@@ -240,3 +240,28 @@ test("AC-12 no horizontal overflow at 320px or equivalent 400 percent desktop la
     ),
   ).toBe(true);
 });
+
+test("AC-11 restored pages clear before the native event returns", async ({
+  page,
+}) => {
+  await reachReview(page);
+  await page.getByRole("link", { name: "Get guidance" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your next step." }),
+  ).toBeVisible();
+  const immediatelyVisible = await page.evaluate(() => {
+    window.dispatchEvent(
+      new PageTransitionEvent("pageshow", { persisted: true }),
+    );
+    return [...document.querySelectorAll("main h1")]
+      .filter((heading) => heading.getClientRects().length > 0)
+      .map((heading) => heading.textContent);
+  });
+  expect(immediatelyVisible).toEqual(["No assessment is open."]);
+  await expect(
+    page.getByRole("heading", { name: "No assessment is open." }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your next step." })).toHaveCount(0);
+  await page.getByRole("link", { name: "Start a fictional example" }).click();
+  await expect(page.getByRole("heading", { name: "Explore a fictional situation." })).toBeVisible();
+});

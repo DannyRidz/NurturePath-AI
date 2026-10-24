@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import { SessionProvider, useSession } from "./session-provider";
 
 function Frame({ children }: { children: ReactNode }) {
@@ -37,7 +38,8 @@ function Frame({ children }: { children: ReactNode }) {
     };
     const restore = (event: PageTransitionEvent) => {
       if (event.persisted) {
-        dispatch({ type: "clear" });
+        // A restored document must not paint the previous session first.
+        flushSync(() => dispatch({ type: "clear" }));
         router.replace("/finished");
       }
     };

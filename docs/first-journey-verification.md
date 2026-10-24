@@ -22,6 +22,8 @@ Run browser tests against the current production build. They start a loopback se
 
 The app source in commit `506ddae` passed lint, strict type checking, production build, 14 unit tests and 16 browser checks on 24 October 2026. The subsequent `92ae359` commit changes CI configuration and ADR status only, and its GitHub CI run also passed all checks. These are same-author engineering checks, supplemented by CodeRabbit review, not clinical validation.
 
+The later browser restoration fix also passed lint, type checking, build and 14 unit tests. All 16 existing browser checks passed against that build, and two added restoration regression executions then passed on desktop/mobile. The regression dispatches a simulated persisted `pageshow` event and checks that the old result is removed synchronously before the handler returns. This is 18 passing browser checks across those runs, not proof of an actual back/forward cache restoration.
+
 - [x] AC-01: The landing page shows purpose, fictional status, limits, privacy and a start action. Inspected in desktop and mobile Chromium screenshots and the live Chrome preview.
 - [x] AC-02: No example is selected by default. Continue is unavailable until selection. Session consent starts unchecked; adult scope appears only after acceptance. Declining returns to sources. Covered in browser tests and live Chrome.
 - [x] AC-02: Adult scope before consent cannot open the journey. Starting a new example resets consent. Covered by reducer tests.
@@ -30,6 +32,7 @@ The app source in commit `506ddae` passed lint, strict type checking, production
 - [x] AC-07/09: Results show authored next step, reason, limitations, actual unvalidated status and the registered WHO source. Covered in browser tests, screenshots and live Chrome.
 - [x] AC-08/14: The browser journey makes no AI, analytics or external requests. No session cookies, local storage, session storage or health values in the URL were observed. Covered in the browser suite. Clicking an external source intentionally leaves the app and is outside that no-request assertion.
 - [x] AC-11: Clear removes the active example, consent and progress. Back, refresh and direct protected URLs do not restore an active journey. Covered by unit/browser tests; clear also exercised in live Chrome.
+- [x] AC-11: Simulated persisted `pageshow` clears the visible result before the native event returns and permits a fresh start. The test reproduced the pre-fix stale DOM, then passed after synchronous clearing. Actual browser cache restoration remains outstanding below.
 - [x] AC-12: Heading focus follows the active review/results page. Hide masks the underlying page, traps keyboard focus, and Escape resumes with focus returned. Covered in browser tests.
 - [x] AC-12: Landing, review and results have no violations in the selected axe WCAG A/AA rules. Desktop and mobile Chromium layouts and 320px reflow passed. These checks do not establish WCAG conformance or real device compatibility.
 
