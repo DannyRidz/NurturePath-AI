@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+reviews:
+  profile: assertive
+  high_level_summary: true
+  poem: false
+  review_status: true
+  commit_status: true
+  fail_commit_status: true
+  request_changes_workflow: false
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    auto_pause_after_reviewed_commits: 0
+    drafts: true
+    base_branches:
+      - ".*"
+    ignore_title_keywords: []
+    ignore_usernames: []
+    labels: []
+  path_instructions:
+    - path: "**"
+      instructions: |
+        Read docs/MASTER-PLAN.md and the applicable specs and acceptance criteria.
+        The current baseline is revision 3: one builder, locked fictional cases,
+        authored simulation, no runtime AI or personal health intake.
+        Flag safety/privacy regressions, unsupported medical claims, arbitrary
+        answer payloads, sensitive storage/logging, clear/back navigation failures,
+        inaccessible interactions and missing meaningful behavior verification.
+        Distinguish engineering checks from clinical validation.
+    - path: "docs/**"
+      instructions: |
+        Check links, scope/capacity consistency, exact test denominators and whether
+        historical independent reviews are being misrepresented as new approvals.
+        Public AI and selective report omission are deferred extensions.
+chat:
+  auto_reply: true
