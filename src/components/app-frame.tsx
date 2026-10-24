@@ -7,7 +7,7 @@ import { flushSync } from "react-dom";
 import { SessionProvider, useSession } from "./session-provider";
 
 function Frame({ children }: { children: ReactNode }) {
-  const { dispatch } = useSession();
+  const { state, dispatch } = useSession();
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -124,7 +124,11 @@ function Frame({ children }: { children: ReactNode }) {
             <p className="eyebrow">Screen hidden</p>
             <h1 id="hidden-title">Take your time.</h1>
             <p>
-              Your session is still open in this tab. Hiding is not deletion.
+              {state.variantId
+                ? "Your session is still open in this tab. Hiding is not deletion."
+                : state.cleared
+                  ? "Your session has been cleared. Resume returns to the app."
+                  : "No session is open. Resume returns to the app."}
             </p>
             <div className="actions">
               <button

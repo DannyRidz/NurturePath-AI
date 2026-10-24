@@ -293,4 +293,23 @@ test("AC-11 restored pages clear before the native event returns", async ({
   await expect(
     page.getByRole("heading", { name: "Explore a fictional situation." }),
   ).toBeVisible();
+
+  // A restored masked page keeps the barrier with a truthful cleared message.
+  await reachReview(page);
+  await page.getByRole("button", { name: "Hide screen" }).click();
+  const maskedMessage = await page.evaluate(() => {
+    window.dispatchEvent(
+      new PageTransitionEvent("pageshow", { persisted: true }),
+    );
+    return document.querySelector('[role="dialog"]')?.textContent;
+  });
+  expect(maskedMessage).toContain("Your session has been cleared.");
+  expect(maskedMessage).not.toContain("Your session is still open");
+  await expect(
+    page.getByRole("dialog", { name: "Take your time." }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Resume" }).click();
+  await expect(
+    page.getByRole("heading", { name: "The example, in full." }),
+  ).toHaveCount(0);
 });
