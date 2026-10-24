@@ -1,7 +1,7 @@
 # 0003. Consumer design direction
 
 **Date:** 2026-10-23
-**Status:** In Progress
+**Status:** Proposed
 
 ## Summary
 

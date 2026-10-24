@@ -1,7 +1,7 @@
 # 0001. Prototype foundation and persistence
 
 **Date:** 2026-10-23
-**Status:** In Progress
+**Status:** Proposed
 
 ## Summary
 
