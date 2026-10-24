@@ -15,7 +15,7 @@ The root .coderabbit.yaml enables automatic reviews, including draft PRs, every 
 Do not count a summary, skip notice, configuration error or pending status as a completed review. If unavailable, report the blocker and leave the PR unmerged pending resolution.
 
 ## Installation and limitations
-CodeRabbit must be installed and enabled for this repository. The GitHub app page showed an existing account installation on 24 October; repository coverage must be verified by a real PR review. GitHub may require the account owner to re-authenticate to view/change installation permissions.
+CodeRabbit must be installed and enabled for this repository. On 24 October 2026, the user approved and GitHub saved CodeRabbit access specifically to NurturePath-AI, retaining existing Cartograph access. CodeRabbit acknowledged the full-review command and started reviewing PR #1 using the repository YAML. A started review is not a completed review; check the final review and latest head before merging. GitHub may require the account owner to re-authenticate to view/change installation permissions.
 
 This configuration does not itself establish a GitHub branch-protection rule or guarantee review availability. Account entitlements, quotas, rate limits and provider outages can prevent a review; do not enable paid usage without separate user authorization. Review tooling setup does not authorize app implementation.
 
@@ -23,3 +23,4 @@ This configuration does not itself establish a GitHub branch-protection rule or 
 - [GitHub integration](https://docs.coderabbit.ai/platforms/github-com)
 - [Automatic review controls](https://docs.coderabbit.ai/configuration/auto-review)
 - [Configuration reference](https://docs.coderabbit.ai/reference/configuration)
+
