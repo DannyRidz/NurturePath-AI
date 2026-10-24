@@ -1,0 +1,52 @@
+# Verify the first fictional journey
+
+Updated 24 October 2026, Asia/Brunei. This checklist covers the authorized foundation and V01 general learning journey only. The governing contracts are [ADR 0001](specs/0001-prototype-foundation.md), [ADR 0003](specs/0003-consumer-design-direction.md) and the [PRD acceptance criteria](04-product-requirements.md). The broader scope remains in progress.
+
+## Reproduce the automated checks
+
+Use Node 20.19 or newer. CI uses Node 22.
+
+```sh
+npm ci
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+Run browser tests against the current production build. They start a loopback server when one is not already running. Stop an older local server before checking a changed build.
+
+## Observed results
+
+The app source in commit `506ddae` passed lint, strict type checking, production build, 14 unit tests and 16 browser checks on 24 October 2026. The subsequent `92ae359` commit changes CI configuration and ADR status only, and its GitHub CI run also passed all checks. These are same-author engineering checks, supplemented by CodeRabbit review, not clinical validation.
+
+- [x] AC-01: The landing page shows purpose, fictional status, limits, privacy and a start action. Inspected in desktop and mobile Chromium screenshots and the live Chrome preview.
+- [x] AC-02: No example is selected by default. Continue is unavailable until selection. Session consent starts unchecked; adult scope appears only after acceptance. Declining returns to sources. Covered in browser tests and live Chrome.
+- [x] AC-02: Adult scope before consent cannot open the journey. Starting a new example resets consent. Covered by reducer tests.
+- [x] AC-03: The four authored sections and review show the fixed V01 answers. Back and Inspect preserve that complete example. Covered in browser tests and live Chrome.
+- [x] AC-04/05: Altered IDs, stale versions, changed answers, incompatible duration, extra fields and incomplete input reject. The valid example produces the specified education result and traceable limitations. Covered by unit tests.
+- [x] AC-07/09: Results show authored next step, reason, limitations, actual unvalidated status and the registered WHO source. Covered in browser tests, screenshots and live Chrome.
+- [x] AC-08/14: The browser journey makes no AI, analytics or external requests. No session cookies, local storage, session storage or health values in the URL were observed. Covered in the browser suite. Clicking an external source intentionally leaves the app and is outside that no-request assertion.
+- [x] AC-11: Clear removes the active example, consent and progress. Back, refresh and direct protected URLs do not restore an active journey. Covered by unit/browser tests; clear also exercised in live Chrome.
+- [x] AC-12: Heading focus follows the active review/results page. Hide masks the underlying page, traps keyboard focus, and Escape resumes with focus returned. Covered in browser tests.
+- [x] AC-12: Landing, review and results have no violations in the selected axe WCAG A/AA rules. Desktop and mobile Chromium layouts and 320px reflow passed. These checks do not establish WCAG conformance or real device compatibility.
+
+Browser artifacts are generated locally under `output/playwright/`, including home and result screenshots for desktop and mobile. They are ignored by Git. Tests and assertions live in `e2e/journey.spec.ts`, `src/lib/scenario.test.ts` and `src/lib/session.test.ts`.
+
+## Manual checks still outstanding
+
+- [ ] AC-12: Complete the journey with VoiceOver/Safari, checking names, reading order, focus and announcements.
+- [ ] AC-12: Check actual iOS Safari and Android Chrome devices, portrait and landscape.
+- [ ] AC-12: Check real 200% text scaling and 400% browser zoom. A 320px viewport is a reflow check, not proof of the complete zoom experience.
+- [ ] AC-12: Background the tab for at least two minutes, return and verify the privacy mask and explicit Resume.
+- [ ] AC-11: Exercise an actual browser back/forward cache restoration after leaving the site and confirm the session reset.
+- [ ] AC-13: Exercise the page error boundary and retry behaviour. No urgent example or provider failure path is implemented in this slice.
+- [ ] AC-15: Recruit consenting adults for the planned formative comprehension study; record actual participants and results.
+
+## Outside this milestone
+
+V02 through V12, whole-variant switching, urgent/unknown interruption, the full typed release suite, APIs, printable reports and runtime AI are not delivered by this first journey. AC-06/10 and the remaining breadth of AC-03/04/05/13 remain later work. No 72-case release pass, clinical approval, safety certification or patient readiness is claimed.
+
+Before merging any change, obtain CodeRabbit review of the latest PR head, address actionable findings and confirm the current CI run passes. A summary or pending status alone is not completion. Follow [the repository review workflow](coderabbit-review-workflow.md).
