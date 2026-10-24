@@ -158,14 +158,36 @@ test("AC-12 Hide masks content, traps focus and Resume returns focus", async ({
   ).toBeVisible();
 });
 
-test("AC-08/14 journey makes no AI, analytics or external requests and stores no session", async ({
+test("AC-08/14 journey uses only expected GET pages and assets and stores no session", async ({
   page,
   context,
 }) => {
   const unexpected: string[] = [];
+  const allowedPages = new Set([
+    "/",
+    "/start",
+    "/consent",
+    "/assessment",
+    "/assessment/review",
+    "/results",
+    "/finished",
+    "/privacy",
+    "/sources",
+  ]);
   page.on("request", (request) => {
     const url = new URL(request.url());
-    if (url.hostname !== "127.0.0.1" || url.pathname.startsWith("/api/"))
+    const expectedPath =
+      allowedPages.has(url.pathname) ||
+      url.pathname.startsWith("/_next/static/");
+    const expectedQuery = [...url.searchParams.keys()].every(
+      (key) => key === "_rsc",
+    );
+    if (
+      url.origin !== "http://127.0.0.1:3000" ||
+      request.method() !== "GET" ||
+      !expectedPath ||
+      !expectedQuery
+    )
       unexpected.push(request.url());
   });
   await reachReview(page);
@@ -180,7 +202,10 @@ test("AC-08/14 journey makes no AI, analytics or external requests and stores no
     })),
   ).toEqual({ local: 0, session: 0 });
   expect(await context.cookies()).toEqual([]);
-  expect(new URL(page.url()).search).toBe("");
+  const resultUrl = new URL(page.url());
+  expect(resultUrl.pathname).toBe("/results");
+  expect(resultUrl.search).toBe("");
+  expect(resultUrl.hash).toBe("");
   expect(unexpected).toEqual([]);
 });
 
@@ -261,7 +286,11 @@ test("AC-11 restored pages clear before the native event returns", async ({
   await expect(
     page.getByRole("heading", { name: "No assessment is open." }),
   ).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Your next step." })).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Your next step." }),
+  ).toHaveCount(0);
   await page.getByRole("link", { name: "Start a fictional example" }).click();
-  await expect(page.getByRole("heading", { name: "Explore a fictional situation." })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Explore a fictional situation." }),
+  ).toBeVisible();
 });
