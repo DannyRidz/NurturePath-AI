@@ -1,6 +1,6 @@
 # Solo builder backlog, revision 3
 
-Updated 23 October 2026 after the user clarified that they alone build the app. Jeremiah has no allocated hours. All tasks remain planned; implementation is not authorized. Estimates are builder hours, uncertain by roughly ±30-50%. The earlier A/B allocations are superseded rather than reassigned to an imaginary reviewer.
+Updated 23 October 2026 after the user clarified that they alone build the app. Jeremiah has no allocated hours. The user authorized the first T03-T05 milestone on 24 October 2026. Work is limited to the foundation, minimum design primitives and one complete V01 journey; other tasks remain planned. Estimates are builder hours, uncertain by roughly ±30-50%. The earlier A/B allocations are superseded rather than reassigned to an imaginary reviewer.
 
 Committed scope is AUTHORED_SIMULATION: locked fictional cases, one authored plain explanation, inline sources, full-report preview/print, consent/clear and appropriate tests. No public model integration or selective report omission is included. The [roadmap](16-development-roadmap.md) owns dates/capacity assumptions; this table owns effort.
 

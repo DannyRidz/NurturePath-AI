@@ -1,0 +1,9 @@
+{
+  "tool": "vitest",
+  "e2eTool": "playwright",
+  "additionalTools": ["@axe-core/playwright"],
+  "testDir": "src",
+  "filePattern": "*.test.ts",
+  "packageManager": "npm",
+  "source": "ADR 0001 and the authorized first journey, 24 October 2026"
+}

@@ -38,4 +38,4 @@ Clinical safety review, actual model access, budget, official timing, final pres
 
 ## First milestone after explicit authorization
 
-Build one thin, locked fictional nonurgent journey with an authored simulation output, explicit unvalidated status, back navigation, clear session reset, and one browser test. Prove the loop before any clinically gated AI selection. Success means a user can explain the next step and its limitations, while the system works with AI disabled. Implementation remains stopped pending your review.
+Build one thin, locked fictional nonurgent journey with an authored simulation output, explicit unvalidated status, back navigation, clear session reset, and one browser test. Prove the loop before any clinically gated AI selection. Success means a user can explain the next step and its limitations, while the system works with AI disabled. The user authorized this first milestone on 24 October 2026. Its foundation and V01 journey are being implemented; broader scope and clinical approval remain outstanding.

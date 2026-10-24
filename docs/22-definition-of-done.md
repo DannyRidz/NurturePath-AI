@@ -1,5 +1,7 @@
 # Definition of done
 
+Current build note, 24 October 2026: the user authorized the foundation and first V01 journey. The planning handoff records below describe the earlier documentation phase, not the current source inventory. Product verification remains limited to the implemented slice; no clinical validation is claimed.
+
 ## Planning phase completion
 
 * Repository and available skills inspected; JS Mastery workflow origin corrected after user clarification.
