@@ -12,7 +12,7 @@ Do not compress 172 hours of work into 82 hours by assuming AI coding speed. Sco
 
 | Target | Sole builder work | Observable completion |
 |---|---|---|
-| 23-25 Oct | Review solo scope, intended use and unresolved competition/clinical questions | Explicit implementation authorization still required; confirm actual start and recompute capacity |
+| 23-25 Oct | Review solo scope, intended use and unresolved competition/clinical questions | First milestone authorized and started 24 October; broader gates remain open, recompute capacity from actual availability |
 | 26 Oct-1 Nov | Foundation and one thin authored path | Landing → consent → locked example → authored result → clear works with a browser test |
 | 2-8 Nov | Complete catalog/rules, urgent interruption, inline sources and printable summary | Core path works across supported variants; no personal health input or model dependency |
 | 9-10 Nov | Integrate responsive/accessibility and privacy fixes | Feature freeze 10 Nov 18:00 Brunei; no feature expansion |
@@ -46,4 +46,4 @@ The minimum additional work is estimated at 24 builder hours plus an unconfirmed
 | Too few usability volunteers | Report actual n and outstanding target. Do not count Jeremiah or invent participation |
 | Need more competitive AI proof | Discuss added capacity/reviewer access and displaced work explicitly; never use an unsafe shortcut |
 
-No app code, dependency installation or deployment is authorized by this roadmap. The original dates remain proposed targets; organizer terms and timing still need clarification.
+This roadmap does not itself authorize implementation or deployment. The user separately authorized the foundation and first V01 journey on 24 October 2026; deployment remains outside that authorization. The original dates remain proposed targets; organizer terms and timing still need clarification.

@@ -1,6 +1,6 @@
 # Decisions and approvals
 
-Prepared 23 October 2026. **Only planning is authorized.** No approval is inferred from this document or from elapsed time. The user originally confirmed 25h/week personal capacity and later clarified that they alone build the app; Jeremiah is not allocated engineering/review hours. The JS Mastery origin was identified. The user subsequently authorized an independent model review and all eight recommended planning revisions. This authorizes document revisions only; it does not approve clinical content, resource activation, the entire product scope or application implementation. Other recommendations remain Proposed unless explicitly stated.
+Prepared 23 October 2026. **The first implementation milestone was authorized on 24 October 2026.** No approval is inferred from this document or from elapsed time. The user originally confirmed 25h/week personal capacity and later clarified that they alone build the app; Jeremiah is not allocated engineering/review hours. The JS Mastery origin was identified. The user subsequently authorized an independent model review and all eight recommended planning revisions. This authorizes document revisions only; it does not approve clinical content, resource activation, the entire product scope or application implementation. The earlier planning restriction was superseded only for the first milestone by the user’s “please proceed” on 24 October. Clinical approval, paid services, deployment and final submission are not authorized by that message. Other recommendations remain Proposed unless explicitly stated.
 
 | Decision | Recommendation and why | Alternative / consequence | Status / decision maker |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Prepared 23 October 2026. **Only planning is authorized.** No approval is inferr
 | D21 Solo delivery | User builds everything; Jeremiah role unassigned. Core 82h, gross capacity about 100h, reserve 18h gross/about 14h before internal submission | No hidden second reviewer or parallel workstream | Solo builder confirmed; reduced scope/estimates proposed |
 | D22 Report scope | Complete preview and browser Print/Save as PDF, share all or cancel | Selective field omission and its dependency-redaction work deferred | Proposed solo scope reduction |
 | D23 AI capacity | No runtime model service in committed solo core | Safe fragment-only design retained; 24h added builder work plus any independent reviewer time needs funding/approval | Deferred, no fabricated AI delivery |
-| D16 Implementation | Begin first thin milestone only after explicit authorization | Complete plan is reviewable now; no source scaffold yet | **Not authorized**, user |
+| D16 Implementation | Build the app foundation and one complete authored fictional journey | Other variants, report, runtime AI and deployment remain later work | **Authorized**, user, 24 October 2026 |
 
 ## Approval checklist for your team review
 
@@ -40,6 +40,6 @@ Prepared 23 October 2026. **Only planning is authorized.** No approval is inferr
 
 Record each future decision with date, actual approver, selected option, rationale and affected docs. Update the canonical owner document and ADR when a proposal changes. Do not create contradicting meeting notes as a new specification. A blanket build approval does not authorize sending outreach, accepting new terms, collecting patient data, purchasing services or submitting the final entry unless the user separately requests those actions.
 
-## Authorized first milestone, only after future approval
+## Authorized first milestone, 24 October 2026
 
-T03 to T05: pin supported dependencies, create shared contract and a minimal fictional nonurgent journey with authored output, session clear and one browser test. Add no account, database or predictive model. Expand only after that loop is verified. Current status remains planning complete, implementation stopped.
+T03 to T05: pin supported dependencies, create shared contract and a minimal fictional nonurgent journey with authored output, session clear and one browser test. Add no account, database or predictive model. Expand only after that loop is verified. The user authorized this milestone with “please proceed.” Build status and verification evidence are recorded with the implementation PR.

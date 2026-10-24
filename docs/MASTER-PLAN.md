@@ -1,8 +1,8 @@
 # NurturePath AI master plan
 
-Prepared 23 October 2026, Asia/Brunei. Status: **Proposed for team review. Implementation is not authorized.**
+Prepared 23 October 2026, Asia/Brunei. Status: **First implementation milestone authorized by the user on 24 October 2026 and in progress.**
 
-Start with the [executive summary](00-executive-summary.md), then review the [approval register](21-decisions-and-approvals.md). The recommendation is to retain Male Reproductive Health and build a small, synthetic scenario prototype for education and care navigation. No clinical validation, usability results, model benchmarks, partnership, or regulatory compliance is claimed. Revision 2 incorporated the authorized independent review fixes. Revision 3 rebases delivery after the user clarified they are the sole builder; no implementation is authorized.
+Start with the [executive summary](00-executive-summary.md), then review the [approval register](21-decisions-and-approvals.md). The recommendation is to retain Male Reproductive Health and build a small, synthetic scenario prototype for education and care navigation. No clinical validation, usability results, model benchmarks, partnership, or regulatory compliance is claimed. Revision 2 incorporated the authorized independent review fixes. Revision 3 rebases delivery after the user clarified they are the sole builder. On 24 October the user authorized the app foundation and one complete authored fictional journey.
 
 ## Reading map
 
@@ -31,7 +31,7 @@ Start with the [executive summary](00-executive-summary.md), then review the [ap
 | [20 Risks and review](20-risks-and-open-questions.md) | What could invalidate the plan? |
 | [21 Decisions and approvals](21-decisions-and-approvals.md) | What is proposed, confirmed, or awaiting a decision? |
 | [22 Definition of done](22-definition-of-done.md) | What separates a finished demonstration from a patient service? |
-| [Living scope](scope/scope.md) | Coarse implementation sequence, all still planned |
+| [Living scope](scope/scope.md) | Coarse implementation sequence and current progress |
 | [Architecture decision records](specs/0001-prototype-foundation.md) | Foundation, safety/AI/design and [shared admission](specs/0004-public-ai-spend-controls.md) |
 | [Independent review and resolution log](reviews/2026-10-23-independent-plan-review.md) | Eight findings and the authorized planning revisions |
 
@@ -45,4 +45,4 @@ The user is the sole application builder. Jeremiah's other contribution is unass
 
 Revision 3 commits to authored simulation, one plain explanation style, inline evidence and a complete printable report with no per-field omission. Public AI/Redis work, additional styles and selective report redaction are deferred beyond the core budget. The twelve-variant contract and safety controls stay intact. Full report disclosure/consent replaces partial omission in the solo core; the stronger transitive-redaction design remains a prerequisite if that enhancement is later added. The historical 172h two-builder allocation is superseded. Technical contracts for conditional future AI remain specified, not funded or implemented.
 
-Only planning Markdown files were created. No application source, packages, scaffold, migration, account, deployment, submission, or external message was created.
+The original planning handoff created Markdown only. The authorized first build now adds the Next.js foundation and V01 journey. Runtime AI, other variants, reports, deployment and competition submission remain outside this milestone. CodeRabbit reviews every PR through the configured GitHub integration.

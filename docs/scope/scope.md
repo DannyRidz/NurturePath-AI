@@ -1,6 +1,6 @@
 # Scope: NurturePath AI
 
-Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. All retained work remains planned. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. No implementation is authorized.
+Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. The first foundation and V01 journey milestone is now in progress. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. The user authorized the first milestone on 24 October 2026; no deployment is included.
 
 **Build approach:** Tracer Bullet, prove a thin complete fictional journey before adding breadth. No health-record/auth layer is required. Public selection/metadata counters are deferred outside the solo core; their safe contract remains in ADR 0004 for separately funded work.
 **Workflow:** Beta proposed, behavior verification and tests; additional independent human review for safety/privacy. These workflow names do not establish clinical or regulatory maturity. The user can review the proposal before selecting a depth.
@@ -9,11 +9,11 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 
 | # | Feature | Phase | Status |
 |---|---|---|---|
-| 1 | Stack and architecture | Foundation | planned |
-| 2 | Coding conventions and tooling | Foundation | planned |
-| 3 | Runtime data model and interfaces | Foundation | planned |
-| 4 | Design system | Foundation | planned |
-| 5 | Thin authored fictional journey | Slice 1 | planned |
+| 1 | Stack and architecture | Foundation | in-progress |
+| 2 | Coding conventions and tooling | Foundation | in-progress |
+| 3 | Runtime data model and interfaces | Foundation | in-progress |
+| 4 | Design system | Foundation | in-progress |
+| 5 | Thin authored fictional journey | Slice 1 | in-progress |
 | 6 | Safe navigation and evidence breadth | Slice 2 | planned |
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
 | 8 | Report and session control | Slice 4 | planned |
@@ -21,26 +21,26 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 
 ## Foundations
 
-### 1. Stack and architecture, planned
+### 1. Stack and architecture, in-progress
 
 One maintainable application that supports the narrow demonstration. Done when the foundation decision is ratified and an authorized skeleton runs and builds.
 
-* [ ] Review proposed [ADR 0001](../specs/0001-prototype-foundation.md).
-* [ ] After explicit authorization, build the foundation.
+* [x] Review proposed [ADR 0001](../specs/0001-prototype-foundation.md). First milestone authorized 24 October.
+* [x] After explicit authorization, build the foundation. Code in `src/app`, with a passing production build.
 
-### 2. Coding conventions and tooling, planned
+### 2. Coding conventions and tooling, in-progress
 
 Capture actual conventions after a scaffold exists. Done when documented conventions and reproducible CI checks match the repository.
 
 * [ ] Capture context and tooling from the future real project with the audit workflow.
 
-### 3. Runtime data model and interfaces, planned
+### 3. Runtime data model and interfaces, in-progress
 
 Agree on locked catalog IDs, normalized enums, rule aggregation, complete-report disclosure and consent. Selective report omission remains deferred and would require the retained dependency contract. Done when [data/API contracts](../09-database-and-api-design.md) are approved and implemented with boundary validation.
 
 * [ ] Review runtime model and no persistence decision before implementation.
 
-### 4. Design system, planned
+### 4. Design system, in-progress
 
 Keep consumer interaction consistent. Done when approved direction and core controls support keyboard, focus and mobile reading.
 
@@ -48,11 +48,11 @@ Keep consumer interaction consistent. Done when approved direction and core cont
 
 ## Slices
 
-### 5. Thin authored fictional journey, planned
+### 5. Thin authored fictional journey, in-progress
 
 One scenario from purpose through consent to guidance and clear. Done when the complete path works with AI disabled and one browser test proves it.
 
-* [ ] After approval, build and verify the first whole journey.
+* [x] After approval, build and verify the first whole journey. V01 code in `src/components/journey.tsx`; browser coverage in `e2e/journey.spec.ts`. PR review remains required before merge.
 
 ### 6. Safe navigation and evidence breadth, planned
 

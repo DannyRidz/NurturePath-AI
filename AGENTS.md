@@ -13,3 +13,12 @@
 - If automation does not run, comment `@coderabbitai full review` on the PR and check the response. Report installation, entitlement, configuration or rate-limit blockers; do not silently bypass the requested review.
 - CodeRabbit supplements testing and human judgment. It does not provide clinical approval.
 - See docs/coderabbit-review-workflow.md for setup and troubleshooting.
+
+## Current implementation
+- The user authorized the foundation and one complete V01 fictional journey on 24 October 2026. Additional variants, reports, runtime AI, deployment and submission remain later work.
+- Stack: Next.js App Router, strict TypeScript, Tailwind and Zod, with browser memory only, as specified in ADR 0001.
+- Build approach: tracer bullet, one complete authored journey before breadth, as recorded in docs/scope/scope.md.
+- Design system: design.md, with tokens in src/app/globals.css.
+- Commands: npm run dev, npm run lint, npm run typecheck, npm test, npm run build, npm run test:e2e. Browser tests use a production build on 127.0.0.1:3000.
+- Node 20.19 or newer is required by the installed tooling; CI uses Node 22. Use npm ci for the locked dependency tree.
+- Keep session data in React memory. Never add personal intake, persistent storage, analytics or a provider call to this slice.
