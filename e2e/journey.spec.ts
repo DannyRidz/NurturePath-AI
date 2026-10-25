@@ -42,13 +42,18 @@ test("AC-01/02/03/07/09/11 complete fictional journey and clear survive Back", a
   ).toBeVisible();
   await page.getByRole("link", { name: "Get guidance" }).click();
   await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
+  await expect(
     page.getByRole("heading", { name: "Your next step." }),
   ).toBeFocused();
   await expect(
-    page.getByText("Unvalidated simulation. Not reviewed by a clinician."),
+    page
+      .getByText("Unvalidated simulation. Not reviewed by a clinician.")
+      .filter({ visible: true }),
   ).toBeVisible();
   await expect(
-    page.getByText(/These example answers cannot confirm reproductive health/),
+    page.getByText(/^Read the relevant information and consider/),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "World Health Organization: Infertility" }),
@@ -84,7 +89,7 @@ test("AC-02 adult collection follows unchecked session consent and decline is us
   await expect(
     page.getByRole("button", { name: "Continue", exact: true }),
   ).toBeDisabled();
-  await page.getByRole("radio").check();
+  await page.getByRole("radio", { name: /General learning/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(page.getByRole("checkbox", { name: /I am 18/ })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).not.toBeChecked();
@@ -193,6 +198,9 @@ test("AC-08/14 journey uses only expected GET pages and assets and stores no ses
   await reachReview(page);
   await page.getByRole("link", { name: "Get guidance" }).click();
   await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
+  await expect(
     page.getByRole("heading", { name: "Your next step." }),
   ).toBeVisible();
   expect(
@@ -233,6 +241,9 @@ test("AC-12 critical pages have no automated WCAG A or AA violations", async ({
     ).violations,
   ).toEqual([]);
   await page.getByRole("link", { name: "Get guidance" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
   expect(
     (
       await new AxeBuilder({ page })
@@ -259,6 +270,9 @@ test("AC-12 no horizontal overflow at 320px or equivalent 400 percent desktop la
     ),
   ).toBe(true);
   await page.getByRole("link", { name: "Get guidance" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -271,6 +285,9 @@ test("AC-11 restored pages clear before the native event returns", async ({
 }) => {
   await reachReview(page);
   await page.getByRole("link", { name: "Get guidance" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Your next step." }),
   ).toBeVisible();
@@ -313,3 +330,196 @@ test("AC-11 restored pages clear before the native event returns", async ({
     page.getByRole("heading", { name: "The example, in full." }),
   ).toHaveCount(0);
 });
+
+test("AC-03/04 whole example replacement resets all answers and preserves consent", async ({
+  page,
+}) => {
+  await reachReview(page);
+  await page
+    .getByRole("combobox", { name: "Complete fictional example", exact: true })
+    .selectOption("V09");
+  await page.getByRole("button", { name: "Replace whole example" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Current concern and relevant history",
+  );
+  await expect(page.getByRole("definition")).toHaveText([
+    "No",
+    "Preparing for a discussion",
+    "Yes",
+    "Yes",
+    "No",
+    "No",
+    "Not applicable to this purpose",
+  ]);
+  await page.getByRole("link", { name: "Get guidance" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your next step.", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("A current concern is recorded in this fictional example."),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Relevant clinician diagnosed history or treatment is recorded in this fictional example.",
+    ),
+  ).toBeVisible();
+  await page
+    .getByRole("link", { name: "Review the fictional answers" })
+    .click();
+  await page.getByRole("button", { name: "Inspect the example" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Immediate concerns", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Next section" }).click();
+  await page.getByRole("button", { name: "Next section" }).click();
+  await page
+    .getByRole("button", { name: "No, load General learning", exact: true })
+    .first()
+    .click();
+  await expect(page.getByRole("status")).toContainText("General learning");
+  await expect(
+    page.getByRole("heading", { name: "Immediate concerns", exact: true }),
+  ).toBeVisible();
+});
+
+for (const [id, heading] of [
+  ["V08", "Seek urgent medical help now."],
+  ["V07", "This example needs safety information."],
+] as const) {
+  test(`AC-06 ${id} interrupts immediately at safety and cannot resume lower questions`, async ({
+    page,
+  }) => {
+    await consent(page);
+    await page
+      .getByRole("button", {
+        name:
+          id === "V08"
+            ? "Yes, load Sudden severe pain"
+            : "Unknown, load Safety information unknown",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("heading", { name: heading, exact: true, level: 1 }),
+    ).toBeFocused();
+    await expect(
+      page.getByRole("button", { name: "Next section" }),
+    ).toHaveCount(0);
+    await page.goBack();
+    await expect(
+      page.getByRole("button", { name: "Next section" }),
+    ).toHaveCount(0);
+    expect(
+      (
+        await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze()
+      ).violations,
+    ).toEqual([]);
+  });
+}
+
+test("AC-06 catalog safety selection stops after consent without requiring intake", async ({
+  page,
+}) => {
+  await page.goto("/start");
+  await page.getByRole("radio", { name: /Sudden severe pain/ }).check();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page
+    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .check();
+  await page.getByRole("button", { name: "Accept session notice" }).click();
+  await page.getByRole("checkbox", { name: /I am 18/ }).check();
+  await page
+    .getByRole("button", { name: "Explore the example", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Seek urgent medical help now.",
+      level: 1,
+    }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Next section" })).toHaveCount(
+    0,
+  );
+  await page
+    .getByRole("combobox", { name: "Complete fictional example", exact: true })
+    .selectOption("V10");
+  await page.getByRole("button", { name: "Replace whole example" }).click();
+  await expect(
+    page.getByText("This information is not treated as no."),
+  ).toBeVisible();
+});
+
+for (const [id, text] of [
+  ["V01", "Read, then prepare your questions"],
+  ["V02", "This example requests general lifestyle information."],
+  ["V03", "This example includes the testosterone or steroid topic."],
+  ["V04", "A current concern is recorded"],
+  ["V05", "Relevant clinician diagnosed history"],
+  ["V06", "Difficulty conceiving is recorded"],
+  ["V07", "This example needs safety information."],
+  ["V08", "Seek urgent medical help now."],
+  ["V09", "Relevant clinician diagnosed history"],
+  ["V10", "Unknown or declined information"],
+  ["V11", "Difficulty conceiving is recorded"],
+  ["V12", "Unknown or declined information"],
+]) {
+  test(`AC-04/05 ${id} renders its authored outcome`, async ({ page }) => {
+    await reachReview(page);
+    await page.getByRole("link", { name: "Get guidance" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Your next step.", exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("combobox", {
+        name: "Complete fictional example",
+        exact: true,
+      })
+      .selectOption(id);
+    await page.getByRole("button", { name: "Replace whole example" }).click();
+    await expect(page.getByRole("status")).toContainText(
+      "The whole fictional example has been replaced",
+    );
+    await expect(
+      page.getByText(text, { exact: false }).filter({ visible: true }).first(),
+    ).toBeVisible();
+    await expect(
+      page
+        .getByText("Unvalidated simulation. Not reviewed by a clinician.")
+        .filter({ visible: true }),
+    ).toBeVisible();
+    if (["V07", "V10", "V12"].includes(id)) {
+      const unknown = page.getByRole("region", {
+        name: "Unknown or declined information",
+        exact: true,
+      });
+      await expect(unknown.getByRole("term")).toHaveCount(id === "V10" ? 3 : 1);
+      await expect(unknown).not.toContainText(/Q0[1-7]/);
+      await expect(unknown).toContainText(
+        "This information is not treated as no.",
+      );
+      if (id === "V07")
+        await expect(unknown).toContainText(
+          "Does this fictional person have sudden, severe pain in a testicle now?",
+        );
+      if (id === "V10")
+        await expect(unknown.getByRole("definition")).toHaveText([
+          "Unknown",
+          "Declined",
+          "Unknown",
+        ]);
+      if (id === "V12")
+        await expect(unknown).toContainText("what duration is provided?");
+    }
+    if (id === "V07" || id === "V08")
+      await expect(
+        page.getByRole("heading", { name: text, exact: true, level: 1 }),
+      ).toBeFocused();
+    if (id === "V08" || id === "V09")
+      await page.screenshot({
+        path: `output/playwright/${id}-${test.info().project.name}.png`,
+        fullPage: true,
+      });
+  });
+}

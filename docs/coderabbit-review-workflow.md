@@ -1,6 +1,14 @@
-# CodeRabbit pull request workflow
+# Pull request verification workflow and CodeRabbit history
 
-Requested by the user on 24 October 2026 for DannyRidz/NurturePath-AI.
+## Current policy, 25 October 2026
+
+The user explicitly removed reliance on CodeRabbit and authorized merging PR #3 when the implementation has been checked, browser verified and found working. Merge readiness now depends on diff inspection, applicable lint/type/build/tests, browser behavior verification and passing CI for the latest head. CodeRabbit review completion is no longer required. Automatic reviews, incremental reviews, commit statuses and chat replies are disabled in `.coderabbit.yaml`. No paid service or installation permission change is needed.
+
+Previously identified valid defects still need fixes. Actual manual/device/clinical limitations remain recorded, and engineering verification is not clinical approval.
+
+## Historical setup, superseded
+
+The sections below record the setup requested on 24 October 2026. They are historical and do not override the current policy.
 
 ## Configuration
 The root .coderabbit.yaml enables automatic reviews, including draft PRs, every target branch and incremental commits. Auto-pause is disabled; title, author and label exclusions are empty. No API key or GitHub Actions workflow is required for the GitHub App integration. CodeRabbit's own file eligibility and service limits still apply.
@@ -24,3 +32,7 @@ This configuration does not itself establish a GitHub branch-protection rule or 
 - [Automatic review controls](https://docs.coderabbit.ai/configuration/auto-review)
 - [Configuration reference](https://docs.coderabbit.ai/reference/configuration)
 
+
+## Observed service limits, 25 October 2026
+
+On PR #3, CodeRabbit skipped automatic review and stated that the repository has fewer than ten stars. The manual `@coderabbitai full review` command was accepted and completed for `14c03c6`. That review reported one included review per hour with zero remaining. These are observed service responses, not YAML exclusions or a guarantee of future entitlement. A green skipped status is not review completion. After any fix, request and inspect a new review; if quota blocks it, leave the PR unmerged until an included review becomes available. Paid usage needs separate user authorization.

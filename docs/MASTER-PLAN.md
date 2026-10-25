@@ -1,6 +1,6 @@
 # NurturePath AI master plan
 
-Prepared 23 October 2026, Asia/Brunei. Status: **First implementation milestone authorized by the user on 24 October 2026 and in progress.**
+Prepared 23 October 2026, Asia/Brunei. Status: **First milestone merged in PR #2. Scenario breadth and safe navigation authorized by the user on 25 October 2026 and in progress.**
 
 Start with the [executive summary](00-executive-summary.md), then review the [approval register](21-decisions-and-approvals.md). The recommendation is to retain Male Reproductive Health and build a small, synthetic scenario prototype for education and care navigation. No clinical validation, usability results, model benchmarks, partnership, or regulatory compliance is claimed. Revision 2 incorporated the authorized independent review fixes. Revision 3 rebases delivery after the user clarified they are the sole builder. On 24 October the user authorized the app foundation and one complete authored fictional journey.
 
@@ -45,4 +45,6 @@ The user is the sole application builder. Jeremiah's other contribution is unass
 
 Revision 3 commits to authored simulation, one plain explanation style, inline evidence and a complete printable report with no per-field omission. Public AI/Redis work, additional styles and selective report redaction are deferred beyond the core budget. The twelve-variant contract and safety controls stay intact. Full report disclosure/consent replaces partial omission in the solo core; the stronger transitive-redaction design remains a prerequisite if that enhancement is later added. The historical 172h two-builder allocation is superseded. Technical contracts for conditional future AI remain specified, not funded or implemented.
 
-The original planning handoff created Markdown only. The authorized first build now adds the Next.js foundation and V01 journey. Runtime AI, other variants, reports, deployment and competition submission remain outside this milestone. CodeRabbit reviews every PR through the configured GitHub integration.
+The original planning handoff created Markdown only. The authorized first build now adds the Next.js foundation and V01 journey. Runtime AI, other variants, reports, deployment and competition submission remain outside this milestone. On 25 October the user superseded the CodeRabbit requirement: diff inspection, applicable tests, real browser verification and passing CI determine engineering merge readiness.
+
+On 25 October 2026 the user authorized the next milestone: the twelve locked fictional examples, whole example replacement, deterministic authored outcomes and urgent/unknown safety interruption. This extends implementation authorization only for that slice. Reports, runtime AI, deployment and submission remain later work.

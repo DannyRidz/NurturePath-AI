@@ -1,5 +1,9 @@
+import { getScenario, variantIds, type VariantId } from "./scenario";
+
 export type Session = {
-  variantId: "V01" | null;
+  variantId: VariantId | null;
+  viewRevision: number;
+  announcement: string;
   consent: {
     noticeVersion: "notice-1";
     acceptedAt: string;
@@ -11,21 +15,44 @@ export type Session = {
 
 export const emptySession: Session = {
   variantId: null,
+  viewRevision: 0,
+  announcement: "",
   consent: null,
   section: 0,
   cleared: false,
 };
 export type SessionAction =
-  | { type: "select" }
+  | { type: "select"; variantId?: VariantId }
+  | { type: "switch"; variantId: VariantId }
   | { type: "consent"; acceptedAt: string }
   | { type: "adult" }
   | { type: "section"; section: number }
   | { type: "clear" };
 
 export function sessionReducer(state: Session, action: SessionAction): Session {
+  const nextRevision =
+    state.viewRevision < 2147483647 ? state.viewRevision + 1 : 1;
+  if (action.type === "switch" && state.viewRevision >= 2147483647)
+    return { ...emptySession, cleared: true, viewRevision: 1 };
   switch (action.type) {
     case "select":
-      return { ...emptySession, variantId: "V01" };
+      return variantIds.includes(action.variantId ?? "V01")
+        ? {
+            ...emptySession,
+            variantId: action.variantId ?? "V01",
+            viewRevision: nextRevision,
+          }
+        : state;
+    case "switch":
+      return hasActiveSession(state) && variantIds.includes(action.variantId)
+        ? {
+            ...state,
+            variantId: action.variantId,
+            viewRevision: nextRevision,
+            section: 0,
+            announcement: `The whole fictional example has been replaced with ${getScenario(action.variantId).label}. All answers now belong to this example.`,
+          }
+        : state;
     case "consent":
       return state.variantId
         ? {
@@ -49,10 +76,14 @@ export function sessionReducer(state: Session, action: SessionAction): Session {
         ? { ...state, section: action.section }
         : state;
     case "clear":
-      return { ...emptySession, cleared: true };
+      return { ...emptySession, cleared: true, viewRevision: nextRevision };
   }
 }
 
 export function hasActiveSession(state: Session) {
-  return state.variantId === "V01" && state.consent?.adultScope === true;
+  return (
+    state.variantId !== null &&
+    variantIds.includes(state.variantId) &&
+    state.consent?.adultScope === true
+  );
 }

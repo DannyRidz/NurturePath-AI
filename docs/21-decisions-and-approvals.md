@@ -43,3 +43,11 @@ Record each future decision with date, actual approver, selected option, rationa
 ## Authorized first milestone, 24 October 2026
 
 T03 to T05: pin supported dependencies, create shared contract and a minimal fictional nonurgent journey with authored output, session clear and one browser test. Add no account, database or predictive model. Expand only after that loop is verified. The user authorized this milestone with “please proceed.” Build status and verification evidence are recorded with the implementation PR.
+
+## Authorized second milestone, 25 October 2026
+
+The user said “please proceed with the next milestone” after agreeing the scope of scenario breadth and safe navigation. T06 to T09 cover the twelve locked fictional examples, whole example replacement, ordered authored outcomes, urgent/unknown safety interruption and inline source context. PR #2 is merged. This authorization does not approve clinical content or source rights, runtime AI, reports, deployment, purchases or submission.
+
+## Review policy change and merge authorization, 25 October 2026
+
+The user explicitly said to disregard CodeRabbit because of free plan limits, rely on checked and browser verified implementations, and merge the current PR if it works. This supersedes the earlier mandatory CodeRabbit workflow. PR #3 is authorized for merge after verification and passing latest head CI. Automatic CodeRabbit reviews are disabled. The existing review correction remains fixed; clinical approval and other external release gates are unchanged.

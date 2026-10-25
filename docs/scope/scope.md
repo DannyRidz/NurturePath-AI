@@ -1,6 +1,6 @@
 # Scope: NurturePath AI
 
-Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. The first foundation and V01 journey milestone is now in progress. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. The user authorized the first milestone on 24 October 2026; no deployment is included.
+Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. The first foundation and V01 journey milestone is merged in PR #2; scenario breadth and safe navigation was authorized on 25 October and is in progress. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. The user authorized the first milestone on 24 October 2026; no deployment is included.
 
 **Build approach:** Tracer Bullet, prove a thin complete fictional journey before adding breadth. No health-record/auth layer is required. Public selection/metadata counters are deferred outside the solo core; their safe contract remains in ADR 0004 for separately funded work.
 **Workflow:** Beta proposed, behavior verification and tests; additional independent human review for safety/privacy. These workflow names do not establish clinical or regulatory maturity. The user can review the proposal before selecting a depth.
@@ -13,8 +13,8 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 2 | Coding conventions and tooling | Foundation | in-progress |
 | 3 | Runtime data model and interfaces | Foundation | in-progress |
 | 4 | Design system | Foundation | in-progress |
-| 5 | Thin authored fictional journey | Slice 1 | in-progress |
-| 6 | Safe navigation and evidence breadth | Slice 2 | planned |
+| 5 | Thin authored fictional journey | Slice 1 | done |
+| 6 | Safe navigation and evidence breadth | Slice 2 | done |
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
 | 8 | Report and session control | Slice 4 | planned |
 | 9 | Evidence and submission | Release | planned |
@@ -48,17 +48,19 @@ Keep consumer interaction consistent. Done when approved direction and core cont
 
 ## Slices
 
-### 5. Thin authored fictional journey, in-progress
+### 5. Thin authored fictional journey, done
 
 One scenario from purpose through consent to guidance and clear. Done when the complete path works with AI disabled and one browser test proves it.
 
-* [x] After approval, build and verify the first whole journey. V01 code in `src/components/journey.tsx`; browser coverage in `e2e/journey.spec.ts`. PR review remains required before merge.
+* [x] After approval, build and verify the first whole journey. V01 code in `src/components/journey.tsx`; browser coverage in `e2e/journey.spec.ts`. Merged in PR #2 after browser verification, passing CI and latest head CodeRabbit review.
 
-### 6. Safe navigation and evidence breadth, planned
+### 6. Safe navigation and evidence breadth, done
 
 Add only supported question branches and source cards. Done when urgent precedence, unknowns and reviewed or clearly simulated expectations pass.
 
-* [ ] Review [ADR 0002](../specs/0002-navigation-and-ai-boundary.md) and clinical approval status.
+* [x] Review [ADR 0002](../specs/0002-navigation-and-ai-boundary.md) and clinical approval status. Implemented authored simulation only; ADR remains Proposed and clinical approval remains outstanding.
+
+Implementation in `src/lib/scenario.ts`, `src/lib/session.ts` and `src/components/journey.tsx`. The twelve locked examples, whole example switches and urgent/unknown interruption are built. Verification is recorded in [the checklist](../scenario-navigation-verification.md); clinical/source approval remains outstanding. PR #3 records the verified implementation and user authorization to merge under the revised review policy.
 
 ### 7. Controlled AI selection, dropped from solo commitment
 
