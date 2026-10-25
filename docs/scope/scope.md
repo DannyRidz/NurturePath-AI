@@ -1,6 +1,6 @@
 # Scope: NurturePath AI
 
-Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. The first foundation and V01 journey milestone is merged in PR #2; scenario breadth and safe navigation was authorized on 25 October and is in progress. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. The user authorized the first milestone on 24 October 2026; no deployment is included.
+Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no assigned engineering/review hours. Core 82h, about 100h gross capacity, with lower usable reserve before the 19 November internal target. The first foundation and V01 journey milestone is merged in PR #2; scenario breadth is merged in PR #3. The complete report was authorized, built and verified on 25 October. This scope is the coarse view; [the backlog](../17-task-backlog.md) owns atomic tasks and hours. The user authorized the first milestone on 24 October 2026; no deployment is included.
 
 **Build approach:** Tracer Bullet, prove a thin complete fictional journey before adding breadth. No health-record/auth layer is required. Public selection/metadata counters are deferred outside the solo core; their safe contract remains in ADR 0004 for separately funded work.
 **Workflow:** Beta proposed, behavior verification and tests; additional independent human review for safety/privacy. These workflow names do not establish clinical or regulatory maturity. The user can review the proposal before selecting a depth.
@@ -16,7 +16,7 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 5 | Thin authored fictional journey | Slice 1 | done |
 | 6 | Safe navigation and evidence breadth | Slice 2 | done |
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
-| 8 | Report and session control | Slice 4 | planned |
+| 8 | Report and session control | Slice 4 | done |
 | 9 | Evidence and submission | Release | planned |
 
 ## Foundations
@@ -68,11 +68,11 @@ Retained as a future design, not a deadline commitment. Requires actual clinical
 
 * [ ] Review the one-candidate staffed experiment and [shared admission decision](../specs/0004-public-ai-spend-controls.md) before enabling any provider call.
 
-### 8. Report and session control, planned
+### 8. Report and session control, done
 
 Prepare a complete semantic HTML report with Print/Save as PDF and reliable clear. Done when preview discloses all included facts, no field omission is offered, cancel works and no old session is restored. No PDF-generation library or selective-redaction feature.
 
-* [ ] Build and verify the approved report/clear contract after the core path.
+* [x] Build and verify the approved report/clear contract after the core path. Authorized 25 October; implementation in `src/components/report.tsx`, `src/lib/report.ts` and `src/app/report/page.tsx`. Evidence in [report verification](../report-verification.md).
 
 ### 9. Evidence and submission, planned
 

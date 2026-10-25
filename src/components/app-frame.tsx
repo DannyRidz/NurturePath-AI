@@ -82,7 +82,9 @@ function Frame({ children }: { children: ReactNode }) {
             </button>
           </div>
         </header>
-        <main id="main">{children}</main>
+        <main id="main" data-route={pathname}>
+          {children}
+        </main>
         <footer className="site-footer">
           <p>Authored simulation. No runtime AI. No clinical validation.</p>
           <nav aria-label="Information">

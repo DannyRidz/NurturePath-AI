@@ -51,3 +51,7 @@ The user said “please proceed with the next milestone” after agreeing the sc
 ## Review policy change and merge authorization, 25 October 2026
 
 The user explicitly said to disregard CodeRabbit because of free plan limits, rely on checked and browser verified implementations, and merge the current PR if it works. This supersedes the earlier mandatory CodeRabbit workflow. PR #3 is authorized for merge after verification and passing latest head CI. Automatic CodeRabbit reviews are disabled. The existing review correction remains fixed; clinical approval and other external release gates are unchanged.
+
+## Authorized complete report milestone, 25 October 2026
+
+After the scenario milestone merged, the user authorized the recommended complete printable summary and requested implementation and verification without further questions. Implement T12/T13 report preview, explicit browser Print / Save as PDF, Cancel / Back and reliable clear. Use the existing all-facts disclosure and canonical answers/reasons/sources. This does not authorize selective omission, personal intake, runtime AI, deployment or submission.

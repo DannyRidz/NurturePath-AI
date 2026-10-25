@@ -1,6 +1,6 @@
 # NurturePath AI
 
-An unvalidated fictional demonstration of reproductive health information and preparation. The app implements twelve locked fictional examples, consent, whole example switching, immediate urgent and unknown safety interruption, answer review, authored guidance, sources, hiding and session clearing. No personal health intake, runtime AI, accounts, database, report or deployment is included.
+An unvalidated fictional demonstration of reproductive health information and preparation. The app implements twelve locked fictional examples, consent, whole example switching, immediate urgent and unknown safety interruption, answer review, authored guidance, sources, hiding and session clearing. A complete fictional report preview offers explicit browser Print / Save as PDF and Cancel. No personal health intake, runtime AI, accounts, database or deployment is included.
 
 ## Run locally
 
@@ -31,3 +31,5 @@ Merge readiness relies on code inspection, applicable local checks, browser veri
 The [master plan](docs/MASTER-PLAN.md) describes the larger planned prototype. Clinical review and source reuse review remain outstanding.
 
 Milestone evidence: [first journey](docs/first-journey-verification.md) and [scenario navigation](docs/scenario-navigation-verification.md).
+
+Report evidence: [complete preview, print and clearing checks](docs/report-verification.md).

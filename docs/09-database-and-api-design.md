@@ -1,6 +1,6 @@
 # Data model and API contract, revision 2
 
-Planning revisions address IR-01, IR-04, IR-05 and IR-07. This is a specification, not source or a migration. Implementation authorization is limited to the first milestone (24 October) and scenario breadth/safe navigation (25 October), recorded in document 21. Conditional API/provider/report work remains later scope. The [clinical decision table](11-clinical-safety.md) owns the finite fictional catalog and navigation behavior; [ADR 0004](specs/0004-public-ai-spend-controls.md) owns shared rate and spend enforcement.
+Planning revisions address IR-01, IR-04, IR-05 and IR-07. This is a specification, not source or a migration. Implementation authorization is limited to the first milestone (24 October) and scenario breadth/safe navigation (25 October), recorded in document 21. The complete report/print milestone was subsequently authorized on 25 October. Conditional API/provider work remains later scope. The [clinical decision table](11-clinical-safety.md) owns the finite fictional catalog and navigation behavior; [ADR 0004](specs/0004-public-ai-spend-controls.md) owns shared rate and spend enforcement.
 
 ## Runtime entities
 
