@@ -50,3 +50,7 @@ Keep scope status planned until real work exists. Every task needs evidence of i
 ## Implementation update, 25 October 2026
 
 The V01 milestone is merged in PR #2. The user authorized scenario breadth and safe navigation (T06 to T09) on 25 October. Implementation and measured checks are recorded in the scenario navigation checklist and its PR. Other tasks stay planned; no clinical or source rights approval is inferred.
+
+## Complete report update, 25 October 2026
+
+T12 and report-related T13 behavior are implemented and verified against the complete all-facts contract. The report checklist records actual unit/browser denominators, native Chrome Print/Save as PDF, PDF inspection and remaining device/assistive technology limitations. PR/CI records own merge status; broader release evidence is still planned. No actual-hour saving is inferred.

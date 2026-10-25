@@ -175,6 +175,7 @@ test("AC-08/14 journey uses only expected GET pages and assets and stores no ses
     "/assessment",
     "/assessment/review",
     "/results",
+    "/report",
     "/finished",
     "/privacy",
     "/sources",
@@ -214,6 +215,26 @@ test("AC-08/14 journey uses only expected GET pages and assets and stores no ses
   expect(resultUrl.pathname).toBe("/results");
   expect(resultUrl.search).toBe("");
   expect(resultUrl.hash).toBe("");
+  await page
+    .getByRole("link", { name: "Preview complete report", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Appointment preparation report",
+      exact: true,
+    }),
+  ).toBeVisible();
+  const reportUrl = new URL(page.url());
+  expect(reportUrl.pathname).toBe("/report");
+  expect(reportUrl.search).toBe("");
+  expect(reportUrl.hash).toBe("");
+  expect(
+    await page.evaluate(() => ({
+      local: localStorage.length,
+      session: sessionStorage.length,
+    })),
+  ).toEqual({ local: 0, session: 0 });
+  expect(await context.cookies()).toEqual([]);
   expect(unexpected).toEqual([]);
 });
 

@@ -22,4 +22,6 @@
 - Node 20.19 or newer is required by the installed tooling; CI uses Node 22. Use npm ci for the locked dependency tree.
 - Keep session data in React memory. Never add personal intake, persistent storage, analytics or a provider call to this slice.
 
-- The user authorized scenario breadth and safe navigation on 25 October 2026. The canonical twelve rows, choice destinations and ordered rule outputs come from docs/11-clinical-safety.md and src/lib/scenario.ts. Keep whole example replacement atomic and urgent/unknown safety cases outside the remaining assessment flow. Reports, runtime AI and deployment are still later work.
+- The user authorized scenario breadth and safe navigation on 25 October 2026. The canonical twelve rows, choice destinations and ordered rule outputs come from docs/11-clinical-safety.md and src/lib/scenario.ts. Keep whole example replacement atomic and urgent/unknown safety cases outside the remaining assessment flow. That milestone merged in PR #3; runtime AI and deployment are still later work.
+
+- The user authorized the complete report milestone on 25 October 2026. Report data comes from the full canonical case and current authored result. Keep all answers/reasons, neutral print metadata, browser-only explicit printing and reliable clear. No selective omission, automatic download/share or PDF generation library.

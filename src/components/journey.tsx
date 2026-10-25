@@ -591,6 +591,9 @@ export function Results() {
         <VariationControls key={state.variantId} />
         {!stopped && <SafetyNote />}
         <div className="actions">
+          <Link className="button" href="/report">
+            Preview complete report
+          </Link>
           <ClearButton />
           <Link className="text-link" href="/privacy">
             What clearing does
