@@ -51,3 +51,7 @@ Reports, runtime AI, deployment and submission are outside this milestone. The r
 ## Review correction
 
 CodeRabbit reviewed `14c03c6` and found that unknown/declined information should display question text, including on stopped results. The correction renders each affected question with its explicit Unknown or Declined answer and preserves the statement that this is not no. V07, V10 and V12 browser assertions check meaningful question labels and the absence of raw internal question IDs. This historical review does not approve a later commit; inspect the latest head review and CI in PR #3.
+
+## Merge readiness under the revised review policy
+
+On 25 October the user removed the CodeRabbit merge requirement and authorized merging the verified current PR. Correction `1234eda` passed all GitHub App checks (run 9), including all 50 browser executions. Manual Chrome verification also confirmed the question text and Unknown value on the stopped safety result. The workflow/configuration followup changes no app code; its latest CI must also pass before merge. CodeRabbit quota is no longer a merge blocker.

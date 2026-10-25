@@ -5,12 +5,12 @@ reviews:
   high_level_summary: true
   poem: false
   review_status: true
-  commit_status: true
-  fail_commit_status: true
+  commit_status: false
+  fail_commit_status: false
   request_changes_workflow: false
   auto_review:
-    enabled: true
-    auto_incremental_review: true
+    enabled: false
+    auto_incremental_review: false
     auto_pause_after_reviewed_commits: 0
     drafts: true
     base_branches:
@@ -34,4 +34,4 @@ reviews:
         historical independent reviews are being misrepresented as new approvals.
         Public AI and selective report omission are deferred extensions.
 chat:
-  auto_reply: true
+  auto_reply: false

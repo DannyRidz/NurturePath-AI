@@ -6,13 +6,12 @@
 - App implementation remains subject to the user's explicit authorization; configuring review tooling does not authorize building the app.
 
 ## Pull request review
-- Use a pull request for changes and obtain a CodeRabbit review on the latest head before merging.
-- Automatic reviews are configured in .coderabbit.yaml for every target branch, including drafts and subsequent pushes.
-- Check the actual review result. A summary, skipped review, pending run or missing bot response does not count as a completed review.
-- Address actionable findings; record reasons for declining suggestions. After fixes, wait for an updated review covering the new head.
-- If automation does not run, comment `@coderabbitai full review` on the PR and check the response. Report installation, entitlement, configuration or rate-limit blockers; do not silently bypass the requested review.
-- CodeRabbit supplements testing and human judgment. It does not provide clinical approval.
-- See docs/coderabbit-review-workflow.md for setup and troubleshooting.
+- Use pull requests for changes. The user removed the CodeRabbit requirement on 25 October 2026; do not request or wait for CodeRabbit reviews.
+- Review the diff, run applicable lint/type/build/tests, and verify changed behavior in the browser before reporting a change ready to merge. Inspect actual CI results for the latest head.
+- Fix verified defects regardless of who identified them. CodeRabbit status is not a merge gate.
+- Merge when the user authorizes it and verification passes. Record limitations and outstanding manual checks honestly.
+- Engineering verification does not provide clinical approval.
+- See docs/coderabbit-review-workflow.md for the superseded setup and current policy.
 
 ## Current implementation
 - The user authorized the foundation and one complete V01 fictional journey on 24 October 2026. That milestone merged in PR #2; the following authorization extends scenario coverage only.

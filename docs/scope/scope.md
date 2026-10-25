@@ -14,7 +14,7 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 3 | Runtime data model and interfaces | Foundation | in-progress |
 | 4 | Design system | Foundation | in-progress |
 | 5 | Thin authored fictional journey | Slice 1 | done |
-| 6 | Safe navigation and evidence breadth | Slice 2 | in-progress |
+| 6 | Safe navigation and evidence breadth | Slice 2 | done |
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
 | 8 | Report and session control | Slice 4 | planned |
 | 9 | Evidence and submission | Release | planned |
@@ -54,13 +54,13 @@ One scenario from purpose through consent to guidance and clear. Done when the c
 
 * [x] After approval, build and verify the first whole journey. V01 code in `src/components/journey.tsx`; browser coverage in `e2e/journey.spec.ts`. Merged in PR #2 after browser verification, passing CI and latest head CodeRabbit review.
 
-### 6. Safe navigation and evidence breadth, in-progress
+### 6. Safe navigation and evidence breadth, done
 
 Add only supported question branches and source cards. Done when urgent precedence, unknowns and reviewed or clearly simulated expectations pass.
 
-* [ ] Review [ADR 0002](../specs/0002-navigation-and-ai-boundary.md) and clinical approval status.
+* [x] Review [ADR 0002](../specs/0002-navigation-and-ai-boundary.md) and clinical approval status. Implemented authored simulation only; ADR remains Proposed and clinical approval remains outstanding.
 
-Implementation in `src/lib/scenario.ts`, `src/lib/session.ts` and `src/components/journey.tsx`. The twelve locked examples, whole example switches and urgent/unknown interruption are built. Verification is recorded in [the checklist](../scenario-navigation-verification.md); clinical/source approval remains outstanding, and PR review/merge is still required.
+Implementation in `src/lib/scenario.ts`, `src/lib/session.ts` and `src/components/journey.tsx`. The twelve locked examples, whole example switches and urgent/unknown interruption are built. Verification is recorded in [the checklist](../scenario-navigation-verification.md); clinical/source approval remains outstanding. PR #3 records the verified implementation and user authorization to merge under the revised review policy.
 
 ### 7. Controlled AI selection, dropped from solo commitment
 

@@ -26,7 +26,7 @@ npm run test:e2e
 
 Browser tests launch the production server and exercise desktop and mobile Chromium layouts. They include consent order, all twelve outcomes, whole example replacement, urgent and unknown safety interruption, Back, clear, refresh, hide, storage/network checks and automated accessibility. They do not establish clinical validity or compatibility with real phones or assistive technology.
 
-CodeRabbit automatically reviews PRs and later pushes. Address its findings before merging, as described in [the workflow](docs/coderabbit-review-workflow.md).
+Merge readiness relies on code inspection, applicable local checks, browser verification and passing latest-head CI. On 25 October 2026 the user removed the CodeRabbit requirement; automatic reviews are disabled. See [the workflow record](docs/coderabbit-review-workflow.md).
 
 The [master plan](docs/MASTER-PLAN.md) describes the larger planned prototype. Clinical review and source reuse review remain outstanding.
 
