@@ -39,6 +39,8 @@ describe("consent and session lifecycle", () => {
       consent: null,
       section: 0,
       cleared: true,
+      viewRevision: active.viewRevision + 1,
+      announcement: "",
     });
     expect(hasActiveSession(cleared)).toBe(false);
     expect(sessionReducer(cleared, { type: "section", section: 2 })).toEqual(
@@ -46,7 +48,24 @@ describe("consent and session lifecycle", () => {
     );
     expect(sessionReducer(cleared, { type: "adult" })).toEqual(cleared);
   });
+  it("AC-03 whole case replacement preserves consent and invalidates prior view", () => {
+    const switched = sessionReducer(
+      { ...active, section: 3 },
+      { type: "switch", variantId: "V09" },
+    );
+    expect(switched.variantId).toBe("V09");
+    expect(switched.consent).toEqual(active.consent);
+    expect(switched.section).toBe(0);
+    expect(switched.viewRevision).toBe(active.viewRevision + 1);
+    expect(switched.announcement).toContain("whole fictional example");
+    expect(
+      sessionReducer(emptySession, { type: "switch", variantId: "V08" }),
+    ).toEqual(emptySession);
+  });
   it("AC-02 starting another example requires fresh consent", () => {
-    expect(sessionReducer(active, { type: "select" })).toEqual(selected);
+    expect(sessionReducer(active, { type: "select" })).toEqual({
+      ...selected,
+      viewRevision: active.viewRevision + 1,
+    });
   });
 });

@@ -46,3 +46,7 @@ Public AI can enter scope only if remaining measured capacity covers the 24h pac
 ## Completion convention
 
 Keep scope status planned until real work exists. Every task needs evidence of its observable outcome. Mark omitted AI work deferred/not delivered, not passed. Safety/privacy acceptance remains mode-specific; real-world patient deployment is still excluded. Personal intake, accounts, health DB, clinic booking, translations, prediction, FHIR, wearables and dashboards remain outside this deadline scope.
+
+## Implementation update, 25 October 2026
+
+The V01 milestone is merged in PR #2. The user authorized scenario breadth and safe navigation (T06 to T09) on 25 October. Implementation and measured checks are recorded in the scenario navigation checklist and its PR. Other tasks stay planned; no clinical or source rights approval is inferred.

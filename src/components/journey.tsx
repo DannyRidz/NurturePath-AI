@@ -2,15 +2,23 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { useSession } from "./session-provider";
 import { hasActiveSession } from "@/lib/session";
 import {
-  durationAnswer,
-  getLearningResult,
-  learningExample,
+  answerLabel,
+  answerLabels,
+  catalog,
+  choiceDestinations,
+  choiceValues,
+  getResult,
+  getScenario,
+  questions,
   questionGroups,
+  reasonText,
   sources,
+  type QuestionId,
+  type VariantId,
 } from "@/lib/scenario";
 
 export function Guard({
@@ -70,7 +78,7 @@ export function SafetyNote() {
 export function StartExample() {
   const { state, dispatch } = useSession();
   const router = useRouter();
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState<VariantId | null>(null);
   return (
     <section className="page narrow">
       <p className="eyebrow">01 / Choose an example</p>
@@ -82,32 +90,37 @@ export function StartExample() {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          dispatch({ type: "select" });
+          if (!selected) return;
+          dispatch({ type: "select", variantId: selected });
           router.push("/consent");
         }}
       >
         <fieldset>
-          <legend>Available in this first demonstration</legend>
-          <label className={`choice ${selected ? "selected" : ""}`}>
-            <input
-              type="radio"
-              name="example"
-              required
-              checked={selected}
-              onChange={() => setSelected(true)}
-            />
-            <span>
-              <strong>General learning</strong>
+          <legend>Choose a complete fictional example</legend>
+          {catalog.map((example) => (
+            <label
+              key={example.variantId}
+              className={`choice ${selected === example.variantId ? "selected" : ""}`}
+            >
+              <input
+                type="radio"
+                name="example"
+                required
+                checked={selected === example.variantId}
+                onChange={() => setSelected(example.variantId)}
+              />
               <span>
-                A person exploring reproductive health information, with no
-                current concern described in the example.
+                <strong>{example.label}</strong>
+                <span>
+                  Authored fictional example. Not a description of your health.
+                </span>
               </span>
-            </span>
-          </label>
+            </label>
+          ))}
         </fieldset>
         <p className="muted">
-          One authored example is available. Other variations are not included
-          yet. Your age scope confirmation comes after the session notice.
+          Twelve authored examples are available. Your age scope confirmation
+          comes after the session notice.
         </p>
         {state.consent && (
           <p className="notice">
@@ -206,7 +219,11 @@ export function Consent() {
             onSubmit={(event) => {
               event.preventDefault();
               dispatch({ type: "adult" });
-              router.push("/assessment");
+              router.push(
+                getScenario(state.variantId!).canonicalAnswers.Q01 === "no"
+                  ? "/assessment"
+                  : "/results",
+              );
             }}
           >
             <h2 ref={heading} tabIndex={-1}>
@@ -249,10 +266,13 @@ export function Assessment() {
   const { state, dispatch } = useSession();
   const router = useRouter();
   const group = questionGroups[state.section];
+  const example = getScenario(state.variantId ?? "V01");
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
   }, [state.section]);
+  if (hasActiveSession(state) && example.canonicalAnswers.Q01 !== "no")
+    return <Results />;
   return (
     <Guard>
       <section className="page narrow">
@@ -267,20 +287,23 @@ export function Assessment() {
         </h1>
         <p className="lead">{group.explanation}</p>
         <p className="notice">
-          Fixed fictional answers. You are viewing the general learning example,
-          not entering your own history.
+          Fixed fictional answers. You are viewing {example.label}, not entering
+          your own history.
         </p>
         <dl className="answer-list">
-          {group.questions.map((q) => (
-            <div key={q.id}>
-              <dt>{q.question}</dt>
-              <dd>
-                {q.answer}
-                <span className="answer-label">Authored example answer</span>
-              </dd>
-            </div>
-          ))}
+          {questions
+            .filter((q) => (group.ids as readonly string[]).includes(q.id))
+            .map((q) => (
+              <div key={q.id}>
+                <dt>{q.question}</dt>
+                <dd>
+                  {answerLabel(q.id, example.canonicalAnswers)}
+                  <span className="answer-label">Authored example answer</span>
+                </dd>
+              </div>
+            ))}
         </dl>
+        <VariationControls ids={group.ids} />
         <div className="actions">
           <button
             className="button"
@@ -309,24 +332,115 @@ export function Assessment() {
   );
 }
 
+export function VariationControls({ ids }: { ids?: readonly QuestionId[] }) {
+  const controlId = useId();
+  const { state, dispatch } = useSession();
+  const router = useRouter();
+  const example = getScenario(state.variantId ?? "V01");
+  const [selected, setSelected] = useState<VariantId>(example.variantId);
+  const heading = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (state.announcement) heading.current?.focus();
+  }, [state.viewRevision, state.announcement]);
+  function replace(id: VariantId) {
+    const next = getScenario(id);
+    dispatch({ type: "switch", variantId: id });
+    if (next.canonicalAnswers.Q01 !== "no") router.replace("/results");
+  }
+  return (
+    <section className="variation-panel">
+      <h2>Explore another fictional variation</h2>
+      <p>
+        Every choice below replaces the whole example, including answers on
+        other sections. No personal answers are collected.
+      </p>
+      <p role="status" tabIndex={-1} ref={heading}>
+        {state.announcement}
+      </p>
+      {ids ? (
+        ids.map((id) => (
+          <fieldset
+            key={id}
+            disabled={
+              id === "Q07" && example.canonicalAnswers.Q02 !== "difficulty"
+            }
+          >
+            <legend>{questions.find((q) => q.id === id)!.question}</legend>
+            {choiceValues[id].map((value) => {
+              const dest = choiceDestinations[id][value];
+              return (
+                <button
+                  type="button"
+                  className="variation-choice"
+                  key={value}
+                  disabled={!dest}
+                  onClick={() => dest && replace(dest)}
+                >
+                  {answerLabels[value]}
+                  {dest
+                    ? `, load ${getScenario(dest).label}`
+                    : ", this variation is not included in this demonstration"}
+                </button>
+              );
+            })}
+            {id === "Q07" && example.canonicalAnswers.Q02 !== "difficulty" && (
+              <p className="muted">
+                Duration choices apply only to difficulty conceiving examples.
+              </p>
+            )}
+          </fieldset>
+        ))
+      ) : (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            replace(selected);
+          }}
+        >
+          <label htmlFor={controlId}>Complete fictional example</label>
+          <select
+            id={controlId}
+            value={selected}
+            onChange={(e) => setSelected(e.target.value as VariantId)}
+          >
+            {catalog.map((v) => (
+              <option key={v.variantId} value={v.variantId}>
+                {v.label}
+              </option>
+            ))}
+          </select>
+          <button className="button" type="submit">
+            Replace whole example
+          </button>
+        </form>
+      )}
+    </section>
+  );
+}
+
 export function AnswerSummary() {
+  const { state } = useSession();
+  const example = getScenario(state.variantId ?? "V01");
   return (
     <dl className="summary-list">
-      {[...questionGroups.flatMap((g) => [...g.questions]), durationAnswer].map(
-        (q) => (
-          <div key={q.id}>
-            <dt>{q.question}</dt>
-            <dd>{q.answer}</dd>
-          </div>
-        ),
-      )}
+      {questions.map((q) => (
+        <div key={q.id}>
+          <dt>{q.question}</dt>
+          <dd>{answerLabel(q.id, example.canonicalAnswers)}</dd>
+        </div>
+      ))}
     </dl>
   );
 }
 
 export function Review() {
-  const { dispatch } = useSession();
+  const { state, dispatch } = useSession();
   const router = useRouter();
+  if (
+    hasActiveSession(state) &&
+    getScenario(state.variantId!).canonicalAnswers.Q01 !== "no"
+  )
+    return <Results />;
   return (
     <Guard>
       <section className="page narrow">
@@ -336,10 +450,11 @@ export function Review() {
         </div>
         <h1 tabIndex={-1}>The example, in full.</h1>
         <p className="lead">
-          These answers belong to the fictional general learning example. They
-          cannot be changed individually in this version.
+          These answers belong to {getScenario(state.variantId ?? "V01").label}.
+          Inspect the answers or replace the whole fictional example.
         </p>
         <AnswerSummary />
+        <VariationControls key={state.variantId} />
         <div className="actions">
           <Link className="button" href="/results">
             Get guidance
@@ -360,88 +475,105 @@ export function Review() {
 }
 
 export function Results() {
-  const result = getLearningResult(learningExample);
+  const { state } = useSession();
+  const example = getScenario(state.variantId ?? "V01");
+  const result = getResult(example);
+  const stopped =
+    result.status === "urgent" || result.status === "insufficientInformation";
+  const resultHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (stopped && resultHeading.current?.getClientRects().length)
+      resultHeading.current.focus();
+  }, [state.viewRevision, stopped]);
+  const titles = {
+    "STEP-URGENT": "Seek urgent medical help now.",
+    "STEP-CLARIFY": "This example needs safety information.",
+    "STEP-DISCUSS": "Prepare for a professional discussion",
+    "STEP-EDUCATION": "Read, then prepare your questions",
+  };
   return (
     <Guard>
-      <section className="page result-page">
+      <section
+        className={`page result-page ${result.status === "urgent" ? "urgent-result" : ""}`}
+      >
         <div className="section-top">
-          <p className="eyebrow">General learning / Fictional example</p>
+          <p className="eyebrow">{example.label} / Fictional example</p>
           <ClearButton />
         </div>
-        <h1 tabIndex={-1}>Your next step.</h1>
+        <h1 tabIndex={-1} ref={resultHeading}>
+          {stopped ? titles[result.nextStepId] : "Your next step."}
+        </h1>
         <p className="review-status">
           Unvalidated simulation. Not reviewed by a clinician.
         </p>
-        <div className="result-sheet">
-          <section className="result-row">
-            <span className="row-number" aria-hidden="true">
-              01
-            </span>
-            <div>
-              <h2>What the example describes</h2>
-              <p>
-                A person seeking general reproductive health information. No
-                current concern or relevant history is described, and no
-                additional lifestyle information is requested.
-              </p>
-            </div>
-          </section>
-          <section className="result-row">
-            <span className="row-number" aria-hidden="true">
-              02
-            </span>
-            <div>
-              <h2>Why this guidance appears</h2>
-              <p>{result.reason}</p>
-              <p>
-                No applicable answer is marked unknown in this example. Missing
-                or unknown information in other cases must not be treated as
-                “no.”
-              </p>
-            </div>
-          </section>
-          <section className="result-row next-step">
-            <span className="row-number" aria-hidden="true">
-              03
-            </span>
-            <div>
-              <h2>Read, then prepare your questions</h2>
-              <p>{result.nextStep}</p>
-            </div>
-          </section>
-        </div>
-        <section className="support-section">
-          <h2>A starting point for a conversation</h2>
-          <p>
-            Consider which information you would like a qualified professional
-            to explain. This demonstration cannot choose tests, treatment, a
-            care service or appointment timing for you.
-          </p>
-          <Link className="text-link" href="/assessment/review">
-            Review the fictional answers
-          </Link>
+        <section className="next-step">
+          <h2>{titles[result.nextStepId]}</h2>
+          <p>{result.nextStep}</p>
         </section>
+        <section className="support-section">
+          <h2>Why this guidance appears</h2>
+          {result.reasonIds.map((id) => (
+            <p key={id}>{reasonText[id]}</p>
+          ))}
+          <p>
+            {result.unknownIds.length
+              ? `Unknown or declined information: ${result.unknownIds.join(", ")}. This information is not treated as no.`
+              : "No applicable answer is marked unknown or declined in this example."}
+          </p>
+          <p>
+            These example answers cannot confirm reproductive health or rule out
+            a problem. This is not a comprehensive symptom assessment.
+          </p>
+        </section>
+        {stopped ? (
+          <>
+            <SafetyNote />
+            <p className="notice">
+              No further example questions are required. No clinician is on
+              call, no alert is sent, and the app cannot verify that care was
+              obtained.
+            </p>
+          </>
+        ) : (
+          <section className="support-section">
+            <h2>What the example describes</h2>
+            <AnswerSummary />
+            <Link className="text-link" href="/assessment/review">
+              Review the fictional answers
+            </Link>
+          </section>
+        )}
         <section className="support-section">
           <h2>Sources and limits</h2>
           <p>
             The next step is authored demonstration wording, not a validated
-            clinical rule. WHO provides general background on fertility care;
-            its fact sheet does not approve this tool.
+            clinical rule. Content and rule version: sim-1.
           </p>
-          <p>
-            <a href={sources[0].url}>
-              {sources[0].organization}: {sources[0].title}
-            </a>
-            <br />
-            <span className="muted">
-              {sources[0].date}. Content and rule version: sim-1.
-            </span>
-          </p>
+          {(stopped ? [sources[1]] : [sources[0]]).map((source) => (
+            <p key={source.id}>
+              <a href={source.url}>
+                {source.organization}: {source.title}
+              </a>
+              <br />
+              <span className="muted">
+                {source.date}. {source.note}
+              </span>
+            </p>
+          ))}
+          {result.contentIds.includes("CARD-DISCUSSION") && (
+            <p>
+              Discussion actions follow the proposed simulation table. Exact
+              guideline section verification and clinical approval remain
+              outstanding; no care service or timing is inferred from a broad
+              guideline link.
+            </p>
+          )}
           <Link className="text-link" href="/sources">
             View source details and limitations
           </Link>
         </section>
-        <SafetyNote />
+        <VariationControls key={state.variantId} />
+        {!stopped && <SafetyNote />}
         <div className="actions">
           <ClearButton />
           <Link className="text-link" href="/privacy">
