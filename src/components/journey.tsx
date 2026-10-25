@@ -515,11 +515,27 @@ export function Results() {
           {result.reasonIds.map((id) => (
             <p key={id}>{reasonText[id]}</p>
           ))}
-          <p>
-            {result.unknownIds.length
-              ? `Unknown or declined information: ${result.unknownIds.join(", ")}. This information is not treated as no.`
-              : "No applicable answer is marked unknown or declined in this example."}
-          </p>
+          {result.unknownIds.length ? (
+            <section aria-label="Unknown or declined information">
+              <h3>Unknown or declined information</h3>
+              <dl className="summary-list">
+                {questions
+                  .filter((q) => result.unknownIds.includes(q.id))
+                  .map((q) => (
+                    <div key={q.id}>
+                      <dt>{q.question}</dt>
+                      <dd>{answerLabel(q.id, example.canonicalAnswers)}</dd>
+                    </div>
+                  ))}
+              </dl>
+              <p>This information is not treated as no.</p>
+            </section>
+          ) : (
+            <p>
+              No applicable answer is marked unknown or declined in this
+              example.
+            </p>
+          )}
           <p>
             These example answers cannot confirm reproductive health or rule out
             a problem. This is not a comprehensive symptom assessment.

@@ -447,9 +447,7 @@ test("AC-06 catalog safety selection stops after consent without requiring intak
     .selectOption("V10");
   await page.getByRole("button", { name: "Replace whole example" }).click();
   await expect(
-    page.getByText(
-      "Unknown or declined information: Q03, Q04, Q05. This information is not treated as no.",
-    ),
+    page.getByText("This information is not treated as no."),
   ).toBeVisible();
 });
 
@@ -463,9 +461,9 @@ for (const [id, text] of [
   ["V07", "This example needs safety information."],
   ["V08", "Seek urgent medical help now."],
   ["V09", "Relevant clinician diagnosed history"],
-  ["V10", "Unknown or declined information: Q03, Q04, Q05"],
+  ["V10", "Unknown or declined information"],
   ["V11", "Difficulty conceiving is recorded"],
-  ["V12", "Unknown or declined information: Q07"],
+  ["V12", "Unknown or declined information"],
 ]) {
   test(`AC-04/05 ${id} renders its authored outcome`, async ({ page }) => {
     await reachReview(page);
@@ -491,6 +489,29 @@ for (const [id, text] of [
         .getByText("Unvalidated simulation. Not reviewed by a clinician.")
         .filter({ visible: true }),
     ).toBeVisible();
+    if (["V07", "V10", "V12"].includes(id)) {
+      const unknown = page.getByRole("region", {
+        name: "Unknown or declined information",
+        exact: true,
+      });
+      await expect(unknown.getByRole("term")).toHaveCount(id === "V10" ? 3 : 1);
+      await expect(unknown).not.toContainText(/Q0[1-7]/);
+      await expect(unknown).toContainText(
+        "This information is not treated as no.",
+      );
+      if (id === "V07")
+        await expect(unknown).toContainText(
+          "Does this fictional person have sudden, severe pain in a testicle now?",
+        );
+      if (id === "V10")
+        await expect(unknown.getByRole("definition")).toHaveText([
+          "Unknown",
+          "Declined",
+          "Unknown",
+        ]);
+      if (id === "V12")
+        await expect(unknown).toContainText("what duration is provided?");
+    }
     if (id === "V07" || id === "V08")
       await expect(
         page.getByRole("heading", { name: text, exact: true, level: 1 }),

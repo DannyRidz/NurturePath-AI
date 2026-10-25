@@ -24,3 +24,7 @@ This configuration does not itself establish a GitHub branch-protection rule or 
 - [Automatic review controls](https://docs.coderabbit.ai/configuration/auto-review)
 - [Configuration reference](https://docs.coderabbit.ai/reference/configuration)
 
+
+## Observed service limits, 25 October 2026
+
+On PR #3, CodeRabbit skipped automatic review and stated that the repository has fewer than ten stars. The manual `@coderabbitai full review` command was accepted and completed for `14c03c6`. That review reported one included review per hour with zero remaining. These are observed service responses, not YAML exclusions or a guarantee of future entitlement. A green skipped status is not review completion. After any fix, request and inspect a new review; if quota blocks it, leave the PR unmerged until an included review becomes available. Paid usage needs separate user authorization.

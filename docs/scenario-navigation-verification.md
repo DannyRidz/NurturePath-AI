@@ -47,3 +47,7 @@ The manual pass found that safety replacement on the results route should focus 
 - [ ] Full planned release case matrix, usability study and measured deployment evidence.
 
 Reports, runtime AI, deployment and submission are outside this milestone. The rules and text are unvalidated authored simulation. Unknown optional information is not no; urgent/unknown safety cases stop the remaining intake. Duration never changes the discussion action, and no score, diagnosis or appointment deadline is calculated.
+
+## Review correction
+
+CodeRabbit reviewed `14c03c6` and found that unknown/declined information should display question text, including on stopped results. The correction renders each affected question with its explicit Unknown or Declined answer and preserves the statement that this is not no. V07, V10 and V12 browser assertions check meaningful question labels and the absence of raw internal question IDs. This historical review does not approve a later commit; inspect the latest head review and CI in PR #3.
