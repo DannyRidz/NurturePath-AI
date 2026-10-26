@@ -26,6 +26,7 @@ Prepared 23 October 2026. **The first implementation milestone was authorized on
 | D21 Solo delivery | User builds everything; Jeremiah role unassigned. Core 82h, gross capacity about 100h, reserve 18h gross/about 14h before internal submission | No hidden second reviewer or parallel workstream | Solo builder confirmed; reduced scope/estimates proposed |
 | D22 Report scope | Complete preview and browser Print/Save as PDF, share all or cancel | Selective field omission and its dependency-redaction work deferred | Proposed solo scope reduction |
 | D23 AI capacity | No runtime model service in committed solo core | Safe fragment-only design retained; 24h added builder work plus any independent reviewer time needs funding/approval | Deferred, no fabricated AI delivery |
+| D24 AI coach proposal | Capture an optional summary and three clinician discussion questions for fictional nonurgent examples in proposal 0007 | Extends fragment selection; requires revised content, API/hosting, provider, budget and evaluation decisions | Planning authorized by user, 26 October 2026; implementation and public AI enablement not authorized |
 | D16 Implementation | Build the app foundation and one complete authored fictional journey | Other variants, report, runtime AI and deployment remain later work | **Authorized**, user, 24 October 2026 |
 
 ## Approval checklist for your team review

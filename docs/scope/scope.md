@@ -66,6 +66,8 @@ Implementation in `src/lib/scenario.ts`, `src/lib/session.ts` and `src/component
 
 Retained as a future design, not a deadline commitment. Requires actual clinical/rights approval, 24 additional builder hours, safe shared controls and unconfirmed external review capacity. Authored mode explicitly records AI absent.
 
+The user requested a separate [AI appointment preparation coach proposal](../specs/0007-ai-appointment-coach.md) on 26 October. It records generated summaries/questions as a candidate next slice, with implementation still unauthorized and decisions outstanding. It does not reactivate this older fragment-selection commitment or inherit its 24h estimate. Reconcile and enroll the chosen build scope only after the new design and revised solo estimate are approved.
+
 * [ ] Review the one-candidate staffed experiment and [shared admission decision](../specs/0004-public-ai-spend-controls.md) before enabling any provider call.
 
 ### 8. Report and session control, done

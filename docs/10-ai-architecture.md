@@ -1,5 +1,7 @@
 # AI architecture and release modes, revision 2
 
+Planning update, 26 October 2026: [proposal 0007](specs/0007-ai-appointment-coach.md) captures the user's requested AI appointment coach plan. Generated summaries/questions would expand the boundary below. This proposal does not enable a new release mode or authorize calls; reconcile these contracts and obtain separate approval before implementing it. The deployed application remains authored only.
+
 The user approved the review's planning revisions on 23 October 2026. Public free prose generation is deferred. Optional AI selects complete authored explanation bundles; the app supplies every displayed word. This is assisted content selection, not autonomous medical explanation. Implementation and external service activation remain unauthorized.
 
 Solo revision 3: AUTHORED_SIMULATION is the only committed deadline mode. REVIEWED_SELECTION remains designed but deferred outside the 82h core. Clinical approval alone does not fund it: the additional builder hours, shared-control qualification and any independent reviewer must exist first. Jeremiah supplies no assumed engineering/review capacity.
