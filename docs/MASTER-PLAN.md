@@ -54,3 +54,5 @@ On 25 October 2026 the user authorized the complete printable summary milestone 
 On 26 October 2026 the user authorized release validation and fixes, with recommendations applied without questions. Browser evidence and remaining gates belong in [release verification](release-verification.md). Deployment and competition submission remain later work.
 
 On 26 October 2026 the user authorized the recommended owner private hosted preview. The optional static export and Sites access boundary are recorded in [ADR 0005](specs/0005-private-preview.md). Public sharing, invitations and competition submission are outside this authorization.
+
+On 26 October 2026 the user requested replacing Sites with a judge accessible host that needs no OpenAI login and a memorable URL. [ADR 0006](specs/0006-public-demo-hosting.md) governs the Vercel public fictional demonstration. This supersedes the owner private requirement for the new host only; no clinical approval or competition submission is implied.

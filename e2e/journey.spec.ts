@@ -14,6 +14,10 @@ async function consent(page: Page) {
   await page
     .getByRole("button", { name: "Explore the example", exact: true })
     .click();
+  // Wait for navigation's focus effect before testing another focus change.
+  await expect(
+    page.getByRole("heading", { name: "Immediate concerns", exact: true }),
+  ).toBeFocused();
 }
 
 async function reachReview(page: Page) {
@@ -100,6 +104,9 @@ test("AC-02 adult collection follows unchecked session consent and decline is us
   await expect(
     page.getByRole("heading", { name: "Sources and limitations." }),
   ).toBeVisible();
+  // Finish pending route requests before starting a separate document navigation.
+  // This app has no polling or analytics requests that could keep it busy.
+  await page.waitForLoadState("networkidle");
   await page.goto("/results");
   await expect(
     page.getByRole("heading", { name: "No assessment is open." }),

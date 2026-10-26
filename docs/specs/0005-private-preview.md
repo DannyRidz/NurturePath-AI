@@ -1,7 +1,7 @@
 # 0005. Owner private hosted preview
 
 **Date:** 2026-10-26
-**Status:** In Progress
+**Status:** Superseded by [0006](0006-public-demo-hosting.md) for active hosting
 
 ## Summary
 
