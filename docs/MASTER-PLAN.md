@@ -50,3 +50,5 @@ The original planning handoff created Markdown only. The authorized first build 
 On 25 October 2026 the user authorized the next milestone: the twelve locked fictional examples, whole example replacement, deterministic authored outcomes and urgent/unknown safety interruption. This extends implementation authorization only for that slice. Reports, runtime AI, deployment and submission remain later work.
 
 On 25 October 2026 the user authorized the complete printable summary milestone and directed Codex to use recommendations without questions, implement it and verify actual behavior. The scope is full preview, browser Print / Save as PDF, Cancel / Back and report/session clearing, with no selective omission or PDF generation library. Runtime AI, deployment and submission remain later work.
+
+On 26 October 2026 the user authorized release validation and fixes, with recommendations applied without questions. Browser evidence and remaining gates belong in [release verification](release-verification.md). Deployment and competition submission remain later work.

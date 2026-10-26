@@ -76,6 +76,11 @@ export function SafetyNote() {
 }
 
 export function StartExample() {
+  const { state } = useSession();
+  return <StartExampleFlow key={state.cleared ? "cleared" : "open"} />;
+}
+
+function StartExampleFlow() {
   const { state, dispatch } = useSession();
   const router = useRouter();
   const [selected, setSelected] = useState<VariantId | null>(null);
@@ -141,10 +146,20 @@ export function StartExample() {
 }
 
 export function Consent() {
+  const { state } = useSession();
+  return (
+    <ConsentFlow
+      key={state.consent?.acceptedAt ?? state.variantId ?? "fresh"}
+    />
+  );
+}
+
+function ConsentFlow() {
   const { state, dispatch } = useSession();
   const router = useRouter();
   const [accepted, setAccepted] = useState(false);
   const [adult, setAdult] = useState(false);
+  const [resultConsent, setResultConsent] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const hasConsent = state.consent !== null;
   useEffect(() => {
@@ -154,6 +169,9 @@ export function Consent() {
     dispatch({ type: "clear" });
     router.replace("/sources");
   };
+  // Keep accepted sessions local: safety interruptions must not wait for a route fetch.
+  if (hasActiveSession(state) && resultConsent === state.consent?.acceptedAt)
+    return <Results />;
   return (
     <Guard selectedOnly>
       <section className="page narrow">
@@ -219,11 +237,9 @@ export function Consent() {
             onSubmit={(event) => {
               event.preventDefault();
               dispatch({ type: "adult" });
-              router.push(
-                getScenario(state.variantId!).canonicalAnswers.Q01 === "no"
-                  ? "/assessment"
-                  : "/results",
-              );
+              if (getScenario(state.variantId!).canonicalAnswers.Q01 === "no")
+                router.push("/assessment");
+              else setResultConsent(state.consent!.acceptedAt);
             }}
           >
             <h2 ref={heading} tabIndex={-1}>
@@ -335,7 +351,6 @@ export function Assessment() {
 export function VariationControls({ ids }: { ids?: readonly QuestionId[] }) {
   const controlId = useId();
   const { state, dispatch } = useSession();
-  const router = useRouter();
   const example = getScenario(state.variantId ?? "V01");
   const [selected, setSelected] = useState<VariantId>(example.variantId);
   const heading = useRef<HTMLParagraphElement>(null);
@@ -343,9 +358,7 @@ export function VariationControls({ ids }: { ids?: readonly QuestionId[] }) {
     if (state.announcement) heading.current?.focus();
   }, [state.viewRevision, state.announcement]);
   function replace(id: VariantId) {
-    const next = getScenario(id);
     dispatch({ type: "switch", variantId: id });
-    if (next.canonicalAnswers.Q01 !== "no") router.replace("/results");
   }
   return (
     <section className="variation-panel">

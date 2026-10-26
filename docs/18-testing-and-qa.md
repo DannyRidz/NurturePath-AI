@@ -1,6 +1,6 @@
 # Testing and quality assurance
 
-Test strategy only. No application test, model call, usability session, security scan or clinical validation has been executed. Documentation verification at planning completion is separate from product QA.
+This strategy was written before implementation. Actual application verification is recorded in the [release checklist](release-verification.md) and earlier milestone checklists. The proposed corpus and release gates below are not automatically satisfied by the current test suite. No model evaluation, human usability session or clinical validation is claimed.
 
 ## Test layers and acceptance traceability
 

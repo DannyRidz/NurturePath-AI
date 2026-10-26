@@ -1,6 +1,6 @@
 # Datasets and evaluation plan
 
-**No evaluation has been run. All numbers below are proposed targets or sample sizes.** Synthetic correctness is not clinical validation, and simulated navigation is not completed real care.
+**The evaluation numbers below remain proposed targets or sample sizes.** Application tests are recorded separately in the [release checklist](release-verification.md); they do not establish execution of this planned evaluation corpus. Synthetic correctness is not clinical validation, and simulated navigation is not completed real care.
 
 ## Dataset assessment
 

@@ -222,7 +222,12 @@ test("AC-11 report cannot survive clear, Back, refresh or direct navigation", as
 
 test("AC-10/12 print CSS exports the complete preview with neutral title and no controls", async ({
   page,
+  browserName,
 }, info) => {
+  test.skip(
+    browserName !== "chromium",
+    "PDF export API is Chromium-only; native Safari print is checked manually.",
+  );
   await openReport(page, "Current concern and relevant history");
   expect(
     (
@@ -283,7 +288,12 @@ test("AC-10/12 print CSS exports the complete preview with neutral title and no 
 
 test("AC-11/14 privacy mask cannot print concealed report facts", async ({
   page,
+  browserName,
 }, info) => {
+  test.skip(
+    browserName !== "chromium",
+    "PDF export API is Chromium-only; this is not a WebKit/Firefox PDF pass.",
+  );
   await openReport(page, "Testosterone or steroid topic");
   await page.getByRole("button", { name: "Hide screen", exact: true }).click();
   await page.emulateMedia({ media: "print" });
