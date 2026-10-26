@@ -1,6 +1,6 @@
 # NurturePath AI
 
-An unvalidated fictional demonstration of reproductive health information and preparation. The app implements twelve locked fictional examples, consent, whole example switching, immediate urgent and unknown safety interruption, answer review, authored guidance, sources, hiding and session clearing. A complete fictional report preview offers explicit browser Print / Save as PDF and Cancel. No personal health intake, runtime AI, patient accounts or database is included. A public demonstration on Vercel is being prepared; it will open without an OpenAI account.
+An unvalidated fictional demonstration of reproductive health information and preparation. The app implements twelve locked fictional examples, consent, whole example switching, immediate urgent and unknown safety interruption, answer review, authored guidance, sources, hiding and session clearing. A complete fictional report preview offers explicit browser Print / Save as PDF and Cancel. No personal health intake, runtime AI, patient accounts or database is included. The [public demonstration](https://nurturepath-demo.vercel.app) is hosted on Vercel and opens without an OpenAI account.
 
 ## Run locally
 
@@ -39,6 +39,8 @@ Release validation evidence: [browser coverage and remaining release checks](doc
 CI runs in the official Playwright image, pinned by version and digest to match the locked package, so browser engines and system libraries are already available.
 
 ## Public demonstration hosting
+
+Judge link: **https://nurturepath-demo.vercel.app**. [Verification evidence](docs/public-demo-verification.md) records the deployment and checks.
 
 Active hosting uses Vercel, configured in `vercel.json`. The deployment builds the same Next.js static export directly into `out/`, with webpack and export-only cache flags. It does not use OpenAI Sites or its packaging helper. The normal Node build remains available.
 
