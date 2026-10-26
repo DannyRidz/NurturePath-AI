@@ -1,6 +1,6 @@
 # Definition of done
 
-Current build note, 24 October 2026: the user authorized the foundation and first V01 journey. The planning handoff records below describe the earlier documentation phase, not the current source inventory. Product verification remains limited to the implemented slice; no clinical validation is claimed.
+Current build note, 26 October 2026: the implemented authored demonstration includes all twelve examples and complete printable reports. Release verification and remaining manual gates are recorded in the [release checklist](release-verification.md). The planning handoff records below describe the earlier documentation phase, not the current source inventory. Product verification remains limited to the implemented slice; no clinical validation is claimed.
 
 ## Planning phase completion
 

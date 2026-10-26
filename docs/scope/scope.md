@@ -17,7 +17,7 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 6 | Safe navigation and evidence breadth | Slice 2 | done |
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
 | 8 | Report and session control | Slice 4 | done |
-| 9 | Evidence and submission | Release | planned |
+| 9 | Evidence and submission | Release | in-progress |
 
 ## Foundations
 
@@ -74,9 +74,9 @@ Prepare a complete semantic HTML report with Print/Save as PDF and reliable clea
 
 * [x] Build and verify the approved report/clear contract after the core path. Authorized 25 October; implementation in `src/components/report.tsx`, `src/lib/report.ts` and `src/app/report/page.tsx`. Evidence in [report verification](../report-verification.md).
 
-### 9. Evidence and submission, planned
+### 9. Evidence and submission, in-progress
 
-Produce actual measured evidence and a compliant demonstration package. Done when release gates pass and the team reviews the actual final entry.
+Release validation was authorized on 26 October. Actual browser evidence and remaining gates are recorded in [release verification](../release-verification.md). Deployment and submission remain outstanding. Produce actual measured evidence and a compliant demonstration package. Done when release gates pass and the team reviews the actual final entry.
 
 * [ ] Run the planned checks and prepare official deliverables after a working build exists.
 

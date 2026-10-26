@@ -59,7 +59,7 @@ export default function Home() {
             </li>
           </ol>
           <p className="sheet-footnote">
-            One general learning example is available in this first version.
+            Twelve authored fictional examples are available to explore.
           </p>
         </aside>
       </section>
@@ -75,8 +75,9 @@ export default function Home() {
             can hide or clear the session at any point.
           </p>
           <p>
-            Guidance is authored. Runtime AI, appointment booking and printable
-            reports are not included in this version.
+            Guidance is authored. You can preview a complete fictional report
+            and choose whether to print or save it. Runtime AI and appointment
+            booking are not included in this version.
           </p>
           <Link className="text-link" href="/sources">
             Read the supporting sources
