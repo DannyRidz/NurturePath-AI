@@ -35,3 +35,5 @@ Milestone evidence: [first journey](docs/first-journey-verification.md) and [sce
 Report evidence: [complete preview, print and clearing checks](docs/report-verification.md).
 
 Release validation evidence: [browser coverage and remaining release checks](docs/release-verification.md). If Turbopack cannot bind its compiler port in a restricted local environment, `npm run build -- --webpack` is the supported alternative compiler; CI still checks the default build.
+
+CI runs in the official Playwright image, pinned by version and digest to match the locked package, so browser engines and system libraries are already available.

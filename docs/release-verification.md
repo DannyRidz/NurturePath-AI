@@ -63,3 +63,9 @@ Do not start another suite using the same output directory while one is running.
 * Controlled performance benchmarks, production-host logs/headers, deployment verification, competition assets and final submission remain outstanding. No runtime AI exists, so AI latency, selection quality and cost metrics are not applicable.
 
 Release scope remains in progress. Passing this engineering check permits the verified source change to merge under the user's current workflow; it does not close these release gates or authorize public deployment.
+
+## CI environment
+
+The first PR run passed install, lint, types, units and the default Turbopack build, but spent over eight minutes downloading the additional WebKit/Firefox system packages from the runner's Ubuntu mirror. It is superseded by a container run, rather than treated as a passing full CI run.
+
+CI now follows [Playwright's GitHub container guidance](https://playwright.dev/docs/ci#via-containers). The official `v1.64.1-noble` image matches the locked package and supplies browsers/system libraries, as described in the [Docker documentation](https://playwright.dev/docs/docker). Its multiarchitecture registry digest was read directly from Microsoft Artifact Registry: `sha256:47b510dd9230bf0b9bfc9b20102241e577ea7a99334ab4c3ca19f19770e9b8ea`. The job runs as UID 1001, keeps shared memory within the container, retains all checks and its 15 minute limit, and does not install OS packages on each run. The latest head container run must pass before merge. This changes only the test environment, not the deployed application or local app source.
