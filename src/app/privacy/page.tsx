@@ -30,13 +30,12 @@ export default function Page() {
         create patient accounts. Following a source link opens an external
         website with its own privacy practices.
       </p>
-      <h2>Access to a private preview</h2>
+      <h2>Access to this demonstration</h2>
       <p>
-        If you open a private hosted preview, ChatGPT sign-in controls access.
-        The preview host handles that sign-in and may process basic profile
-        information, authentication cookies and access logs. These are separate
-        from the fictional session held in this app. Finish and clear resets the
-        app session; it does not end your sign-in with the host.
+        The public demonstration opens without an OpenAI or hosting account.
+        The web host still processes ordinary access requests and may retain
+        security and access logs. These are separate from the fictional session
+        held in this app. No personal health information should be entered here.
       </p>
       <h2>What this demonstration cannot do</h2>
       <p>

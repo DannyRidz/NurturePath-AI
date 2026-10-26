@@ -76,7 +76,7 @@ Prepare a complete semantic HTML report with Print/Save as PDF and reliable clea
 
 ### 9. Evidence and submission, in-progress
 
-Release validation was authorized on 26 October. Actual browser evidence and remaining gates are recorded in [release verification](../release-verification.md). The user authorized an owner private preview on 26 October, governed by [ADR 0005](../specs/0005-private-preview.md). Public sharing and submission remain outstanding. Produce actual measured evidence and a compliant demonstration package. Done when release gates pass and the team reviews the actual final entry.
+Release validation was authorized on 26 October. Actual browser evidence and remaining gates are recorded in [release verification](../release-verification.md). The user authorized an owner private preview on 26 October, governed by [ADR 0005](../specs/0005-private-preview.md). The user subsequently requested a public judge link on a different host with a memorable name, governed by [ADR 0006](../specs/0006-public-demo-hosting.md). Deployment verification and submission remain separate. Produce actual measured evidence and a compliant demonstration package. Done when release gates pass and the team reviews the actual final entry.
 
 * [ ] Run the planned checks and prepare official deliverables after a working build exists.
 
