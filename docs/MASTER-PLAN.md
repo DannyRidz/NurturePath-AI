@@ -52,3 +52,5 @@ On 25 October 2026 the user authorized the next milestone: the twelve locked fic
 On 25 October 2026 the user authorized the complete printable summary milestone and directed Codex to use recommendations without questions, implement it and verify actual behavior. The scope is full preview, browser Print / Save as PDF, Cancel / Back and report/session clearing, with no selective omission or PDF generation library. Runtime AI, deployment and submission remain later work.
 
 On 26 October 2026 the user authorized release validation and fixes, with recommendations applied without questions. Browser evidence and remaining gates belong in [release verification](release-verification.md). Deployment and competition submission remain later work.
+
+On 26 October 2026 the user authorized the recommended owner private hosted preview. The optional static export and Sites access boundary are recorded in [ADR 0005](specs/0005-private-preview.md). Public sharing, invitations and competition submission are outside this authorization.
