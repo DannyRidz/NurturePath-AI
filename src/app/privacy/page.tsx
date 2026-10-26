@@ -19,16 +19,24 @@ export default function Page() {
       <h2>What clearing means</h2>
       <p>
         Finish and clear removes the app’s session state. Back cannot restore
-        it. Clearing does not erase browser history, host access logs or copies
-        you saved elsewhere. Hiding the screen only masks it; Resume makes it
-        visible again.
+        it. Clearing does not sign you out of the preview host or erase browser
+        history, host access logs or copies you saved elsewhere. Hiding the
+        screen only masks it; Resume makes it visible again.
       </p>
       <h2>What reaches other services</h2>
       <p>
         Opening the site sends ordinary web requests to its host. This version
-        has no analytics, remote fonts, account service or AI provider call.
-        Following a source link opens an external website with its own privacy
-        practices.
+        makes no analytics, remote font or AI provider request and does not
+        create patient accounts. Following a source link opens an external
+        website with its own privacy practices.
+      </p>
+      <h2>Access to a private preview</h2>
+      <p>
+        If you open a private hosted preview, ChatGPT sign-in controls access.
+        The preview host handles that sign-in and may process basic profile
+        information, authentication cookies and access logs. These are separate
+        from the fictional session held in this app. Finish and clear resets the
+        app session; it does not end your sign-in with the host.
       </p>
       <h2>What this demonstration cannot do</h2>
       <p>

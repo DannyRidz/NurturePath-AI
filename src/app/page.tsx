@@ -71,8 +71,8 @@ export default function Home() {
         </h2>
         <div>
           <p>
-            No account. No health details to type. You choose when to begin and
-            can hide or clear the session at any point.
+            No patient account. No health details to type. You choose when to
+            begin and can hide or clear the session at any point.
           </p>
           <p>
             Guidance is authored. You can preview a complete fictional report

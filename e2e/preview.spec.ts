@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("PD-05 static QA server preserves HTTP routing and privacy headers", async ({
+test("PD-05 preview handler preserves HTTP routing and privacy headers", async ({
   request,
 }, info) => {
   test.skip(
@@ -16,6 +16,10 @@ test("PD-05 static QA server preserves HTTP routing and privacy headers", async 
   expect(page.headers()["referrer-policy"]).toBe("no-referrer");
   expect(page.headers()["x-content-type-options"]).toBe("nosniff");
   expect(page.headers()["x-robots-tag"]).toBe("noindex, nofollow");
+  expect(page.headers()["content-security-policy"]).toContain(
+    "frame-ancestors",
+  );
+  expect(page.headers()["strict-transport-security"]).toBe("max-age=31536000");
 
   const head = await request.head("/report");
   expect(head.status()).toBe(200);
@@ -32,5 +36,8 @@ test("PD-05 static QA server preserves HTTP routing and privacy headers", async 
     expect(result.headers()["cache-control"], path).toBe("private, no-store");
   }
   const post = await request.post("/start");
-  expect(post.status()).toBe(404);
+  expect(post.status()).toBe(405);
+  expect(post.headers()["allow"]).toBe("GET, HEAD");
+  const invalid = await request.get("/%E0%A4%A");
+  expect(invalid.status()).toBe(400);
 });

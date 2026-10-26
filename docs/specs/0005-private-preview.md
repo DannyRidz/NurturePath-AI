@@ -5,7 +5,7 @@
 
 ## Summary
 
-Deploy the existing fictional demonstration to an owner private Sites URL. Use Next.js static export so the same application can run without a new backend. Keep the normal Node build available and verify actual hosted behaviour and access before reporting success.
+Deploy the existing fictional demonstration to an owner private Sites URL. Use Next.js static export and a small Sites request handler that serves those immutable files with explicit response headers. Keep the normal Node build available and verify actual hosted behaviour and access before reporting success.
 
 ## Context
 
@@ -30,7 +30,7 @@ The existing app uses authored files and React memory only. All current routes b
 
 ## Decision
 
-Use an optional `NURTUREPATH_STATIC_PREVIEW=1` build mode with `output: "export"`, preserving the existing Next configuration where supported. Choose owner private Sites and its native private publication operation. Keep the standard build and start commands unchanged. The initial export failed with `Invariant: PPR cannot be enabled in export mode`. For the optional export only, disable `cacheComponents` and `partialPrefetching`; keep both enabled in the normal Node build. This changes navigation optimisation for the preview, so the full journey suite must verify the export. No framework migration is needed.
+Use an optional `NURTUREPATH_STATIC_PREVIEW=1` build mode with `output: "export"`, preserving the existing Next configuration where supported. Choose owner private Sites and its native private publication operation. Keep the standard build and start commands unchanged. The initial export failed with `Invariant: PPR cannot be enabled in export mode`. For the optional export only, disable `cacheComponents` and `partialPrefetching`; keep both enabled in the normal Node build. This changes navigation optimisation for the preview, so the full journey suite must verify the export. No framework migration is needed. The first static publication proved that Sites ignores `_headers`: signed in responses used public revalidation and lacked the requested privacy headers. Replace that serving layer with a small Worker ES module that embeds the exported files, resolves their routes, and sets actual HTTP response headers. It has no database, secret, visitor identity logic, external fetch or application API. Use the same generated handler in local QA.
 
 Implementation skills: architect, develop, Sites, check verify and sync. Existing testing preferences remain Vitest and Playwright; no discovery or installation of extra skills is needed.
 
@@ -44,7 +44,7 @@ A separate static build avoids changing the verified application runtime for the
 |---|---|
 | Application/content | Current Git source and locked npm dependencies |
 | Export mode | Explicit build environment flag, default off |
-| Route assets | Next.js `out/`, generated from the same source |
+| Route assets | Next.js `out/`, generated from the same source and embedded in `dist/server/index.js` by the preview builder |
 | Site identity and expected origin | Native create/get Site response, copied unchanged into `.openai/hosting.json` |
 | Audience | Owner private creation policy, confirmed by get Site and enforced by private deployment |
 | Source commit | Exact source helper push result |
@@ -54,11 +54,11 @@ A separate static build avoids changing the verified application runtime for the
 
 The host access gate may require the owner's ChatGPT sign in. This is distinct from app consent and the app's lack of patient accounts. Do not add identity SDKs or persist visitor identity in application state. Do not add analytics, provider calls, external fonts, patient intake or storage. The host may retain access/security metadata; do not invent a retention duration or claim anonymity.
 
-For static hosting, request a real 404 document rather than a single page fallback for unknown routes. Configure supported host response headers for no indexing, no referrer and no sniffing, plus no store for HTML and route payloads. Verify the resulting headers after publication. If the host cannot enforce a required protection, record the limit and do not report that gate passed. Source and saved versions permit reverting the deployment as one unit.
+The generated request handler serves only GET and HEAD for known exported files, denies dot/config paths, returns a real 404 document for missing routes, and rejects other methods with 405. Embed text assets as strings and binary assets as base64, with explicit content types. Abort builds if the compressed handler exceeds the chosen 2 MiB budget. Configure no indexing, no referrer, no sniffing and private no store on all app responses. Add HTTPS transport policy plus CSP rules for object, base and trusted frame ancestors, without claiming a complete script security policy. The platform still owns authentication and reserved sign in routes; the handler never implements sign in or trusts a caller supplied identity header. Verify the resulting headers after publication. If the host cannot enforce a required protection, record the limit and do not report that gate passed. Source and saved versions permit reverting the deployment as one unit.
 
 ## Build plan
 
-1. Prove the optional export locally with the existing app and a loopback static QA server that resolves exported HTML and real 404 pages, PD-01. Export requests may use GET or HEAD and known generated `.txt` route payloads; they must remain on the configured preview origin, carry only the framework `_rsc` query and store no app session.
+1. Prove the optional export locally with the existing app and a loopback QA server using the same generated handler as the host, PD-01. Export requests may use GET or HEAD and known generated `.txt` route payloads; they must remain on the configured preview origin, carry only the framework `_rsc` query and store no app session.
 2. Register one private Site, persist identity and package the exact pushed source with the Sites helper, PD-02 and PD-03.
 3. Deploy the saved version privately and prove access, deep links and headers, PD-02, PD-03 and PD-05.
 4. Drive the hosted flows in the real browser and applicable automated checks, PD-04 and PD-05.

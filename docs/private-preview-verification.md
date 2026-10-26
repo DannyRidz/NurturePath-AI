@@ -7,9 +7,9 @@ The user authorized the recommended owner private hosted preview. Public sharing
 * Base: merged PR #5, `f2f0a318f20cd6503f3d56b8fe3247509e660a9f`.
 * Deployment decision: [ADR 0005](specs/0005-private-preview.md).
 * `npm run build:preview` passed using webpack and `output: export`. The first attempt exposed Next.js's explicit rejection of PPR with static export. Both cache flags are now disabled only in export mode; the normal Node build retains them and its separate webpack build passed.
-* The exported app passed all 284 existing browser checks across five projects, with six explicit Chromium-only PDF API skips and zero failures (2.6 minutes). This is a local exported-artifact run, not a claim that those checks ran against the remote host.
-* The added HTTP contract check passed once on the export QA server. It covers real missing-route status, blocked metadata/config/traversal paths, HEAD/POST handling and privacy headers. Other project/mode instances skip this local server contract by design.
-* All 45 unit tests, lint and TypeScript passed. Latest head PR CI must pass before merging repository changes. CI runs the complete Node suite, then an exported desktop suite including the HTTP contract.
+* The initial export passed 284 browser checks with six PDF API skips. After replacing the host serving layer, the generated Worker passed **285 checks with ten explicit skips and zero failures** across five projects (2.6 minutes). Six skips concern the Chromium PDF API; four avoid repeating the same HTTP contract in other browser projects. This is a local exported-artifact run, not a claim that those checks ran against the remote host.
+* The HTTP contract check passed against the generated handler, which local QA and the hosted version share. It covers real missing-route status, blocked metadata/config/traversal paths, HEAD/POST handling and privacy headers. Other project/mode instances skip this local server contract by design.
+* After the privacy copy clarified host sign in versus patient accounts and app clearing, 16 targeted cross-browser journey/consent/accessibility/HTTP checks passed, with four intentional duplicate HTTP-contract skips. All 45 unit tests, lint and TypeScript passed. Latest head PR CI must pass before merging repository changes. CI runs the complete Node suite, then an exported desktop suite including the HTTP contract.
 * Export network checks retain the configured origin, no app cookies or persistent storage, no case values in URLs, and read-only requests. Export-specific HEAD probes and an explicit allowlist of generated route payloads are permitted; no arbitrary network host, method or query is allowed.
 
 ## Registration and audience
@@ -22,7 +22,11 @@ The user authorized the recommended owner private hosted preview. Public sharing
 
 ## Hosted verification
 
-Pending publication and actual HTTP/browser observations. Do not treat `_headers` or the local QA server as proof of hosted protections.
+Initial static publication succeeded on source `0b39b7cc4e96d4ef054dca123f66a8b9826b6525`, deployment `appgdep_6adf1e0b6ad481918473b9f415e973f2`, saved version `appgprj_6adf1a0354bc8191acd32379cac1674f~appgver_7ac3a4aa45348191a797e0c8cdd4ba61`.
+
+Actual HTTP checks proved signed out requests to the home page, start, assessment, report, route payload and JavaScript asset returned **401** with no app content. Authorized service requests returned the expected HTML/assets and a true 404 for a missing route. Owner ChatGPT sign in opened the app in Chrome.
+
+That publication **failed the header gate**: `_headers` was ignored, responses used `public, max-age=0, must-revalidate`, and referrer, nosniff and robots headers were absent. It is not a verified release to roll back to. The replacement embeds the same exported files in a small Worker that sets actual response headers. The handler is about 353 KB compressed for 88 assets; the build enforces a 2 MiB budget. Its local HTTP contract and full browser suite passed. Replacement hosted HTTP/browser observations remain pending; local headers do not prove remote headers.
 
 ## Rollback and update procedure
 

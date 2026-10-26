@@ -40,7 +40,7 @@ CI runs in the official Playwright image, pinned by version and digest to match 
 
 ## Private hosted preview
 
-The optional static export uses the same app and authored data. Next.js does not support partial prerendering with export, so `cacheComponents` and `partialPrefetching` are disabled only for this mode. The normal Node build keeps both enabled.
+The optional static export uses the same app and authored data. The preview builder embeds its files in a small Sites Worker under `dist/` so actual HTTP response headers are enforced; bare Sites static serving did not apply `_headers`. Next.js does not support partial prerendering with export, so `cacheComponents` and `partialPrefetching` are disabled only for this mode. The normal Node build keeps both enabled.
 
 ```sh
 npm run build:preview
@@ -49,6 +49,6 @@ npm run serve:preview
 NURTUREPATH_STATIC_PREVIEW=1 npm run test:e2e
 ```
 
-The loopback QA server uses port 3001. It is not the hosted access boundary. The registered Site is owner private and requires the owner's ChatGPT sign in. This is separate from app consent; the app creates no patient account and stores no health record. Do not change sharing to bypass a login problem.
+The loopback QA server uses port 3001 and delegates to the same generated handler deployed to Sites. It is not the hosted access boundary. The registered Site is owner private and requires the owner's ChatGPT sign in. This is separate from app consent; the app creates no patient account and stores no health record. Do not change sharing to bypass a login problem.
 
 [Private preview verification](docs/private-preview-verification.md) records the actual deployment, access, headers and rollback evidence. `.openai/hosting.json` contains only Site identity and artifact configuration. Native credentials belong only in memory and helper stdin, never source, command arguments, logs or archives. Publish the exact pushed source and matching artifact through the Sites helper; reuse its returned commit/version IDs.
