@@ -19,6 +19,7 @@ Start with the [executive summary](00-executive-summary.md), then review the [ap
 | [08 Software architecture](08-software-architecture.md) | How should the sole builder structure the system? |
 | [09 Data and API contracts](09-database-and-api-design.md) | Where does every input and output come from? |
 | [10 AI architecture](10-ai-architecture.md) | What may the model do, and how does it fail safely? |
+| [Proposed AI appointment coach](specs/0007-ai-appointment-coach.md) | The requested next AI proposal, its boundaries, open decisions and evaluation plan; planning only |
 | [11 Clinical safety](11-clinical-safety.md) | What requires qualified clinical approval? |
 | [12 Privacy and security](12-privacy-and-security.md) | Where could sensitive information escape? |
 | [13 Datasets and evaluation](13-datasets-and-evaluation.md) | What evidence can be produced honestly? |
@@ -56,3 +57,5 @@ On 26 October 2026 the user authorized release validation and fixes, with recomm
 On 26 October 2026 the user authorized the recommended owner private hosted preview. The optional static export and Sites access boundary are recorded in [ADR 0005](specs/0005-private-preview.md). Public sharing, invitations and competition submission are outside this authorization.
 
 On 26 October 2026 the user requested replacing Sites with a judge accessible host that needs no OpenAI login and a memorable URL. [ADR 0006](specs/0006-public-demo-hosting.md) governs the Vercel public fictional demonstration. This supersedes the owner private requirement for the new host only; no clinical approval or competition submission is implied.
+
+On 26 October 2026 the user asked to capture the recommended AI appointment preparation coach before implementation. [Proposal 0007](specs/0007-ai-appointment-coach.md) records an optional factual summary and three clinician discussion questions for enabled nonurgent fictional examples, with authored fallback and unchanged deterministic safety guidance. This authorizes planning only. Generated text extends the earlier fragment-selection design; provider, content review, hosting/API, consent, budget, evaluation and revised solo estimates must be settled before a separate build authorization. The deployed app still has no runtime AI.
