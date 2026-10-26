@@ -182,7 +182,8 @@ function ConsentFlow() {
             <h2>What happens here</h2>
             <p>
               You view authored fictional answers and guidance. There is no
-              personal health intake, account, diagnosis or clinician on call.
+              personal health intake, patient account, diagnosis or clinician on
+              call.
             </p>
           </div>
           <div className="sheet-row">

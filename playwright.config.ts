@@ -1,4 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
+const staticPreview = process.env.NURTUREPATH_STATIC_PREVIEW === "1";
+const baseURL = staticPreview
+  ? "http://127.0.0.1:3001"
+  : "http://127.0.0.1:3000";
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -8,7 +12,7 @@ export default defineConfig({
   reporter: [["list"]],
   outputDir: "output/playwright/results",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
   },
@@ -26,8 +30,10 @@ export default defineConfig({
     { name: "firefox", use: { ...devices["Desktop Firefox"] } },
   ],
   webServer: {
-    command: "npm run start -- --hostname 127.0.0.1",
-    url: "http://127.0.0.1:3000",
+    command: staticPreview
+      ? "npm run serve:preview"
+      : "npm run start -- --hostname 127.0.0.1",
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },

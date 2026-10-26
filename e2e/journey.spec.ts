@@ -163,9 +163,10 @@ test("AC-12 Hide masks content, traps focus and Resume returns focus", async ({
   ).toBeVisible();
 });
 
-test("AC-08/14 journey uses only expected GET pages and assets and stores no session", async ({
+test("AC-08/14 journey uses only expected read requests and stores no session", async ({
   page,
   context,
+  baseURL,
 }) => {
   const unexpected: string[] = [];
   const allowedPages = new Set([
@@ -180,21 +181,39 @@ test("AC-08/14 journey uses only expected GET pages and assets and stores no ses
     "/privacy",
     "/sources",
   ]);
+  const allowedPayloads = new Set(
+    [...allowedPages].flatMap((path) => {
+      const prefix = path === "/" ? "" : path;
+      const segment = path.slice(1).replaceAll("/", ".");
+      return [
+        path === "/" ? "/index.txt" : `${path}.txt`,
+        `${prefix}/__next._tree.txt`,
+        `${prefix}/__next._full.txt`,
+        `${prefix}/__next.${segment ? `${segment}.` : ""}__PAGE__.txt`,
+      ];
+    }),
+  );
   page.on("request", (request) => {
     const url = new URL(request.url());
     const expectedPath =
       allowedPages.has(url.pathname) ||
+      (process.env.NURTUREPATH_STATIC_PREVIEW === "1" &&
+        allowedPayloads.has(url.pathname)) ||
       url.pathname.startsWith("/_next/static/");
     const expectedQuery = [...url.searchParams.keys()].every(
       (key) => key === "_rsc",
     );
     if (
-      url.origin !== "http://127.0.0.1:3000" ||
-      request.method() !== "GET" ||
+      url.origin !== new URL(baseURL!).origin ||
+      !(
+        request.method() === "GET" ||
+        (process.env.NURTUREPATH_STATIC_PREVIEW === "1" &&
+          request.method() === "HEAD")
+      ) ||
       !expectedPath ||
       !expectedQuery
     )
-      unexpected.push(request.url());
+      unexpected.push(`${request.method()} ${request.url()}`);
   });
   await reachReview(page);
   await page.getByRole("link", { name: "Get guidance" }).click();

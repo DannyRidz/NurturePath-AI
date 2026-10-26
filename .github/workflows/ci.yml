@@ -27,3 +27,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:e2e
+      - run: npm run build:preview
+      - run: npm run test:e2e -- --project=desktop
+        env:
+          NURTUREPATH_STATIC_PREVIEW: "1"
