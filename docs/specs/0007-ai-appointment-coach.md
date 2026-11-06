@@ -5,6 +5,8 @@
 **Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. Real provider activation, spending, model evaluation calls and public AI access remain unauthorized.
 **Readiness:** Local simulated slice accepted and built under the 6 November authorization. Verification is recorded in `docs/local-coach-verification.md` and the implementation PR. Provider activation and public deployment remain separate, incomplete release work.
 
+**Provider qualification, 6 November 2026:** [Gemini qualification](../gemini-coach-qualification.md) records the documentation review and conditional allowance arithmetic. Activation remains no-go: account terms/retention/access and exact hard billable-token bounds need evidence. No provider adapter, call or spending is authorized by this review.
+
 ## Summary
 
 Add an optional AI coach that helps someone prepare to discuss a fictional example with a clinician. It would draft a short factual summary and three discussion questions. The existing authored guidance remains available and continues to determine every next step.

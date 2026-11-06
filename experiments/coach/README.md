@@ -35,3 +35,5 @@ Session, consent, access token and draft live in React memory. Clear, withdrawal
 The endpoint denies a hosted Vercel/export environment, missing enable flag, wrong token, nonlocal Host/Origin, unsupported cases, stale versions and unexpected fields. This is a local operator tool, not a deployable public access design. Directly running Next instead of the launcher does not establish a qualified configuration. Keep it local.
 
 Real provider activation, paid budget, account terms/retention, model qualification, qualified content review, public admission and hosting remain separate work under [specification 0007](../../docs/specs/0007-ai-appointment-coach.md).
+
+The [Gemini qualification record](../../docs/gemini-coach-qualification.md) tracks documentation findings, conditional costs and unresolved activation gates. It does not enable a provider adapter or authorize calls.
