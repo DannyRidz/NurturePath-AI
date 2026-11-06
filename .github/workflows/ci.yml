@@ -52,3 +52,4 @@ jobs:
       - run: npm run test:coach
       - run: npm run build:coach
       - run: npm run test:e2e:coach
+      - run: npm run test:e2e:coach:gemini

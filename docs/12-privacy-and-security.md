@@ -1,5 +1,7 @@
 # Privacy, security and regulatory plan
 
+Gemini continuation, 6 November 2026: the user authorized the local provider integration and a conditional 60 attempt / USD 1 reservation trial under [specification 0007](specs/0007-ai-appointment-coach.md). The adapter is built but dispatch remains disabled pending exact cost qualification. Paid account access was checked without changing billing. This extends only the isolated local experiment; no public AI, personal intake, report integration or hosted endpoint is added. Existing public contracts remain unchanged.
+
 Local experiment exception, 6 November 2026: the user authorized the simulated V01 coach slice in [specification 0007](specs/0007-ai-appointment-coach.md). It lives in `experiments/coach`, uses authored fixtures only, requires local token access and keeps draft/session data in memory. Only anonymous cumulative simulation counters persist locally. No provider call, public endpoint, generated AI prose, personal intake or public hosting change is authorized or added. Existing public contracts below remain unchanged.
 
 This is a design and legal research assessment, not an audit of implemented controls or a compliance certification. Sensitive reproductive information creates disclosure, discrimination, stigma and safety risks. The hackathon default is locked authored fictional variants only. Server accepts their IDs/versions, never health-answer payloads.

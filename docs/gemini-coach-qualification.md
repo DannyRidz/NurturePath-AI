@@ -60,3 +60,14 @@ No run has started: provider attempts 0, measured cost not applicable, model qua
 ## Change verification
 
 This qualification changes documentation only. Runtime behavior, mocks, notices, deployment and account configuration are unchanged. Reviewed source links and allowance arithmetic; no browser behavior changed and no new model tests were run. PR #9's passing CI applies to its recorded head, not to this new document.
+
+
+## Implementation and account continuation, 6 November 2026
+
+The user ultimately selected Gemini and approved use of existing AI Studio credits for a maximum of 60 local V01 attempts and USD 1 in application reservations, conditional on passing account and cost checks. The paid tier, prepaid availability and auto reload off were observed through the authenticated AI Studio UI. No account IDs, balances or keys are recorded in this public repository. No billing change was made. A generic existing key was visible but was not copied or used; no new credential was created.
+
+The implementation now includes a disabled Gemini adapter, exact request hashing, expiring activation evidence, direct REST transport, strict response/provenance checks, no retries, anonymous reservations and truthful Gemini browser states. The public export still excludes it. This supersedes the earlier statement that no adapter exists, but does not mean dispatch is qualified.
+
+**Cost qualification remains no-go.** Minimal thinking does not guarantee zero thought tokens. General documentation and first party support discussions describe combined caps, but the retrieved material does not settle that hard bound for this exact model/API/configuration. Do not copy Interactions API `max_output_tokens` guarantees into the GenerateContent contract. The [token counting clarification](https://discuss.ai.google.dev/t/gemini-api-counttokens/188451) also says `countTokens` excludes output schemas in generation configuration. A token count alone cannot establish the whole billable input bound here. The larger conditional input ceiling of 16,384 plus 1,024 combined generated tokens would yield USD 0.005632 per attempt at the checked rates. It remains conditional, not a proven maximum.
+
+No activation record has been manufactured. No model inference or token counting call has been made, and no credits were spent by this work. Before running the approved trial, obtain authoritative model specific bounds or approve a separately qualified Gemini model/configuration through an explicit spec update. Continue to count every admitted failure and do not infer safety or usefulness from synthetic transport tests.

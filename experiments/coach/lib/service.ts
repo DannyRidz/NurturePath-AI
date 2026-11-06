@@ -3,9 +3,10 @@ import { open, readFile, rename, unlink } from "node:fs/promises";
 import { join, isAbsolute } from "node:path";
 import { z } from "zod";
 import { createReport } from "../../../src/lib/report";
-import { noticeVersion, outputShape, requestShape, responseShape } from "./contract";
+import { noticeVersion, geminiNoticeVersion, geminiModel, outputShape, requestShape, responseShape, type CoachMode } from "./contract";
+import { generateGemini, GeminiFailure, readActivation } from "./gemini";
 const ledgerShape = z.object({ experimentId: z.string().min(1), attempts: z.number().int().min(0).max(60), reservedCents: z.number().int().min(0).max(100) }).strict();
-export type Config = { enabled: boolean; token?: string; ledgerPath?: string; experimentId?: string; hosted: boolean };
+export type Config = { enabled: boolean; token?: string; ledgerPath?: string; experimentId?: string; hosted: boolean; mode?: CoachMode; apiKey?:string; activationPath?:string; ci?:boolean };
 const headers = { "Cache-Control": "private, no-store" };
 function error(status: number, code: string, requestId?: string) {
   return Response.json({status:"unavailable",code,...(requestId ? {requestId} : {})},{status,headers});
@@ -27,7 +28,7 @@ async function reserve(config: Config) {
     if (ledger.attempts>=60 || ledger.reservedCents>=100) { await lock.close(); await unlink(lockPath); return "exhausted"; }
     await lock.writeFile(JSON.stringify({...ledger,attempts:ledger.attempts+1,reservedCents:ledger.reservedCents+1}));
     await lock.sync();
-    // Keep the lock for the entire simulated attempt; commit the counter first.
+    // Keep the lock for the entire attempt; commit the counter before dispatch.
     const temporary=join(config.ledgerPath,"ledger.next");
     const next=await open(temporary,"w",0o600);
     try { await next.writeFile(JSON.stringify({...ledger,attempts:ledger.attempts+1,reservedCents:ledger.reservedCents+1})); await next.sync(); } finally { await next.close(); }
@@ -35,7 +36,7 @@ async function reserve(config: Config) {
     return {release:async()=>{await lock.close();await unlink(lockPath);}};
   } catch { await lock.close(); await unlink(lockPath); throw new Error("ledger"); }
 }
-export async function handleCoach(request: Request, config: Config) {
+export async function handleCoach(request: Request, config: Config, transport?:typeof fetch) {
   if (!config.enabled || config.hosted) return error(503,"disabled");
   if (request.headers.get("host")!=="127.0.0.1:3000" || request.headers.get("origin")!=="http://127.0.0.1:3000" || !equalToken(request.headers.get("authorization")??"",config.token)) return error(403,"local_access_required");
   if (request.headers.get("content-type")?.split(";")[0].trim()!=="application/json") return error(400,"json_required");
@@ -63,18 +64,28 @@ export async function handleCoach(request: Request, config: Config) {
   try { input=requestShape.parse(JSON.parse(Buffer.concat(chunks).toString("utf8"))); } catch { return error(400,"invalid_request"); }
   const id=input.requestId;
   if (!input.consent || input.variantId!=="V01") return error(403,"ineligible",id);
-  if ([input.catalogVersion,input.rulesVersion,input.contentVersion].some(v=>v!=="sim-1") || input.noticeVersion!==noticeVersion) return error(409,"stale_version",id);
+  const mode=config.mode??"mock", expectedNotice=mode==="gemini"?geminiNoticeVersion:noticeVersion;
+  if ([input.catalogVersion,input.rulesVersion,input.contentVersion].some(v=>v!=="sim-1") || input.noticeVersion!==expectedNotice) return error(409,"stale_version",id);
+  let activation;
+  if(mode==="gemini") {
+    if(config.ci || !config.apiKey || config.apiKey.length<20)return error(503,"activation_required",id);
+    try {activation=await readActivation(config.activationPath,config.experimentId);}catch{return error(503,"activation_required",id);}
+  }
   let reservation;
   try { reservation=await reserve(config); } catch { return error(503,"ledger_unavailable",id); }
   if (typeof reservation==="string") return error(429,reservation,id);
   try {
-    // This is deliberately an authored fixture. There is no provider adapter or network dispatch.
+    if(mode==="gemini" && activation && config.apiKey){
+      const {output,usage}=await generateGemini(config.apiKey,activation,transport);
+      return Response.json(responseShape.parse({status:"draft",requestId:id,variantId:"V01",catalogVersion:"sim-1",rulesVersion:"sim-1",contentVersion:"sim-1",noticeVersion:geminiNoticeVersion,promptVersion:"coach-gemini-prompt-1",provider:"google",model:geminiModel,generatedAt:new Date().toISOString(),...output,usage}),{headers});
+    }
+    // Simulation remains authored and never invokes the transport.
     const report=createReport("V01",new Date().toISOString());
     const output=outputShape.parse({
       summary: `Fictional purpose: ${report.purpose}. Sudden severe pain: ${report.answers[0].answer}. Current concern: ${report.answers[2].answer}. Relevant clinician history: ${report.answers[3].answer}. Testosterone or steroid use: ${report.answers[4].answer}. Lifestyle information requested: ${report.answers[5].answer}. Difficulty conceiving duration: ${report.answers[6].answer}.`,
       questions:["What information would be useful to bring to a conversation about reproductive health?","How can I describe what I would like to learn?","Which reliable educational resources could we discuss?"],
     });
     return Response.json(responseShape.parse({status:"draft",requestId:id,variantId:"V01",catalogVersion:"sim-1",rulesVersion:"sim-1",contentVersion:"sim-1",noticeVersion,promptVersion:"coach-mock-1",provider:"simulated",model:"authored-fixture-1",generatedAt:report.generatedAt,...output}),{headers});
-  } catch { return error(503,"invalid_simulation",id); }
+  } catch(failure) { return error(failure instanceof GeminiFailure && failure.code==="deadline"?504:503,mode==="gemini"?(failure instanceof GeminiFailure?failure.code:"provider_failure"):"invalid_simulation",id); }
   finally { await reservation.release(); }
 }

@@ -2,7 +2,11 @@ import { handleCoach } from "../../../lib/service";
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   return handleCoach(request, {
-    enabled: process.env.COACH_EXPERIMENT_ENABLED === "1" && process.env.COACH_ADAPTER === "mock",
+    enabled: process.env.COACH_EXPERIMENT_ENABLED === "1" && ["mock","gemini"].includes(process.env.COACH_ADAPTER??""),
+    mode:process.env.COACH_ADAPTER==="gemini"?"gemini":"mock",
+    apiKey:process.env.GEMINI_API_KEY,
+    activationPath:process.env.COACH_ACTIVATION_PATH,
+    ci:Boolean(process.env.CI),
     token: process.env.COACH_EXPERIMENT_TOKEN,
     ledgerPath: process.env.COACH_LEDGER_PATH,
     experimentId: process.env.COACH_EXPERIMENT_ID,

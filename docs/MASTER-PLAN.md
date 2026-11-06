@@ -63,3 +63,8 @@ On 26 October 2026 the user asked to capture the recommended AI appointment prep
 ## Local coach simulation, 6 November 2026
 
 The user authorized the next local slice of specification 0007 with simulated provider responses. It is isolated in `experiments/coach`, uses the canonical V01 example and adds no model call or public endpoint. [Verification](local-coach-verification.md) records the local checks; latest head CI is recorded in the implementation PR. Real provider activation, spending, model evaluation and public AI enablement remain separate decisions.
+
+
+## Gemini integration continuation, 6 November 2026
+
+The user selected Gemini and authorized the local integration plus a conditional trial using existing AI Studio prepaid credits (at most 60 attempts and USD 1 in reservations after account/cost checks). The paid account check passed. The adapter and deterministic verification are implemented; exact billable token qualification and actual evaluation remain outstanding. No model calls or credit spending occurred. Public AI stays separately unauthorized. See [qualification](gemini-coach-qualification.md) and [specification 0007](specs/0007-ai-appointment-coach.md).

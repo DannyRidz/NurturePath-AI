@@ -2,14 +2,28 @@
 
 **Date:** 2026-10-26
 **Status:** In Progress
-**Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. Real provider activation, spending, model evaluation calls and public AI access remain unauthorized.
+**Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. The later continuation below authorizes provider integration and a conditional bounded local trial. Public AI access remains unauthorized.
 **Readiness:** Local simulated slice accepted and built under the 6 November authorization. Verification is recorded in `docs/local-coach-verification.md` and the implementation PR. Provider activation and public deployment remain separate, incomplete release work.
 
-**Provider qualification, 6 November 2026:** [Gemini qualification](../gemini-coach-qualification.md) records the documentation review and conditional allowance arithmetic. Activation remains no-go: account terms/retention/access and exact hard billable-token bounds need evidence. No provider adapter, call or spending is authorized by this review.
+**Provider qualification, 6 November 2026:** [Gemini qualification](../gemini-coach-qualification.md) records the documentation review and conditional allowance arithmetic. The subsequent user approval permits a conditional bounded local trial. Activation still requires the remaining hard billable-token evidence; the review itself does not activate calls.
 
 ## Summary
 
 Add an optional AI coach that helps someone prepare to discuss a fictional example with a clinician. It would draft a short factual summary and three discussion questions. The existing authored guidance remains available and continues to determine every next step.
+
+## Gemini implementation continuation, 6 November 2026
+
+The user authorized implementation, ultimately selected Gemini and explicitly approved use of existing AI Studio credits for a local V01 trial of at most 60 attempts and USD 1 in application reservations, after account and cost checks pass. Public AI remains outside this approval. This supersedes the brief OpenAI selection before provider code was written. A read only AI Studio check confirmed paid tier, prepaid credit availability and auto reload off. No account identifiers, balance or credentials are recorded here. No billing settings were changed.
+
+Use Gemini Developer API direct REST `v1beta/models/gemini-3.1-flash-lite:generateContent`. Freeze the full canonical V01 facts, instructions, strict output schema and configuration in a SHA256 hash. The request uses one candidate, temperature 0, `maxOutputTokens:1024`, minimal thinking, JSON schema output, no tools, history, grounding, cache, uploads or automatic retries. The existing 8,192 request byte cap, 16 KiB response cap and 15 second provider deadline apply. Every successful response must have the expected model version, STOP finish reason, one text part, valid usage and independently validated summary/questions. Obvious prohibited patterns may reject an output but never replace semantic review.
+
+Simulation stays the launcher default. Explicit Gemini launch uses `.local/coach-gemini` and experiment ID `gemini-trial-1`, separate from simulation counters. Keys are read through masked terminal input or server environment, never arguments or files. A separate activation JSON file, outside git, must bind the experiment, exact model and request hash, recent review time and expiry (at most seven days), approval reference, paid/region/intended use checks, terms and retention disclosure, input/output bound evidence, rates and the approved allowance. Missing or mismatched evidence stops dispatch before reservation. Recheck the evidence for each request. Removing it stops new admissions; an existing sent request can still bill. This record is an operator assertion, not proof of account configuration.
+
+Standard rates checked are USD 0.25 per million input tokens and USD 1.50 per million generated tokens including thinking. A qualified input ceiling of 16,384 tokens and a combined generation ceiling of 1,024 would cost at most USD 0.005632, below the one cent reservation. The byte cap is not a token ceiling. These bounds are still conditional: **do not create activation evidence until authoritative support for the exact request is available**. Account and allowance approval do not waive this gate. A post-response usage rejection cannot prevent provider billing.
+
+UI follows the existing result, disclosure, token/consent, loading, draft, unavailable and dismiss composition in `design.md`. Server configuration provides only the public mode to the local shell. Gemini uses `coach-gemini-notice-1` and `coach-gemini-prompt-1`, names the provider/model and explains paid processing, limited abuse/legal retention, billing and cancellation limits. It never claims zero retention or that a failed real request contacted nobody. Browser validation requires matching provider/notice provenance. Drafts remain outside reports and printing.
+
+Deterministic transports verify success and failure without keys or provider access. The browser suite verifies simulation and Gemini mode separately with real dispatch disabled. CI always denies real dispatch, as do Vercel and exported preview environments. Root export isolation checks include Gemini markers. Evaluation remains ten qualification attempts followed by twenty fresh frozen evaluation attempts, with thirty reserve attempts. No model run, output quality, clinical approval or measured patient benefit is claimed before those runs and reviews occur.
 
 ## Context
 
