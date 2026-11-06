@@ -56,3 +56,7 @@ The user explicitly said to disregard CodeRabbit because of free plan limits, re
 ## Authorized complete report milestone, 25 October 2026
 
 After the scenario milestone merged, the user authorized the recommended complete printable summary and requested implementation and verification without further questions. Implement T12/T13 report preview, explicit browser Print / Save as PDF, Cancel / Back and reliable clear. Use the existing all-facts disclosure and canonical answers/reasons/sources. This does not authorize selective omission, personal intake, runtime AI, deployment or submission.
+
+## AI coach design continuation, 6 November 2026
+
+The user authorized continuing the planning work. Proposal 0007 now specifies an isolated local V01 experiment, Gemini as a qualification candidate, exact transport/lifecycle controls, proposed USD 1/60 attempt limits and a thirty call evaluation. Design acceptance, implementation and provider activation remain separate. No account, spending or public runtime change was made. Public AI contracts remain unchanged.

@@ -3,7 +3,7 @@
 **Date:** 2026-10-26
 **Status:** Proposed
 **Authorization:** Capture the recommendation in a plan only. Implementation, provider activation, spending and public AI access are not authorized by this request.
-**Readiness:** Product proposal, not yet an approved implementation specification. Resolve the decisions below before building.
+**Readiness:** Concrete local experiment design added 6 November 2026. Awaiting design acceptance and build authorization. Public deployment remains a separate, incomplete release design.
 
 ## Summary
 
@@ -118,3 +118,86 @@ Conversation preparation addresses a concrete communication task within the curr
 ## Follow-up
 
 Implementation authorization, clinical/content and source-rights review, provider/model selection, approved budget, hosting/API design and measured evaluation remain outstanding. No account, paid resource, key, endpoint or public AI call is created by saving this proposal.
+
+
+## Local experiment decision, 6 November 2026
+
+The next slice is a local experiment on `127.0.0.1`, with V01 General learning only. This narrows the next build to something the sole builder can verify. Do not migrate the public Vercel project for this experiment. No provider call is permitted in production, CI, an exported preview or a remotely accessible development server.
+
+Recommended provider candidate: Google Gemini Developer API, stable model code `gemini-3.1-flash-lite`, with paid service data terms. Google documents structured output support. This is a candidate for qualification, not a reliability finding or an activated account. Use a direct server REST call with native fetch, Zod validation and no agent framework, retrieval, tools, grounding or automatic retries. The alternative is the existing finite authored selection design, if generated prose proves unhelpful or cannot pass review.
+
+Google's terms restrict clinical practice and medical advice. Keep this experiment to fictional communication preparation. Review provider terms, account region availability and the intended use before activation; uncertainty means no call. Paid services do not use prompts/responses to improve Google's products under the checked terms, but that is not a zero retention promise. Do not substitute unpaid service terms silently. No billing account, key or spending is authorized here.
+
+### Feature design
+
+| Item | Local experiment contract |
+|---|---|
+| Eligibility | V01 only, catalog/rules/content `sim-1`, plus a server registry entry with `experimentEnabled: true`. This is engineering experiment eligibility, never clinical approval. All other IDs fail before provider admission |
+| Browser entry | Optional action on the completed V01 authored result. Existing adult and simulation acknowledgements remain required. No report integration |
+| Disclosure | “This optional experiment sends this fixed fictional example to Google to draft conversation questions. It does not assess your health. Google processes the request under the account terms described here. Clearing removes this draft from this app but cannot recall a request already sent.” Show verified account specific retention details before enabling consent |
+| Consent | Unchecked checkbox, labelled “I agree to send this fictional example to Google for this draft.” Separate Request draft button. Decline closes the panel without a request. Provider, notice or case change requires fresh consent |
+| Request | POST `/api/coach`, JSON only, maximum 1,024 UTF-8 bytes, strict object `{variantId:"V01", catalogVersion:"sim-1", rulesVersion:"sim-1", contentVersion:"sim-1", noticeVersion:"coach-notice-1", consent:true, requestId:UUID}`. Reject extra fields, answer maps and free text |
+| Request identity | Browser `crypto.randomUUID()` per attempt. Browser also tracks a monotonically increasing session revision in memory. Capture both on dispatch and require both to match before committing a response |
+| Provider input | Server resolves all seven canonical answers from `src/lib/scenario.ts`, their labels from the existing report mapping, and the authored result. Fixed instructions identify fiction, preserve every answer status and prohibit inference, diagnosis, treatment, tests, urgency, service choice and appointment timing. Input is data, never a user instruction |
+| Provider output | Strict JSON object `{summary:string, questions:[string,string,string]}`, no additional keys. Summary 1 to 600 Unicode code points; each question 1 to 180, distinct after trim/case normalization. Plain text only, no HTML, Markdown links or URLs. Model gets this schema; server independently validates it |
+| Limits | Nonstreaming, one attempt, temperature 0 where supported, lowest documented thinking setting, maximum 1,024 total generated tokens including thinking. Entire request/schema/instructions at most 8,192 UTF-8 bytes. Enforce a 15 second server deadline, 18 second browser deadline and a 16 KiB provider response body cap. Unsupported hard token bounds mean candidate fails qualification |
+| Success | 200 `{status:"draft", requestId, variantId, catalogVersion, rulesVersion, contentVersion, noticeVersion, promptVersion:"coach-prompt-1", provider:"google", model, generatedAt, summary, questions}`. Model comes from actual request configuration, generatedAt from server UTC. Validate response again in browser, render through escaped React text |
+| Failures | 400 invalid schema; 403 missing/invalid local origin, consent or disabled case; 409 stale versions; 413 oversized input; 429 experiment allowance exhausted or busy; 503 disabled/configuration/provider failure; 504 deadline. JSON errors contain only `{status:"unavailable", code, requestId}` when requestId validated, otherwise omit it. Never echo provider bodies or credentials |
+| Cache/logging | All endpoint responses use `Cache-Control: private, no-store`. No prompt, output, request body, IP or credentials in app logs. Operational records contain attempt number, UTC time, model/config version, duration, status and token counts only. Disable SDK tracing; use no SDK retries |
+
+The model can return valid JSON containing poor medical language. Structural checks and a small prohibited pattern check may reject obvious failures, but cannot certify meaning. This experiment is therefore local and requires manual reading of every observed successful output. Do not label a draft as approved or safe merely because validation passed.
+
+### Local access and spending boundary
+
+Serve only on `127.0.0.1`. The route requires a server enable flag, exact allowed Origin `http://127.0.0.1:3000`, JSON content type and a random 256 bit experiment token supplied to the operator through a masked local control. Hold that token in browser memory only and send it in `Authorization`; never a URL or NEXT_PUBLIC variable. Deny absent Origin, cross origin requests and exported builds. Production always denies even if a key is mistakenly present. This is an operator experiment, not a public authentication design.
+
+Recommended activation allowance, subject to explicit approval: at most 60 provider attempts and USD 1 of application reservations for the entire experiment, whichever comes first. One active request across the local server, no automatic retries, duplicate requests consume another attempt. Reserve USD 0.01 before each provider dispatch, without refunds. Qualify current input/output/thinking prices against the stated bounds so worst case charge per attempt is below that reservation; otherwise disable. This does not cap tax, hosting fees or a provider invoice.
+
+Use one local process with an exclusive filesystem lock and an ignored metadata ledger under `.local/coach-experiment/`. Persist only experiment ID, cumulative attempts and integer reserved cents, never case facts, prompts or responses. Update the ledger atomically before dispatch, including failed calls; missing/corrupt ledger after initialization fails closed. Initialization is an explicit operator action, not automatic on restart. Refuse a second process while locked. Stop after a crash and reconcile the ledger before another activation. These controls are local only; do not reuse them in serverless hosting. No patient/session persistence is introduced.
+
+Configuration remains server only: `COACH_EXPERIMENT_ENABLED` defaults false, `GEMINI_API_KEY`, `COACH_EXPERIMENT_TOKEN`, fixed model ID, experiment ID and absolute ledger path. Missing activation evidence, terms/disclosure, current price qualification or any configuration disables dispatch. Keys and tokens stay outside git and shell arguments. Check real provider quota/billing controls before activation; alerts are not a hard cap.
+
+### State and lifecycle
+
+Idle opens disclosure, consent enables Request, Request enters loading, then valid current completion enters draft or failure enters unavailable. Disable duplicate clicks while loading. Manual retry requires another deliberate click and fresh request ID, retaining current consent only for the same case/provider/notice. A local allowance failure remains unavailable.
+
+Clear, Hide, consent withdrawal, panel dismissal, example replacement and navigation away abort the browser request, increment the revision and discard the draft. Hidden content must not reappear from a late completion. Returning to the result starts idle and requires consent again. Keep the authored result and existing complete report usable in every state. No generated output enters printing or a report in this slice.
+
+### Evaluation targets, fixed before model runs
+
+These are proposed experiment gates, not results or public release thresholds.
+
+1. Offline fixtures cover valid output, malformed JSON, extra properties, missing/duplicate/oversized questions, guessed facts, advice, hostile markup, refusal, timeout, invalid versions, ledger failure, concurrent requests and all lifecycle races. Unit tests prove structural/operational rejection; semantic fixtures document reviewer judgments rather than claim automated medical safety.
+2. Make ten V01 qualification calls after activation approval, freeze the prompt/schema/configuration, then make twenty fresh V01 evaluation calls. No tuning on the twenty call evaluation set; a changed prompt/model restarts that evaluation. Count every provider failure in the denominator. The remaining thirty attempts are reserve, not an implied larger test set.
+3. Require at least 18 of 20 evaluation attempts to yield structurally valid drafts, zero observed invented facts or prohibited recommendations, and all successful drafts to preserve the seven answer states without inference. Sole builder records per draft pass/fail with a reason. This is an engineering/content screen, not independent or clinical approval.
+4. For each successful draft compare with the existing V01 report: are the questions relevant, distinct and usable without introducing medical recommendations? Require at least 80% of successful drafts to pass all three. Record actual numerator/denominator and reviewer identity. Do not describe this as measured patient benefit.
+5. Record latency p50/p95, provider token usage, failures, reservations and measured provider charge when available. Target p95 under 15 seconds; unavailable billing data stays unknown. Zero calls for V07/V08, all other disabled cases, absent consent and disabled configuration.
+6. Verify the complete authored regression suite and coach states in desktop/mobile Chromium and WebKit plus desktop Firefox, including keyboard flow, clear/Hide/Back and delayed responses. CI uses deterministic fake provider responses only. Actual provider evidence is a separate operator run.
+
+Public enablement still needs qualified content and rights review, privacy/terms review, shared admission and approved public budget, a server hosting migration specification, broader frozen and held out cases, independent review and explicit public release approval. Passing this local experiment does not satisfy those gates.
+
+### Ordered next slice and solo estimate
+
+1. Accept this local design and explicitly authorize its build, reconcile the local experiment exception in documents 09, 10, 12 and ADR 0002 without weakening their public boundary (CO-01 to CO-10).
+2. Build V01 only with a fake adapter first, exact route validation, local access controls, ledger and draft UI. Keep provider dispatch disabled (CO-01 to CO-08).
+3. Complete lifecycle/failure tests, authored regressions and browser verification; review latest head CI through a PR (CO-04 to CO-08).
+4. Present exact account terms, model/price qualification, disclosure and USD 1/60 attempt allowance for activation approval. Only then run the thirty call experiment and save its evidence (CO-02, CO-08, CO-10).
+5. Decide whether to revise, stop or design a separately approved hosted release. Report inclusion remains deferred (CO-09).
+
+Planning estimate: 16 to 24 builder hours for the disabled local slice and verification, plus 4 to 8 hours for provider qualification and experiment recording, assuming access is available. At 25 hours per week that is roughly one to two working weeks. External review and public migration are excluded and have no committed completion date. Re-estimate after the first complete V01 loop.
+
+### Migration and rollback
+
+Strategy: isolated local feature flag, no production migration. Keep `vercel.json`, the public URL and production export behavior unchanged. Use a separate Next.js experiment app at `experiments/coach/`, with its own app directory, Next configuration and TypeScript configuration, using the root locked Next/React/Zod dependencies. Its `/api/coach` Route Handler runs on Node. Import canonical source exports from the root rather than copy the catalog. Add an explicit local start command bound to `127.0.0.1:3000`; root build and Vercel still build only the existing root app. The experiment UI presents the canonical V01 answers/result and existing report components through the same session provider, with a fixture entry that cannot select any other eligible case. Extract shared components only if needed, preserving public behavior. CI must separately typecheck/build the experiment and prove the production export contains neither endpoint nor experiment UI.
+
+Rollback: stop the local server, revoke the experiment key/token, disable the flag and retain only minimal counter evidence. The deployed authored app has no experiment dependency. Do not claim abort or local deletion erases provider records.
+
+### Checked references
+
+Official documentation checked 6 November 2026. Access and prices have not been tested against the user's account.
+
+* [Gemini 3.1 Flash Lite model](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite), stable code and structured output capability.
+* [Structured output](https://ai.google.dev/gemini-api/docs/structured-output), schema subset and requirement to validate semantic correctness separately.
+* [Gemini service terms](https://ai.google.dev/gemini-api/terms), paid/unpaid data distinctions and medical use restriction.
+* [Current pricing](https://ai.google.dev/gemini-api/docs/pricing), recheck exact account processing rates before activation; no historical price is an approved allowance.
+* [Vercel deployment protection](https://vercel.com/docs/deployment-protection), relevant to a future hosted experiment, not proof this local design is publicly protected.
