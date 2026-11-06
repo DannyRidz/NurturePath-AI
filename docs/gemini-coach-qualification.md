@@ -2,7 +2,7 @@
 
 Checked 6 November 2026. Governing contract: [specification 0007](specs/0007-ai-appointment-coach.md). Scope: documentation qualification only. No provider request, account inspection, billing change, key creation or public activation occurred.
 
-**Latest follow-up:** The user asked to carry out the remaining qualification and approved trial. A further documentation check identified the Interactions API as a possible alternative, but did not establish the whole billable input bound. [The clarification packet](gemini-provider-clarification.md) contains offline measurements of the exact existing request and a proposed public provider question. It has not been sent. Real dispatch stays disabled; no key was retrieved or credits spent.
+**Latest follow-up:** The user asked to carry out the remaining qualification and approved trial. A further documentation check identified the Interactions API as a possible alternative, but did not establish the whole billable input bound. [The clarification packet](gemini-provider-clarification.md) contains offline measurements of the exact existing request and the approved public provider question. It was [published on 7 November](https://discuss.ai.google.dev/t/documented-billable-token-bounds-for-gemini-3-1-flash-lite-structured-text/198793) under the authorized `Danny_Ridz` profile; a provider reply is pending. Real dispatch stays disabled; no key was retrieved or credits spent.
 
 **Decision: retain Gemini as the candidate; do not activate.** Documented structured output and advertised prices support further preparation. Account-specific terms, retention, access and the hard combined token bound remain unverified. This is not model performance evidence or permission to spend.
 

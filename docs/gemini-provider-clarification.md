@@ -1,6 +1,6 @@
 # Gemini cost qualification clarification
 
-Prepared 6 November 2026, updated 7 November. Status: **posting and account authorized, not sent**. The user approved posting the exact message publicly to the Google AI Developers Forum and explicitly selected the AI Studio account. Automatic approval review could not verify the account click target, so the normal forum sign-in has been handed to the user. This asks for documented bounds, not billing changes or model execution. No account identifiers, keys, prompt contents or health data are included in the proposed message.
+Prepared 6 November 2026, published 7 November. Status: **posted; awaiting provider clarification**. [Published topic](https://discuss.ai.google.dev/t/documented-billable-token-bounds-for-gemini-3-1-flash-lite-structured-text/198793), under the user-authorized `Danny_Ridz` profile in Gemini API / Documentation. The user explicitly approved profile creation, the displayed Google terms/privacy policy, and publication. The topic was verified in the browser after submission. No account identifiers, keys, prompt contents or health data appear in the message. No provider calls or spending occurred.
 
 ## Exact local configuration
 
@@ -23,9 +23,9 @@ The [Interactions API reference](https://ai.google.dev/api/interactions-api) inc
 
 The first party [token counting clarification](https://discuss.ai.google.dev/t/gemini-api-counttokens/188451) says generation configuration output schemas are excluded from `countTokens`. It does not provide a complete pre-dispatch billing upper bound for this request. An observed successful generation or an arbitrary safety margin would not supply that guarantee either.
 
-The next useful step is a provider clarification using the exact message below. The user explicitly authorized that public external communication. No post, email or support ticket has been sent yet. The earlier Git staging review-service usage limit cleared on 7 November. Posting still awaits the normal forum sign-in handoff.
+The approved question below is now public. The forum's new-user limit permits two links, so the REST token reference remains named without a hyperlink; the question and configuration are unchanged. Await a provider reply establishing the missing bounds before activation.
 
-## Proposed public forum message
+## Published public forum message
 
 **Title:** Documented billable token bounds for Gemini 3.1 Flash-Lite structured text
 
@@ -68,7 +68,7 @@ Before dispatch, I need to reserve a conservative maximum billable amount. Could
 2. With the same complete `generateContentRequest`, is `countTokens.totalTokens` an upper bound on the input tokens actually billed? If output schema or other formatting is excluded, what documented adjustment bounds that billable overhead? I am not assuming that bytes equal tokens or that a sample count guarantees an upper bound.
 3. If the stable Interactions API offers a documented solution instead, does this model support the same bounded text schema with `store:false`, no history/tools/continuation, and `generation_config.max_output_tokens:1024`? What documented calculation bounds the entire billed input, including the schema, on that endpoint?
 
-I have reviewed the [thinking guide](https://ai.google.dev/gemini-api/docs/thinking), [REST token reference](https://ai.google.dev/api/tokens), and [token counting scope clarification](https://discuss.ai.google.dev/t/gemini-api-counttokens/188451). I am keeping GenerateContent and Interactions parameter guarantees separate.
+I have reviewed the [thinking guide](https://ai.google.dev/gemini-api/docs/thinking), REST token reference, and [token counting scope clarification](https://discuss.ai.google.dev/t/gemini-api-counttokens/188451). I am keeping GenerateContent and Interactions parameter guarantees separate.
 
 This is a documentation question only. No credentials, account identifiers or private payloads are needed. No model execution, paid support plan, quota change or billing change is requested. Thank you.
 
