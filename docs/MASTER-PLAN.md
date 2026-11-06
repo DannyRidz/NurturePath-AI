@@ -68,3 +68,8 @@ The user authorized the next local slice of specification 0007 with simulated pr
 ## Gemini integration continuation, 6 November 2026
 
 The user selected Gemini and authorized the local integration plus a conditional trial using existing AI Studio prepaid credits (at most 60 attempts and USD 1 in reservations after account/cost checks). The paid account check passed. The adapter and deterministic verification are implemented; exact billable token qualification and actual evaluation remain outstanding. No model calls or credit spending occurred. Public AI stays separately unauthorized. See [qualification](gemini-coach-qualification.md) and [specification 0007](specs/0007-ai-appointment-coach.md).
+
+
+## Production Gemini direction, 7 November 2026
+
+The user authorized preparing Gemini for public availability with production engineering and superseded the project requirement to wait for authoritative hard billable token bounds. Specification 0007 records the new direction. The forum reply is follow up rather than a release dependency. Public spending allowance and intake scope await explicit answers; previous local approval does not define a public budget. Shared admission implementation has begun. No runtime public AI, model evaluation or production readiness is claimed.

@@ -1,5 +1,40 @@
 # 0007. AI appointment preparation coach
 
+## Production direction, 7 November 2026
+
+The user requested making Gemini available and treating the application as a production application. This authorizes production implementation and replaces the earlier requirement to wait for authoritative worst case billable token evidence. The forum response is useful follow up, not a release dependency. Earlier statements that public implementation is unauthorized or that unsupported hard token bounds automatically disqualify Gemini are historical and superseded by this section.
+
+Spending remains subject to a concrete allowance. The earlier USD 1 and 60 attempt authorization covered the local trial only. The public allowance and whether the product remains fictional are awaiting the user's answers. Until then, build and test the infrastructure without paid calls or public activation. Do not interpret this change as clinical approval, evidence of successful model evaluation, or permission to accept personal health intake.
+
+### Production implementation contract
+
+Retain Next.js, Vercel, the existing design system, authored guidance and complete report. Use native Next.js server hosting in place of the static Vercel export. Keep the static export as an explicitly AI disabled artifact. Reuse the existing Gemini transport, fixed V01 facts, strict schema, consent lifecycle and fallback. No browser API key or local operator token appears in the public flow. The server validates exact production Origin and derives all model input from the canonical catalog.
+
+Use the shared Redis primary selected in ADR 0004. The public service must never use the experiment filesystem ledger or process memory as its budget authority. An unavailable shared store prevents dispatch. Use direct REST commands with a bounded deadline and no automatic retries. The first implementation primitive is shared admission, independent of the unresolved public allowance.
+
+| Shared admission value | Source and rule |
+|---|---|
+| Release identifier | Stable server configuration, unchanged across deployments and restarts |
+| Allowance | Explicit operator initialized Redis hash with integer maximum attempts and reserved cents, plus configuration fingerprint and enabled status. Never initialize automatically on request |
+| Lifetime counters | Same hash, integer admitted attempts and reserved cents, never expiring or automatically refunded |
+| Client rate | ADR 0004, at most ten admissions per UTC minute. Use normalized direct Vercel client IP, HMAC SHA256 under a server secret, never raw IP in Redis |
+| Admission | One Redis EVAL checks initialized matching allowance, enabled state, remaining attempts, remaining one cent reservations and minute count before any increment. Failed or uncertain response prevents provider dispatch |
+| Time | Redis server TIME for minute boundary and rate expiry. Never client timestamps |
+| Duplicate or failed call | Each deliberate admitted attempt consumes another reservation. No retries or refunds |
+| Shutdown | Shared enabled field stops new admissions across deployments without resetting counters. Already sent requests can still bill |
+| Data retention | Budget metadata remains for reconciliation. Pseudonymous minute counters expire after the minute plus sixty seconds. No case, prompt, draft or consent record in Redis |
+
+The earlier one cent reservation is an application estimate, not a proven upper bound on Google billing. Keep the explicit provider output setting, payload cap, deadline, no tools and no retries. Check observed usage against the estimate and stop further admissions if it is exceeded or cannot be reconciled. Do not describe post response validation as a provider billing cap. Final public activation needs the chosen allowance, configured services and credentials, reviewed model output, deployed browser checks, latest head CI and a tested shutdown path.
+
+### Production acceptance criteria and build sequence
+
+1. **PUB-1:** Shared atomic admission survives concurrency, deployment changes and exhausted or corrupt state, with no provider call on uncertainty. Build the counter primitive and deterministic transport tests first, then verify the Lua operation against a real Redis primary before activation.
+2. **PUB-2:** An eligible consented fictional journey can request a real Gemini draft through the public server, with keys kept server side and the existing clear, Hide, withdrawal and late completion behavior preserved. Build the public route and UI around the shared admission primitive once the scope answer is recorded.
+3. **PUB-3:** Invalid, urgent, disabled, over budget, malformed and failed requests retain authored guidance and report behavior. Test request admission before the provider and all relevant browser races.
+4. **PUB-4:** Privacy, source labels and operating instructions describe actual provider and metadata processing, estimated spending controls and deployment shutdown. Reconcile the older static only and local only documents with the implemented behavior.
+5. **PUB-5:** Verify real model results within the authorized allowance, review the diff, run applicable checks and browser projects, inspect latest head CI, then verify deployed anonymous access, response headers and shutdown. Do not label unverified work production ready.
+
+
 **Date:** 2026-10-26
 **Status:** In Progress
 **Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. The later continuation below authorizes provider integration and a conditional bounded local trial. Public AI access remains unauthorized.

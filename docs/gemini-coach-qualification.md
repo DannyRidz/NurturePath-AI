@@ -1,5 +1,8 @@
 # Gemini qualification for the bounded coach trial
 
+**7 November production direction:** The user requested public Gemini availability with production engineering. The [production section of specification 0007](specs/0007-ai-appointment-coach.md#production-direction-7-november-2026) supersedes this document's earlier hard token evidence activation gate. The forum reply is no longer a release prerequisite. Spending controls will use explicit estimated reservations without promising an invoice cap. Public allowance and intake scope are pending user answers. Historical findings below remain research evidence, not current instructions to wait indefinitely. No real call or public activation has occurred.
+
+
 Checked 6 November 2026. Governing contract: [specification 0007](specs/0007-ai-appointment-coach.md). Scope: documentation qualification only. No provider request, account inspection, billing change, key creation or public activation occurred.
 
 **Latest follow-up:** The user asked to carry out the remaining qualification and approved trial. A further documentation check identified the Interactions API as a possible alternative, but did not establish the whole billable input bound. [The clarification packet](gemini-provider-clarification.md) contains offline measurements of the exact existing request and the approved public provider question. It was [published on 7 November](https://discuss.ai.google.dev/t/documented-billable-token-bounds-for-gemini-3-1-flash-lite-structured-text/198793) under the authorized `Danny_Ridz` profile; a provider reply is pending. Real dispatch stays disabled; no key was retrieved or credits spent.
