@@ -59,3 +59,7 @@ On 26 October 2026 the user authorized the recommended owner private hosted prev
 On 26 October 2026 the user requested replacing Sites with a judge accessible host that needs no OpenAI login and a memorable URL. [ADR 0006](specs/0006-public-demo-hosting.md) governs the Vercel public fictional demonstration. This supersedes the owner private requirement for the new host only; no clinical approval or competition submission is implied.
 
 On 26 October 2026 the user asked to capture the recommended AI appointment preparation coach before implementation. [Proposal 0007](specs/0007-ai-appointment-coach.md) records an optional factual summary and three clinician discussion questions for enabled nonurgent fictional examples, with authored fallback and unchanged deterministic safety guidance. This authorizes planning only. Generated text extends the earlier fragment-selection design; provider, content review, hosting/API, consent, budget, evaluation and revised solo estimates must be settled before a separate build authorization. The deployed app still has no runtime AI.
+
+## Local coach simulation, 6 November 2026
+
+The user authorized the next local slice of specification 0007 with simulated provider responses. It is isolated in `experiments/coach`, uses the canonical V01 example and adds no model call or public endpoint. [Verification](local-coach-verification.md) records the local checks; latest head CI is recorded in the implementation PR. Real provider activation, spending, model evaluation and public AI enablement remain separate decisions.

@@ -2,8 +2,8 @@
 
 **Date:** 2026-10-26
 **Status:** In Progress
-**Authorization:** Capture the recommendation in a plan only. Implementation, provider activation, spending and public AI access are not authorized by this request.
-**Readiness:** Concrete local experiment design added 6 November 2026. Awaiting design acceptance and build authorization. Public deployment remains a separate, incomplete release design.
+**Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. Real provider activation, spending, model evaluation calls and public AI access remain unauthorized.
+**Readiness:** Local simulated slice accepted and built under the 6 November authorization. Verification is recorded in `docs/local-coach-verification.md` and the implementation PR. Provider activation and public deployment remain separate, incomplete release work.
 
 ## Summary
 
