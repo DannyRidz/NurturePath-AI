@@ -18,6 +18,7 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 7 | Controlled AI selection | Deferred outside solo core | dropped |
 | 8 | Report and session control | Slice 4 | done |
 | 9 | Evidence and submission | Release | in-progress |
+| 10 | Local simulated appointment coach | AI experiment, no provider | in-progress |
 
 ## Foundations
 
@@ -85,3 +86,14 @@ Release validation was authorized on 26 October. Actual browser evidence and rem
 ## Deferred
 
 Public AI service/metadata counters, selective report omission, a second explanation style, additional model comparisons, accounts and saved histories, persistent health-record database, real booking, teleconsultation, EHR/FHIR, test results, wearables, prediction, extra languages, enterprise admin, payments and analytics dashboards. Reconsider only through an explicit scope revision. Planning files are not evidence these capabilities exist.
+
+### 10. Local simulated appointment coach, in-progress
+
+The user authorized the local simulation on 6 November 2026. [Specification 0007](../specs/0007-ai-appointment-coach.md) governs it. Code: `experiments/coach`. This is a separate slice from the dropped finite selection feature.
+
+* [x] Design the local slice (spec).
+* [x] Build V01 with a simulated adapter, local access controls, counter ledger and honest draft labels, CO-01 to CO-08.
+* [x] Verify browser lifecycle, fallback, report exclusion and production isolation, CO-04 to CO-09.
+* [x] Run endpoint, browser and authored regression tests. Latest head CI remains a PR gate.
+
+Real provider qualification, paid activation, the model evaluation and public hosting migration remain later work. No generated output or clinician approval is claimed.

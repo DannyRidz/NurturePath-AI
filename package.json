@@ -11,7 +11,14 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "coach:init": "node scripts/coach-local.mjs init",
+    "dev:coach": "node scripts/coach-local.mjs dev",
+    "start:coach": "node scripts/coach-local.mjs start",
+    "build:coach": "next build experiments/coach --webpack",
+    "typecheck:coach": "next typegen experiments/coach && tsc --noEmit -p experiments/coach/tsconfig.json",
+    "test:coach": "vitest run --config experiments/coach/vitest.config.mts",
+    "test:e2e:coach": "playwright test --config experiments/coach/playwright.config.ts"
   },
   "dependencies": {
     "next": "16.4.3",

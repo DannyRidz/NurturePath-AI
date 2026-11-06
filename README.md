@@ -52,3 +52,7 @@ NURTUREPATH_STATIC_PREVIEW=1 npm run build -- --webpack
 Use the stable production domain for judges, not a protected development deployment URL. Confirm it opens without cookies or a hosting account. The public demo contains authored fictional content only. No personal health details may be entered.
 
 The earlier [private preview verification](docs/private-preview-verification.md) is historical evidence. Existing `build:preview` and `serve:preview` commands reproduce that artifact for regression checks; they are not the active publication path. See [ADR 0006](docs/specs/0006-public-demo-hosting.md) for the public hosting decision and verification requirements.
+
+## Local coach experiment
+
+An isolated V01 coach simulation lives in [experiments/coach](experiments/coach/README.md). It uses authored fixtures, not runtime AI. Its local endpoint is excluded from the public Vercel export. Real provider activation remains separate.

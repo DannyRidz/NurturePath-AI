@@ -44,3 +44,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 node_modules
+
+# Isolated local experiment outputs and metadata
+/experiments/**/.next/
+/.local/

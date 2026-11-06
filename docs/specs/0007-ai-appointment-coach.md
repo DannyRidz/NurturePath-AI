@@ -1,7 +1,7 @@
 # 0007. AI appointment preparation coach
 
 **Date:** 2026-10-26
-**Status:** Proposed
+**Status:** In Progress
 **Authorization:** Capture the recommendation in a plan only. Implementation, provider activation, spending and public AI access are not authorized by this request.
 **Readiness:** Concrete local experiment design added 6 November 2026. Awaiting design acceptance and build authorization. Public deployment remains a separate, incomplete release design.
 

@@ -60,3 +60,7 @@ After the scenario milestone merged, the user authorized the recommended complet
 ## AI coach design continuation, 6 November 2026
 
 The user authorized continuing the planning work. Proposal 0007 now specifies an isolated local V01 experiment, Gemini as a qualification candidate, exact transport/lifecycle controls, proposed USD 1/60 attempt limits and a thirty call evaluation. Design acceptance, implementation and provider activation remain separate. No account, spending or public runtime change was made. Public AI contracts remain unchanged.
+
+## Authorized local simulated coach build, 6 November 2026
+
+The user said “please proceed with the next step” after the recommendation to build the local version with simulated provider responses. This accepts the local slice design and authorizes its implementation, automated tests, browser verification and PR. Real provider activation, spending, the thirty call evaluation and public AI enablement remain unauthorized. No paid service is required for this slice.
