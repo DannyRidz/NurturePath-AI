@@ -1,5 +1,15 @@
 # Production Gemini implementation progress
 
+## Hosted verification, 7 November 2026
+
+The user authorized both merges and the verified release. PRs #9 and #10 merged; native production deployment `m3oXAKSa2wAe5QzYhgBaSh3G1V7b` serves main commit `b409181b34ab57f7b981ec5a43f3ae76ce63105c`. Production configuration was saved after the user completed Vercel verification.
+
+Anonymous HTML, deep links and JavaScript returned 200; an unknown route returned 404. Actual responses carried no referrer, no sniff, no index and framing restrictions. HTML and the API were private and no store; immutable framework assets retained public caching. The API response identified Singapore for both ingress and execution.
+
+With the shared budget disabled, a valid public request reached shared admission and returned disabled without a reservation. After enabling, one actual browser V01 request returned the exact seven canonical facts and three valid Gemini discussion questions. Hide removed the draft, Resume returned the coach to its initial state, and the complete authored report remained available without generated text. Shared shutdown then blocked another valid request without increasing totals. Lifetime use at this check was 33 attempts and 33 cents reserved, leaving 27 attempts. No invoice amount is inferred from reservations.
+
+The browser check exposed a stale session notice claiming there were no external AI requests. The followup correction explains optional Google processing and separate consent, with a regression assertion. The complete journey passed all five browser projects, lint, type checking, 104 unit tests and the native webpack build. A fresh same model context reviewed the correction and found no verified defect. Admission was paused during this correction; live status is authoritative in Redis, never this document. Earlier pending statements below describe preparation before these checks. Personal intake remains design only.
+
 7 November 2026. Work remains in progress under specification 0007. The user approved public implementation, a lifetime maximum of 60 provider attempts and USD 1 in estimated application reservations, and the free Upstash integration agreement and displayed account sharing. No real health intake is enabled.
 
 ## Implemented
