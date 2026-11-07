@@ -5,7 +5,7 @@ import { geminiModel, publicNoticeVersion } from "../src/lib/coach/contract";
 
 async function results(page:Page){
  await page.goto("/start");await page.getByRole("radio",{name:/General learning/}).check();await page.getByRole("button",{name:"Continue",exact:true}).click();
- await page.getByRole("checkbox",{name:/I understand this is a made-up example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
+ await page.getByRole("checkbox",{name:/I understand this is a fictional example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
  await page.getByRole("checkbox",{name:/I am 18 or older/}).check();await page.getByRole("button",{name:"Explore the example",exact:true}).click();
  for(let i=0;i<3;i++)await page.getByRole("button",{name:"Next section"}).click();
  await page.getByRole("button",{name:"Review answers",exact:true}).click();await page.getByRole("link",{name:"Get guidance"}).click();

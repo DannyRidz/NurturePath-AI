@@ -68,7 +68,7 @@ export function SafetyNote() {
       <h2>For a real urgent concern</h2>
       <p>
         Sudden, severe testicular pain needs urgent medical help. This
-        demonstration cannot assess symptoms or contact emergency services.
+        app cannot assess symptoms or contact emergency services.
       </p>
       <a href={sources[1].url}>NHS information on urgent symptoms</a>
     </aside>
@@ -87,9 +87,10 @@ function StartExampleFlow() {
   return (
     <section className="page narrow">
       <p className="eyebrow">01 / Choose an example</p>
-      <h1 tabIndex={-1}>Choose a made-up example.</h1>
+      <h1 tabIndex={-1}>Choose a fictional example.</h1>
       <p className="lead">
-        You will read ready-made answers, see guidance and view a report.
+        Each example uses invented details. You will read its answers, see
+        guidance and view a report.
         Please do not use your own health details.
       </p>
       <p className="notice">
@@ -122,14 +123,14 @@ function StartExampleFlow() {
               <span>
                 <strong>{example.label}</strong>
                 <span>
-                  Made-up example. These are not your health details.
+                  Fictional example. These are not your health details.
                 </span>
               </span>
             </label>
           ))}
         </fieldset>
         <p className="muted">
-          There are twelve examples. Next, read how the demo works and confirm
+          There are twelve examples. Next, read how the app works and confirm
           that you are 18 or older.
         </p>
         {state.consent && (
@@ -186,8 +187,8 @@ function ConsentFlow() {
           <div className="sheet-row">
             <h2>What happens here</h2>
             <p>
-              You read a made-up example with answers and guidance already
-              written for it. You do not enter personal health details. This demo
+              You read a fictional example with answers and guidance already
+              written for it. You do not enter personal health details. This app
               cannot diagnose a condition, and no health professional is on call.
             </p>
           </div>
@@ -204,8 +205,8 @@ function ConsentFlow() {
             <p>
               Only General learning offers optional Gemini questions, when
               available. After the guidance, you can choose whether to send its
-              made-up answers to Google. You will be asked to agree separately.
-              Agreeing to this demo does not send anything to Gemini.
+              fictional answers to Google. You will be asked to agree separately.
+              Agreeing here does not send anything to Gemini.
             </p>
           </div>
         </div>
@@ -227,7 +228,7 @@ function ConsentFlow() {
                 onChange={(event) => setAccepted(event.target.checked)}
               />
               <span>
-                I understand this is a made-up example and agree to continue.
+                I understand this is a fictional example and agree to continue.
               </span>
             </label>
             <div className="actions">
@@ -253,7 +254,7 @@ function ConsentFlow() {
               For adults only
             </h2>
             <p>
-              This demo is for people aged 18 and over. We do not ask for your
+              This app is for people aged 18 and over. We do not ask for your
               date of birth. Next, you will see the example’s answers and
               guidance.
             </p>
@@ -265,7 +266,7 @@ function ConsentFlow() {
                 onChange={(event) => setAdult(event.target.checked)}
               />
               <span>
-                I am 18 or older and understand this is a made-up example.
+                I am 18 or older and understand this is a fictional example.
               </span>
             </label>
             <div className="actions">
@@ -400,7 +401,7 @@ export function VariationControls({ ids }: { ids?: readonly QuestionId[] }) {
                   {answerLabels[value]}
                   {dest
                     ? `, load ${getScenario(dest).label}`
-                    : ", this variation is not included in this demonstration"}
+                    : ", this variation is not included in this app"}
                 </button>
               );
             })}
@@ -525,7 +526,7 @@ export function Results() {
           {stopped ? titles[result.nextStepId] : "Your next step."}
         </h1>
         <p className="review-status">
-          Unvalidated simulation. Not reviewed by a clinician.
+          Fictional example. Not clinically validated or reviewed by a clinician.
         </p>
         <section className="next-step">
           <h2>{titles[result.nextStepId]}</h2>
@@ -583,7 +584,7 @@ export function Results() {
         <section className="support-section">
           <h2>Sources and limits</h2>
           <p>
-            The next step is authored demonstration wording, not a validated
+            The next step is written for this fictional example, not a validated
             clinical rule. Content and rule version: sim-1.
           </p>
           {(stopped ? [sources[1]] : [sources[0]]).map((source) => (
@@ -599,7 +600,7 @@ export function Results() {
           ))}
           {result.contentIds.includes("CARD-DISCUSSION") && (
             <p>
-              Discussion actions follow the proposed simulation table. Exact
+              Discussion actions follow the written example rules. Exact
               guideline section verification and clinical approval remain
               outstanding; no care service or timing is inferred from a broad
               guideline link.

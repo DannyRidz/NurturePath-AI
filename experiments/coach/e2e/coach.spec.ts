@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 async function results(page:Page){
  await page.goto("/start");await page.getByRole("button",{name:"Choose V01"}).click();
- await page.getByRole("checkbox",{name:/I understand this is a made-up example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
+ await page.getByRole("checkbox",{name:/I understand this is a fictional example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
  await page.getByRole("checkbox",{name:/I am 18 or older/}).check();await page.getByRole("button",{name:"Explore the example",exact:true}).click();
  await expect(page.getByRole("heading",{name:"Immediate concerns",exact:true})).toBeFocused();
  for(let i=0;i<3;i++)await page.getByRole("button",{name:"Next section"}).click();

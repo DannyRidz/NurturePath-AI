@@ -6,8 +6,8 @@ export default function Page() {
       <p className="eyebrow">Before you begin</p>
       <h1 tabIndex={-1}>Privacy and limits.</h1>
       <p className="lead">
-        This is a fictional demonstration, not a place to enter personal health
-        information.
+        This app uses fictional examples for learning and conversation
+        preparation. It does not accept personal health information.
       </p>
       <h2>What stays in memory</h2>
       <p>
@@ -55,18 +55,18 @@ export default function Page() {
         not a guarantee of the final Google invoice. The coach can be unavailable
         while authored guidance and reports remain usable.
       </p>
-      <h2>Access to this demonstration</h2>
+      <h2>Access to this app</h2>
       <p>
-        The public demonstration opens without an OpenAI or hosting account.
+        You do not need an account to use the app.
         The web host still processes ordinary access requests and may retain
         security and access logs. These are separate from the fictional session
         held in this app. No personal health information should be entered here.
       </p>
-      <h2>What this demonstration cannot do</h2>
+      <h2>What this app cannot do</h2>
       <p>
         It cannot diagnose, estimate fertility, rule out a problem, recommend
         treatment, choose a local care pathway or contact a clinician. No
-        clinician has approved the demonstration. Source links are not
+        clinician has approved this app for medical care. Source links are not
         endorsements.
       </p>
       <h2>If you need real help</h2>

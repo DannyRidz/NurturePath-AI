@@ -43,7 +43,7 @@ function ReportPreview({ variantId }: { variantId: VariantId }) {
         aria-label="Complete fictional report"
       >
         <header className="report-header">
-          <p className="eyebrow">NurturePath / Fictional demonstration</p>
+          <p className="eyebrow">NurturePath / Fictional examples</p>
           <h1 tabIndex={-1}>Appointment preparation report</h1>
           <p className="report-status">{report.reviewStatus}</p>
           <p className="report-date">
@@ -121,12 +121,12 @@ function ReportPreview({ variantId }: { variantId: VariantId }) {
           <h2>Limits and urgent help</h2>
           <p>
             These example answers cannot confirm reproductive health or rule out
-            a problem. This demonstration cannot choose tests, treatment, a care
+            a problem. This app cannot choose tests, treatment, a care
             service or appointment timing for a real person.
           </p>
           <p>
             Sudden, severe testicular pain needs urgent medical help. This
-            demonstration cannot assess symptoms or contact emergency services.
+            app cannot assess symptoms or contact emergency services.
             No clinician is on call and no alert is sent.
           </p>
         </section>
@@ -145,14 +145,14 @@ function ReportPreview({ variantId }: { variantId: VariantId }) {
           ))}
           {report.discussionSourcePending && (
             <p>
-              Discussion actions follow the proposed simulation table. Exact
+              Discussion actions follow the written example rules. Exact
               guideline section verification and clinical approval remain
               outstanding; no care service or timing is inferred from a broad
               guideline link.
             </p>
           )}
           <p className="report-provenance">
-            Authored simulation. Clinical approval and source reuse review are
+            Written fictional example. Clinical approval and source reuse review are
             outstanding. Report: {report.reportVersion}; catalog:{" "}
             {report.catalogVersion}; rules: {report.ruleVersion}; content:{" "}
             {report.contentVersion}.

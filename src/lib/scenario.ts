@@ -233,11 +233,11 @@ export const choiceValues: Record<QuestionId, string[]> = {
 };
 export const steps = {
   "STEP-URGENT":
-    "Seek urgent medical help now. Sudden severe testicular pain needs urgent assessment. This demonstration cannot contact emergency services or assess your condition.",
+    "Seek urgent medical help now. Sudden severe testicular pain needs urgent assessment. This app cannot contact emergency services or assess your condition.",
   "STEP-CLARIFY":
-    "This example does not contain enough information. Choose another fictional variation if you want to explore a different answer. This demonstration cannot assess a real symptom.",
+    "This example does not contain enough information. Choose another fictional variation if you want to explore a different answer. This app cannot assess a real symptom.",
   "STEP-DISCUSS":
-    "In this fictional example, prepare to discuss the concern with a qualified health professional. This unvalidated demonstration cannot decide the right care service or appointment timing for a real person.",
+    "In this fictional example, prepare to discuss the concern with a qualified health professional. This app is not clinically validated and cannot decide the right care service or appointment timing for a real person.",
   "STEP-EDUCATION":
     "Read the relevant information and consider what you would like to ask a qualified health professional. These example answers cannot confirm reproductive health or rule out a problem.",
 } as const;
@@ -252,7 +252,7 @@ export const reasonText: Record<string, string> = {
   "DISC-DIFFICULTY":
     "Difficulty conceiving is recorded. Duration does not change this discussion action or establish when a real person should seek care.",
   "EDU-MEDICATION":
-    "This example includes the testosterone or steroid topic. Discuss use with a qualified professional or prescriber. This demonstration gives no stop, start or taper instructions.",
+    "This example includes the testosterone or steroid topic. Discuss use with a qualified professional or prescriber. This app gives no stop, start or taper instructions.",
   "EDU-LIFESTYLE":
     "This example requests general lifestyle information. It does not calculate individual risk or promise improvement.",
   "LIMIT-NO-SUPPORTED-TRIGGER":
@@ -317,7 +317,7 @@ export const sources = [
     organization: "World Health Organization",
     date: "28 November 2025",
     url: "https://www.who.int/news-room/fact-sheets/detail/infertility",
-    note: "General background on fertility care and access. This source does not validate this demonstration or determine an individual’s reproductive health.",
+    note: "General background on fertility care and access. This source does not validate this app or determine an individual’s reproductive health.",
   },
   {
     id: "C6",

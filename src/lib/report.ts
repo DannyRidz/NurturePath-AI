@@ -13,7 +13,7 @@ import {
 export const reportDisclosure =
   "This report includes every displayed example answer and reason. Review the full preview before saving or sharing.";
 export const reportReviewStatus =
-  "Unvalidated simulation. Not reviewed by a clinician.";
+  "Fictional example. Not clinically validated or reviewed by a clinician.";
 
 // Report data always comes from the complete canonical case, never a subset of answers.
 export function createReport(variantId: unknown, generatedAt: string) {

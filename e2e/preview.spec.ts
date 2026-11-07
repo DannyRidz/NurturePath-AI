@@ -10,7 +10,7 @@ test("PD-05 preview handler preserves HTTP routing and privacy headers", async (
   );
   const page = await request.get("/start");
   expect(page.status()).toBe(200);
-  expect(await page.text()).toContain("Choose a made-up example.");
+  expect(await page.text()).toContain("Choose a fictional example.");
   expect(page.headers()["content-type"]).toContain("text/html");
   expect(page.headers()["cache-control"]).toBe("private, no-store");
   expect(page.headers()["referrer-policy"]).toBe("no-referrer");

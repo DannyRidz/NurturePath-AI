@@ -76,7 +76,7 @@ function Frame({ children }: { children: ReactNode }) {
             NurturePath<span className="wordmark-mark">/</span>
           </Link>
           <div className="header-actions">
-            <span className="demo-label">Made-up examples</span>
+            <span className="demo-label">Fictional examples</span>
             <button
               className="quiet-button"
               ref={hideButton}
