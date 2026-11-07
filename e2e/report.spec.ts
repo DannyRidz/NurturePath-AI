@@ -12,15 +12,15 @@ async function openResult(page: Page, label = "General learning") {
   await page.goto("/start");
   await page
     .getByRole("radio", {
-      name: `${label} Authored fictional example. Not a description of your health.`,
+      name: `${label} Made-up example. These are not your health details.`,
       exact: true,
     })
     .check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
     .check();
-  await page.getByRole("button", { name: "Accept session notice" }).click();
+  await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18/ }).check();
   await page
     .getByRole("button", { name: "Explore the example", exact: true })
