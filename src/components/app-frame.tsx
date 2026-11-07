@@ -76,7 +76,7 @@ function Frame({ children }: { children: ReactNode }) {
             NurturePath<span className="wordmark-mark">/</span>
           </Link>
           <div className="header-actions">
-            <span className="demo-label">Fictional demonstration</span>
+            <span className="demo-label">Made-up examples</span>
             <button
               className="quiet-button"
               ref={hideButton}
@@ -90,7 +90,10 @@ function Frame({ children }: { children: ReactNode }) {
           {children}
         </main>
         <footer className="site-footer">
-          <p>Authored guidance. Optional Gemini drafts for V01. No clinical validation.</p>
+          <p>
+            Written guidance. Optional Gemini questions for General learning.
+            Not checked for medical care.
+          </p>
           <nav aria-label="Information">
             <Link href="/privacy">Privacy and limits</Link>
             <Link href="/sources">Sources</Link>

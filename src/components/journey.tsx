@@ -87,10 +87,15 @@ function StartExampleFlow() {
   return (
     <section className="page narrow">
       <p className="eyebrow">01 / Choose an example</p>
-      <h1 tabIndex={-1}>Explore a fictional situation.</h1>
+      <h1 tabIndex={-1}>Choose a made-up example.</h1>
       <p className="lead">
-        Read a fixed example, see how the guidance is explained, then clear the
-        session. Please do not use your own health details.
+        You will read ready-made answers, see guidance and view a report.
+        Please do not use your own health details.
+      </p>
+      <p className="notice">
+        Not sure where to start? Choose <strong>General learning</strong> to try
+        optional Gemini questions after the guidance. The other examples do not
+        include Gemini questions.
       </p>
       <form
         onSubmit={(event) => {
@@ -101,7 +106,7 @@ function StartExampleFlow() {
         }}
       >
         <fieldset>
-          <legend>Choose a complete fictional example</legend>
+          <legend>Which example would you like to explore?</legend>
           {catalog.map((example) => (
             <label
               key={example.variantId}
@@ -117,19 +122,19 @@ function StartExampleFlow() {
               <span>
                 <strong>{example.label}</strong>
                 <span>
-                  Authored fictional example. Not a description of your health.
+                  Made-up example. These are not your health details.
                 </span>
               </span>
             </label>
           ))}
         </fieldset>
         <p className="muted">
-          Twelve authored examples are available. Your age scope confirmation
-          comes after the session notice.
+          There are twelve examples. Next, read how the demo works and confirm
+          that you are 18 or older.
         </p>
         {state.consent && (
           <p className="notice">
-            Continuing starts a new example and asks for consent again.
+            Continuing starts a new example. You will be asked to agree again.
           </p>
         )}
         <div className="actions">
@@ -181,26 +186,26 @@ function ConsentFlow() {
           <div className="sheet-row">
             <h2>What happens here</h2>
             <p>
-              You view authored fictional answers and guidance. There is no
-              personal health intake, patient account, diagnosis or clinician on
-              call.
+              You read a made-up example with answers and guidance already
+              written for it. You do not enter personal health details. This demo
+              cannot diagnose a condition, and no health professional is on call.
             </p>
           </div>
           <div className="sheet-row">
-            <h2>Where the session lives</h2>
+            <h2>What happens when you leave</h2>
             <p>
-              Your choice and consent stay in this tab’s memory. Reloading or
-              Finish and clear resets them. Visits still reach the web host;
-              browser history and host logs are not erased by clearing.
+              Your progress stays in this browser tab. Reloading the page or
+              choosing Finish and clear starts over. Clearing does not erase
+              your browser history or the website host’s records of your visit.
             </p>
           </div>
           <div className="sheet-row">
-            <h2>About AI</h2>
+            <h2>Gemini is a separate choice</h2>
             <p>
-              Guidance is authored. Where available, optional Gemini questions
-              for General learning require a separate agreement before its fixed
-              fictional answers are sent to Google. This session notice does not
-              authorize an AI request.
+              Only General learning offers optional Gemini questions, when
+              available. After the guidance, you can choose whether to send its
+              made-up answers to Google. You will be asked to agree separately.
+              Agreeing to this demo does not send anything to Gemini.
             </p>
           </div>
         </div>
@@ -222,16 +227,15 @@ function ConsentFlow() {
                 onChange={(event) => setAccepted(event.target.checked)}
               />
               <span>
-                I understand this fictional demonstration and agree to this
-                session.
+                I understand this is a made-up example and agree to continue.
               </span>
             </label>
             <div className="actions">
               <button className="button" disabled={!accepted}>
-                Accept session notice
+                Agree and continue
               </button>
               <button type="button" className="quiet-button" onClick={leave}>
-                Decline and view sources
+                Leave and view sources
               </button>
             </div>
           </form>
@@ -246,11 +250,12 @@ function ConsentFlow() {
             }}
           >
             <h2 ref={heading} tabIndex={-1}>
-              Adult scope
+              For adults only
             </h2>
             <p>
-              This demonstration is intended for adults. No date of birth is
-              collected.
+              This demo is for people aged 18 and over. We do not ask for your
+              date of birth. Next, you will see the example’s answers and
+              guidance.
             </p>
             <label className="check-row">
               <input
@@ -260,7 +265,7 @@ function ConsentFlow() {
                 onChange={(event) => setAdult(event.target.checked)}
               />
               <span>
-                I am 18 or older and understand this is a fictional example.
+                I am 18 or older and understand this is a made-up example.
               </span>
             </label>
             <div className="actions">

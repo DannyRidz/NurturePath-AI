@@ -3,19 +3,19 @@ import AxeBuilder from "@axe-core/playwright";
 
 async function consent(page: Page) {
   await page.goto("/");
-  await page.getByRole("link", { name: "Start fictional assessment" }).click();
+  await page.getByRole("link", { name: "Explore a made-up example" }).click();
   await page.getByRole("radio", { name: /General learning/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await expect(page.getByText(/Where available, optional Gemini/)).toContainText(
-    "separate agreement",
+  await expect(page.getByText(/Only General learning offers/)).toContainText(
+    "You will be asked to agree separately.",
   );
-  await expect(page.getByText(/Where available, optional Gemini/)).toContainText(
-    "This session notice does not authorize an AI request.",
+  await expect(page.getByText(/Only General learning offers/)).toContainText(
+    "Agreeing to this demo does not send anything to Gemini.",
   );
   await page
-    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
     .check();
-  await page.getByRole("button", { name: "Accept session notice" }).click();
+  await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18 or older/ }).check();
   await page
     .getByRole("button", { name: "Explore the example", exact: true })
@@ -104,9 +104,9 @@ test("AC-02 adult collection follows unchecked session consent and decline is us
   await expect(page.getByRole("checkbox", { name: /I am 18/ })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).not.toBeChecked();
   await expect(
-    page.getByRole("button", { name: "Accept session notice" }),
+    page.getByRole("button", { name: "Agree and continue" }),
   ).toBeDisabled();
-  await page.getByRole("button", { name: "Decline and view sources" }).click();
+  await page.getByRole("button", { name: "Leave and view sources" }).click();
   await expect(
     page.getByRole("heading", { name: "Sources and limitations." }),
   ).toBeVisible();
@@ -361,7 +361,7 @@ test("AC-11 restored pages clear before the native event returns", async ({
   ).toHaveCount(0);
   await page.getByRole("link", { name: "Start a fictional example" }).click();
   await expect(
-    page.getByRole("heading", { name: "Explore a fictional situation." }),
+    page.getByRole("heading", { name: "Choose a made-up example." }),
   ).toBeVisible();
 
   // A restored masked page keeps the barrier with a truthful cleared message.
@@ -479,9 +479,9 @@ test("AC-06 catalog safety selection stops after consent without requiring intak
   await page.getByRole("radio", { name: /Sudden severe pain/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
     .check();
-  await page.getByRole("button", { name: "Accept session notice" }).click();
+  await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18/ }).check();
   await page
     .getByRole("button", { name: "Explore the example", exact: true })

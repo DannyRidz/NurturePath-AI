@@ -5,16 +5,16 @@ async function prepare(page: Page, label = "General learning") {
   await page.goto("/start");
   await page
     .getByRole("radio", {
-      name: `${label} Authored fictional example. Not a description of your health.`,
+      name: `${label} Made-up example. These are not your health details.`,
       exact: true,
     })
     .check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
     .check();
   await page
-    .getByRole("button", { name: "Accept session notice", exact: true })
+    .getByRole("button", { name: "Agree and continue", exact: true })
     .click();
   await page.getByRole("checkbox", { name: /I am 18/ }).check();
 }
@@ -58,16 +58,16 @@ test("AC-02/06/11 clearing an inline safety result starts fresh consent for the 
     .click();
   await page.getByRole("link", { name: "Start again", exact: true }).click();
   await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
-  await page.getByRole("radio", { name: /General learning Authored/ }).check();
+  await page.getByRole("radio", { name: /General learning Made-up/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
-    page.getByRole("checkbox", { name: /I understand this fictional/ }),
+    page.getByRole("checkbox", { name: /I understand this is a made-up example/ }),
   ).not.toBeChecked();
   await page
-    .getByRole("checkbox", { name: /I understand this fictional/ })
+    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
     .check();
   await page
-    .getByRole("button", { name: "Accept session notice", exact: true })
+    .getByRole("button", { name: "Agree and continue", exact: true })
     .click();
   await expect(
     page.getByRole("checkbox", { name: /I am 18/ }),
@@ -173,14 +173,26 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
 }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "reproductive health",
+  );
+  await expect(page.getByText(/Want to try Gemini/)).toContainText("General learning");
+  await expect(page.getByText(/You can skip Gemini/)).toBeVisible();
+  await page.screenshot({
+    path: `output/playwright/onboarding-home-${test.info().project.name}.png`,
+    fullPage: true,
+  });
   await tabTo(
     page,
-    page.getByRole("link", { name: "Start fictional assessment", exact: true }),
+    page.getByRole("link", { name: "Explore a made-up example", exact: true }),
   );
   await page.keyboard.press("Enter");
   await expect(
-    page.getByRole("heading", { name: "Explore a fictional situation." }),
+    page.getByRole("heading", { name: "Choose a made-up example." }),
   ).toBeFocused();
+  await expect(page.getByText(/Not sure where to start/)).toContainText(
+    "General learning",
+  );
   await tabTo(page, page.getByRole("radio", { name: /General learning/ }));
   await page.keyboard.press("Space");
   await tabTo(
@@ -188,14 +200,21 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
     page.getByRole("button", { name: "Continue", exact: true }),
   );
   await page.keyboard.press("Enter");
+  await expect(page.getByText(/Only General learning offers/)).toContainText(
+    "Agreeing to this demo does not send anything to Gemini.",
+  );
+  await page.screenshot({
+    path: `output/playwright/onboarding-notice-${test.info().project.name}.png`,
+    fullPage: true,
+  });
   await tabTo(
     page,
-    page.getByRole("checkbox", { name: /I understand this fictional/ }),
+    page.getByRole("checkbox", { name: /I understand this is a made-up example/ }),
   );
   await page.keyboard.press("Space");
   await tabTo(
     page,
-    page.getByRole("button", { name: "Accept session notice", exact: true }),
+    page.getByRole("button", { name: "Agree and continue", exact: true }),
   );
   await page.keyboard.press("Enter");
   await tabTo(page, page.getByRole("checkbox", { name: /I am 18/ }));
