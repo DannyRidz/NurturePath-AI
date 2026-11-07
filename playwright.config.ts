@@ -10,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 2,
   reporter: [["list"]],
-  outputDir: "output/playwright/results",
+  outputDir: staticPreview ? "output/playwright/export-results" : "output/playwright/results",
   use: {
     baseURL,
     trace: "retain-on-failure",

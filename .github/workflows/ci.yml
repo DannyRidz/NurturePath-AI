@@ -6,6 +6,25 @@ on:
 permissions:
   contents: read
 jobs:
+  shared-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y redis-server redis-tools
+      - run: npm test -- src/lib/coach/admission.redis.test.ts
+        env:
+          REDIS_SERVER_BIN: /usr/bin/redis-server
+          REDIS_CLI_BIN: /usr/bin/redis-cli
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15

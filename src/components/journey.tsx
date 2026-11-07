@@ -634,7 +634,8 @@ export function Finished() {
       </p>
       <p>
         Clearing does not erase browser history, host logs or any copies you may
-        have saved. This version sends nothing to an AI provider.
+        have saved. If you requested a Gemini draft, clearing cannot recall the
+        request or erase records held by Google.
       </p>
       <div className="actions">
         <Link className="button" href="/start">

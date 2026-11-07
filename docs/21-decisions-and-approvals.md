@@ -69,3 +69,8 @@ The user said “please proceed with the next step” after the recommendation t
 ## Authorized Gemini integration and conditional local trial, 6 November 2026
 
 The user requested full implementation, ultimately selected Gemini, identified AI Studio as the credited service, and explicitly authorized at most 60 local V01 provider attempts and USD 1 in application reservations after account and cost checks pass. Public AI activation remains separate. Read only account verification confirmed paid/prepaid availability with auto reload off. The exact billable token bounds remain unresolved, so the adapter is built with dispatch disabled and no paid trial has run. No account IDs or credentials belong in this register.
+
+
+## Public Gemini release and personal intake design, 7 November 2026
+
+The user authorized production implementation and replaced the project gate requiring authoritative worst case billable token bounds. The user then approved a one time public USD 1 application allowance and at most 60 provider requests, acknowledging that it is not a Google invoice guarantee. No automatic reset or additional paid plan is included. The user also requested personal health intake to be designed for a public international adult audience. Personal collection and transmission are not activated by that design request. Specification 0007 governs the fixed fictional release; proposed specification 0008 records the separate personal design.

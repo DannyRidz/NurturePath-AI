@@ -1,6 +1,9 @@
 import { spawnSync } from "node:child_process";
 import {
+  existsSync,
   lstatSync,
+  cpSync,
+  symlinkSync,
   mkdirSync,
   readFileSync,
   readdirSync,
@@ -8,21 +11,34 @@ import {
   writeFileSync,
 } from "node:fs";
 import { createRequire } from "node:module";
-import { extname, join } from "node:path";
+import { extname, join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 import { createPreviewWorker } from "./preview-worker.mjs";
 
 const require = createRequire(import.meta.url);
+// Build a source copy without API routes. Never rename the working tree or copy env files.
+const exportRoot = resolve(".local/static-export-build");
+rmSync(exportRoot, { recursive: true, force: true });
+mkdirSync(exportRoot, { recursive: true });
+for (const name of ["src", "public", "package.json", "package-lock.json", "next.config.ts", "tsconfig.json", "postcss.config.mjs"]) {
+  if (!existsSync(name)) continue;
+  cpSync(name, join(exportRoot, name), { recursive: true, filter: path => path !== "src/app/api" });
+}
+symlinkSync(resolve("node_modules"), join(exportRoot, "node_modules"), "dir");
 const result = spawnSync(
   process.execPath,
   [require.resolve("next/dist/bin/next"), "build", "--webpack"],
   {
+    cwd: exportRoot,
     stdio: "inherit",
     env: { ...process.env, NURTUREPATH_STATIC_PREVIEW: "1" },
   },
 );
 if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status ?? 1);
+
+rmSync("out", { recursive: true, force: true });
+cpSync(join(exportRoot, "out"), "out", { recursive: true });
 
 const mime = {
   ".html": "text/html; charset=utf-8",

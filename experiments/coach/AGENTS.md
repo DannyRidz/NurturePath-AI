@@ -9,3 +9,5 @@
 * Browser configuration uses temporary synthetic tokens and a separate ledger, never a real provider secret. It starts the optimized local server.
 
 * Gemini launch uses separate counters and masked key input. `npm run test:e2e:coach:gemini` exercises provider UI with dispatch disabled. `lib/gemini.ts` binds expiring operator evidence to the exact request hash. Evidence assertions cannot substitute for authoritative cost bounds.
+
+* The public coach now shares prompt and Gemini transport code under `src/lib/coach`. Keep this local workspace isolated from the public endpoint and preserve its own token and ledger behavior. Public authorization and spending controls are governed by the production continuation of specification 0007; no public route may use this workspace's filesystem ledger.

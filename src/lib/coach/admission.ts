@@ -7,6 +7,7 @@ import { z } from "zod";
 export const admissionScript = `
 local state = redis.call('HMGET', KEYS[1], 'enabled', 'fingerprint', 'maxAttempts', 'maxCents', 'attempts', 'reservedCents')
 if not state[1] or not state[2] then return {-2, 0, 0} end
+if state[1] == 'pending' then return {-4, 0, 0} end
 if state[1] ~= '1' then return {-1, 0, 0} end
 local maxAttempts, maxCents = tonumber(state[3]), tonumber(state[4])
 local attempts, cents = tonumber(state[5]), tonumber(state[6])
@@ -24,7 +25,7 @@ if rate[1] and tonumber(rate[1]) == minute then
   if not count or count < 0 or count ~= math.floor(count) then return {-2, 0, 0} end
 end
 if count >= 10 then return {-3, attempts, cents} end
-redis.call('HSET', KEYS[1], 'attempts', attempts + 1, 'reservedCents', cents + 1)
+redis.call('HSET', KEYS[1], 'attempts', attempts + 1, 'reservedCents', cents + 1, 'enabled', 'pending')
 redis.call('HSET', KEYS[2], 'minute', minute, 'count', count + 1)
 redis.call('EXPIREAT', KEYS[2], (minute + 1) * 60 + 60)
 return {1, attempts + 1, cents + 1}
@@ -47,7 +48,7 @@ const configuration = z.object({
 export type AdmissionConfig = z.infer<typeof configuration>;
 export type Admission =
   | { status: "admitted"; attempts: number; reservedCents: number }
-  | { status: "exhausted" | "disabled" | "rate_limited" | "unavailable" };
+  | { status: "exhausted" | "disabled" | "rate_limited" | "busy" | "unavailable" };
 
 export function normalizeClientIp(value: string | null): string | null {
   if (!value || value.includes(",") || value.includes("%") || value.trim() !== value || !isIP(value)) return null;
@@ -74,6 +75,25 @@ export async function admitPublicCoach(
   const prefix = `{nurturepath-coach}:${config.releaseId}`;
   const command = ["EVAL", admissionScript, "2", `${prefix}:budget`, `${prefix}:ip:${pseudonym}`,
     config.fingerprint, String(config.maxAttempts), String(config.maxCents), String(day)];
+  try {
+    const raw = await redisCommand(config, command, transport);
+    const envelope = z.object({ result: z.tuple([z.number().int(), z.number().int().nonnegative(), z.number().int().nonnegative()]) }).strict()
+      .parse(raw);
+    const [code, attempts, reservedCents] = envelope.result;
+    if (code === 1 && attempts >= 1 && attempts <= config.maxAttempts && reservedCents === attempts && reservedCents <= config.maxCents)
+      return { status: "admitted", attempts, reservedCents };
+    if (code === 0) return { status: "exhausted" };
+    if (code === -1) return { status: "disabled" };
+    if (code === -4) return { status: "busy" };
+    if (code === -3) return { status: "rate_limited" };
+    return { status: "unavailable" };
+  } catch {
+    // A lost response may already have consumed a reservation. Never retry it.
+    return { status: "unavailable" };
+  }
+}
+
+export async function redisCommand(config: Pick<AdmissionConfig, "url" | "token">, command: (string | number)[], transport: typeof fetch = fetch): Promise<unknown> {
   const controller = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
@@ -85,31 +105,32 @@ export async function admitPublicCoach(
       method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.token}` },
       body: JSON.stringify(command), redirect: "error", cache: "no-store", signal: controller.signal,
     }), deadline]);
-    if (!response.ok || !response.headers.get("content-type")?.startsWith("application/json")) return { status: "unavailable" };
+    if (!response.ok || !response.headers.get("content-type")?.startsWith("application/json")) throw new Error("store_unavailable");
     reader = response.body?.getReader();
-    if (!reader) return { status: "unavailable" };
+    if (!reader) throw new Error("store_unavailable");
     const chunks: Uint8Array[] = []; let bytes = 0;
     while (true) {
       const chunk = await Promise.race([reader.read(), deadline]);
       if (chunk.done) break;
       bytes += chunk.value.byteLength;
-      if (bytes > 4096) return { status: "unavailable" };
+      if (bytes > 4096) throw new Error("store_unavailable");
       chunks.push(chunk.value);
     }
-    const envelope = z.object({ result: z.tuple([z.number().int(), z.number().int().nonnegative(), z.number().int().nonnegative()]) }).strict()
-      .parse(JSON.parse(Buffer.concat(chunks).toString("utf8")));
-    const [code, attempts, reservedCents] = envelope.result;
-    if (code === 1 && attempts >= 1 && attempts <= config.maxAttempts && reservedCents === attempts && reservedCents <= config.maxCents)
-      return { status: "admitted", attempts, reservedCents };
-    if (code === 0) return { status: "exhausted" };
-    if (code === -1) return { status: "disabled" };
-    if (code === -3) return { status: "rate_limited" };
-    return { status: "unavailable" };
-  } catch {
-    // A lost response may already have consumed a reservation. Never retry it.
-    return { status: "unavailable" };
+    return JSON.parse(Buffer.concat(chunks).toString("utf8"));
   } finally {
     clearTimeout(timer); controller.abort();
     void reader?.cancel().catch(() => {});
   }
+}
+
+const settlementScript = `
+local state = redis.call('HMGET', KEYS[1], 'enabled', 'fingerprint', 'attempts')
+if state[1] ~= 'pending' or state[2] ~= ARGV[1] or state[3] ~= ARGV[2] then return 0 end
+redis.call('HSET', KEYS[1], 'enabled', ARGV[3])
+return 1
+`;
+export async function settlePublicCoach(config: AdmissionConfig, attempt: number, success: boolean, transport: typeof fetch = fetch) {
+  const parsed = configuration.parse(config);
+  const raw = await redisCommand(parsed, ["EVAL", settlementScript, "1", `{nurturepath-coach}:${parsed.releaseId}:budget`, parsed.fingerprint, String(attempt), success ? "1" : "0"], transport);
+  return z.object({ result: z.literal(1) }).strict().safeParse(raw).success;
 }
