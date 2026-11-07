@@ -197,8 +197,10 @@ function ConsentFlow() {
           <div className="sheet-row">
             <h2>About AI</h2>
             <p>
-              This version uses authored guidance. It makes no external AI
-              request.
+              Guidance is authored. Where available, optional Gemini questions
+              for General learning require a separate agreement before its fixed
+              fictional answers are sent to Google. This session notice does not
+              authorize an AI request.
             </p>
           </div>
         </div>

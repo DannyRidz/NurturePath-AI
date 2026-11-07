@@ -6,6 +6,12 @@ async function consent(page: Page) {
   await page.getByRole("link", { name: "Start fictional assessment" }).click();
   await page.getByRole("radio", { name: /General learning/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByText(/Where available, optional Gemini/)).toContainText(
+    "separate agreement",
+  );
+  await expect(page.getByText(/Where available, optional Gemini/)).toContainText(
+    "This session notice does not authorize an AI request.",
+  );
   await page
     .getByRole("checkbox", { name: /I understand this fictional/ })
     .check();
