@@ -29,6 +29,7 @@ This checklist derives from proposed criteria CR-01 through CR-16. It is a futur
 * [ ] Reject extra JSON fields, oversized bodies, malformed Unicode/control/markup/link input and detected identifiers before admission, CR-04, CR-11.
 * [ ] Verify the exact normalized text shown in the preview is what reaches the injected provider transport, CR-04.
 * [ ] Exercise duplicate request IDs, stale rounds, simultaneous requests, expired sessions, forged receipts and attempted third requests; no unintended provider dispatch, CR-07.
+* [ ] Verify a known refusal or local policy boundary closes the AI rehearsal, issues no receipt and blocks a later send before admission. Ordinary editable field errors do not consume an attempt, CR-07, CR-08.
 * [ ] Verify Redis atomically increments both session and global counts before provider dispatch, with no refund/reset, CR-07, CR-12.
 * [ ] Inject corrupt/missing/slow Redis and lost acknowledgements; dispatch stops on uncertainty, CR-07, CR-08.
 * [ ] Deliver timeout, refusal, invalid JSON, extra properties, fake quotes/IDs, wrong provenance, missing usage, oversized output and unsafe prose; no visible successful feedback is fabricated, CR-05, CR-06, CR-08.
@@ -52,6 +53,7 @@ This checklist derives from proposed criteria CR-01 through CR-16. It is a futur
 * [ ] Review every expected output and boundary case; record failures rather than dropping them, CR-05, CR-14.
 * [ ] Report valid-turn numerator/denominator, unsafe/invented facts, rubric scores, failures, p50/p95, actual usage and reservation totals, CR-12, CR-14.
 * [ ] Report communication-quality denominators separately from deliberate refusals, CR-14.
+* [ ] Freeze sixty interaction slots with expected states, receipt availability and dispatch decisions. Include terminal denials and dependent uncompleted slots; report actual provider attempts and at least 24 coached outputs separately, CR-14.
 * [ ] Confirm a named qualified reviewer, real participants, study notice and artifact retention before the human comparison, CR-15, CR-16.
 * [ ] Counterbalance tasks/order and blind human scoring; report disagreement, missing data and sample-size limits, CR-15.
 * [ ] Compare against both written information and the fixed worksheet; do not claim superiority merely because Gemini generated text, CR-15.

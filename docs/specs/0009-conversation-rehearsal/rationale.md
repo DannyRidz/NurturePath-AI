@@ -82,3 +82,9 @@ Project sources: root AGENTS.md; specifications 0004, 0007 and 0008; docs/gemini
 Show one genuine original question, the actual feedback, the user's revision and the explicit final choices. Identify any recorded or simulated segment. Present the same-task comparison and reviewer status with actual sample sizes. If the new release is not qualified, show it as a local development slice and keep the existing public product description truthful.
 
 The official challenge asks for a working solution and supporting assumptions/limitations. A rehearsal can support the conversation-preparation part of that story. It does not by itself deliver personal risk identification, access to assessment, completed referral or health outcomes. Those remain separate pilot questions.
+
+## Design completeness review, 8 November 2026
+
+A fresh same-model read-only reviewer identified two material clarifications. The plan now makes a valid refusal terminal for that rehearsal, with explicit receipt/UI behavior. It also distinguishes sixty frozen end-to-end interaction slots from actual provider attempts and coached outputs, so pre-admission blocks or missing dependent turns cannot inflate or disappear from the denominator.
+
+The author applied these recommended corrections. Operator, country, provider intended-use, qualified-reviewer and additional-budget inputs remain explicit external gates. This review does not approve implementation, personal data processing, spending or clinical use.
