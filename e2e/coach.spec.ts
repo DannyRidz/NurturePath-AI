@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { publicCanonicalSummary } from "../src/lib/coach/facts";
 import { geminiModel, publicNoticeVersion } from "../src/lib/coach/contract";
 
 async function results(page:Page){
@@ -12,7 +13,7 @@ async function results(page:Page){
  await page.getByRole("checkbox",{name:/I agree to send/}).check();
 }
 const draft=(page:Page)=>page.getByRole("article",{name:"AI conversation draft"});
-function fakeDraft(requestId:string){return {status:"draft",requestId,variantId:"V01",catalogVersion:"sim-1",rulesVersion:"sim-1",contentVersion:"sim-1",noticeVersion:publicNoticeVersion,promptVersion:"coach-gemini-prompt-1",provider:"google",model:geminiModel,generatedAt:new Date().toISOString(),summary:"Fictional browser test draft, not observed provider output.",questions:["What would I like to learn?","How could I organize my questions?","Which educational resources could we discuss?"],usage:{inputTokens:700,outputTokens:100,thinkingTokens:0,totalTokens:800,durationMs:20}};}
+function fakeDraft(requestId:string){return {status:"draft",requestId,variantId:"V01",catalogVersion:"sim-1",rulesVersion:"sim-1",contentVersion:"sim-1",noticeVersion:publicNoticeVersion,promptVersion:"coach-gemini-prompt-2",provider:"google",model:geminiModel,generatedAt:new Date().toISOString(),summary:publicCanonicalSummary(),questions:["What would I like to learn?","How could I organize my questions?","Which educational resources could we discuss?"],usage:{inputTokens:700,outputTokens:100,thinkingTokens:0,totalTokens:800,durationMs:20}};}
 
 test.skip(process.env.NURTUREPATH_STATIC_PREVIEW === "1", "AI is excluded from the static artifact");
 
@@ -35,7 +36,7 @@ test("CO-02/03/09 labelled draft, usage, keyboard action and report exclusion wi
  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
  await page.screenshot({path:`output/playwright/public-gemini-${test.info().project.name}.png`,fullPage:true});
  await page.getByRole("link",{name:"Preview complete report"}).click();await expect(draft(page)).toHaveCount(0);
- await expect(page.getByText("Fictional browser test draft",{exact:false})).toHaveCount(0);
+ await expect(page.getByText(publicCanonicalSummary(),{exact:true})).toHaveCount(0);
  await page.getByRole("link",{name:"Back to guidance",exact:true}).click();await expect(draft(page)).toHaveCount(0);
 });
 test("CO-06 rejects simulation provenance in Gemini mode",async({page})=>{

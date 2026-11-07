@@ -1,5 +1,8 @@
 # Gemini qualification for the bounded coach trial
 
+**Live continuation, 7 November:** The project hard token proof gate was explicitly waived. Actual paid account qualification proceeded using estimated lifetime reservations. Two initial failed requests were retained; fixed summary v2 then passed ten qualification and twenty frozen evaluation calls. See [the measured evaluation](gemini-live-evaluation.md). Historical no call and no go statements below no longer describe the current production continuation. Personal intake remains design only.
+
+
 **7 November production direction:** The user requested public Gemini availability with production engineering. The [production section of specification 0007](specs/0007-ai-appointment-coach.md#production-direction-7-november-2026) supersedes this document's earlier hard token evidence activation gate. The forum reply is no longer a release prerequisite. Spending controls will use explicit estimated reservations without promising an invoice cap. Public allowance and intake scope are pending user answers. Historical findings below remain research evidence, not current instructions to wait indefinitely. No real call or public activation has occurred.
 
 

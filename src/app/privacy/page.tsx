@@ -27,7 +27,7 @@ export default function Page() {
       <p>
         Opening the site sends ordinary web requests to Vercel. With separate
         consent on V01, the optional coach sends all seven fixed fictional answers
-        to Google Gemini to draft a summary and three conversation questions.
+        to Google Gemini to draft three conversation questions alongside a fixed factual summary.
         It accepts no names, personal answers, uploads or conversation history.
         The app makes no analytics or remote font requests and does not create
         patient accounts. Following a source link opens an external

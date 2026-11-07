@@ -13,3 +13,8 @@ The proposed personal intake design remains incomplete before implementation. Fi
 * P2: Specify the exact personal request and transmission preview, including field encodings, bounds, server validation and consent tied to the reviewed answer revision.
 
 These findings block calling specification 0008 buildable. They do not block the fixed fictional release. They are recorded as open design decisions, not silently answered or waived.
+
+
+## Follow up after live qualification
+
+A second read only pass checked the revised fixed summary v2 and found no verified public runtime defect. The summary covers all seven source states and is pinned consistently in provider schema, server and browser. It found two operator trial tooling issues: cumulative attempt labels could come from a local offset, and a fresh TextDecoder per response chunk could corrupt multibyte diagnostic output. Both were corrected before frozen evaluation: the tool now reads shared state, records the actual Redis admission and dispatch separately, and buffers response bytes before decoding. The observed twenty evaluation admissions were 13 through 32. These fixes neither reset the ledger nor waive failed calls.

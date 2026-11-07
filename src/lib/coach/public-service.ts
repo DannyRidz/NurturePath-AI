@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { admitPublicCoach, settlePublicCoach, type AdmissionConfig } from "./admission";
-import { configurationHash, geminiRequestBody, generateGemini, GeminiFailure } from "./gemini";
+import { configurationHash, publicGeminiRequestBody, generatePublicGemini, GeminiFailure } from "./gemini";
 import { geminiModel, publicDraftShape, publicNoticeVersion, requestShape } from "./contract";
 
 export const publicOrigin = "https://nurturepath-demo.vercel.app";
@@ -51,17 +51,17 @@ export async function handlePublicCoach(request: Request, config: PublicConfig, 
   if (!config.apiKey || config.apiKey.length < 20 || config.reviewedHash !== configurationHash() ||
       config.costAcknowledgement !== "estimated-reservations-not-invoice-cap" || !config.store ||
       config.store.releaseId !== publicReleaseId || config.store.fingerprint !== configurationHash() ||
-      config.store.maxAttempts !== 60 || config.store.maxCents !== 100 || Buffer.byteLength(geminiRequestBody()) > 8192) return unavailable(503, "configuration_required", id);
+      config.store.maxAttempts !== 60 || config.store.maxCents !== 100 || Buffer.byteLength(publicGeminiRequestBody()) > 8192) return unavailable(503, "configuration_required", id);
   // Trust this header only behind the direct Vercel production origin checked above.
   const admission = await admitPublicCoach(config.store, request.headers.get("x-vercel-forwarded-for"), dependencies.store);
   if (admission.status !== "admitted") return unavailable(["exhausted", "rate_limited", "busy"].includes(admission.status) ? 429 : 503, admission.status, id);
   let success = false;
   try {
-    const { output, usage } = await generateGemini(config.apiKey, { maxInputTokens: 16384 }, dependencies.provider);
+    const { output, usage } = await generatePublicGemini(config.apiKey, { maxInputTokens: 16384 }, dependencies.provider);
     // Usage is observed after billing. This is an estimate check, never an invoice cap.
     const estimate = (usage.inputTokens * 0.25 + (usage.outputTokens + usage.thinkingTokens) * 1.5) / 1e6;
     if (estimate >= 0.01) throw new Error("usage_review_required");
-    const body = publicDraftShape.parse({ status: "draft", requestId: id, variantId: "V01", catalogVersion: "sim-1", rulesVersion: "sim-1", contentVersion: "sim-1", noticeVersion: publicNoticeVersion, promptVersion: "coach-gemini-prompt-1", provider: "google", model: geminiModel, generatedAt: new Date().toISOString(), ...output, usage });
+    const body = publicDraftShape.parse({ status: "draft", requestId: id, variantId: "V01", catalogVersion: "sim-1", rulesVersion: "sim-1", contentVersion: "sim-1", noticeVersion: publicNoticeVersion, promptVersion: "coach-gemini-prompt-2", provider: "google", model: geminiModel, generatedAt: new Date().toISOString(), ...output, usage });
     success = await settlePublicCoach(config.store, admission.attempts, true, dependencies.store);
     if (!success) return unavailable(503, "reconciliation_required", id);
     return Response.json(body, { headers });

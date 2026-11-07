@@ -44,7 +44,7 @@ function CoachPanel() {
   return <section className="page narrow coach-panel" aria-labelledby="coach-title">
     <p className="eyebrow">V01 / Optional Gemini coach</p>
     <h2 id="coach-title">Prepare for a conversation</h2>
-    <p>Gemini can draft a summary and three discussion questions from this fixed fictional example. It does not assess your health. The authored guidance above stays unchanged.</p>
+    <p>This coach pairs a fixed factual summary with three Gemini discussion questions from this fixed fictional example. It does not assess your health. The authored guidance above stays unchanged.</p>
     {!open ? <div className="actions"><button ref={trigger} className="button" onClick={() => setOpen(true)}>Help me prepare for a conversation</button></div> : <>
       <form onSubmit={e => { e.preventDefault(); void requestDraft(); }}>
         <p className="notice">With your agreement, this coach sends all seven fixed V01 answers to Google Gemini ({geminiModel}) under paid service terms. Google does not use paid prompts and responses to improve its products, but can retain them for abuse detection and legal requirements. This is not zero retention. Clearing or cancelling cannot recall a sent request. No personal answers, names or history are accepted. Drafts stay out of the report.</p>
@@ -59,10 +59,10 @@ function CoachPanel() {
         {status === "unavailable" && <p className="notice">The Gemini coach is unavailable. It may be busy, paused or out of allowance. Your authored guidance and report still work. A sent request may still use credits.</p>}
       </div>
       {draft && <article className="draft" aria-label="AI conversation draft">
-        <h3>AI draft from Gemini, review before use</h3>
+        <h3>AI questions from Gemini, review before use</h3>
         <p>Fixed fictional example. Not reviewed by a clinician.</p>
         <p>{draft.summary}</p><ol>{draft.questions.map(q => <li key={q}>{q}</li>)}</ol>
-        <p className="muted">Source: {draft.model}. This draft is excluded from printing and the authored report.</p>
+        <p className="muted">Summary: fixed canonical answers. Questions: {draft.model}. This draft is excluded from printing and the authored report.</p>
       </article>}
     </>}
   </section>;

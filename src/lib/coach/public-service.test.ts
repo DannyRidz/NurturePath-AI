@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
+import { publicCanonicalSummary } from "./facts";
 import { configurationHash } from "./gemini";
 import { geminiModel, publicNoticeVersion } from "./contract";
 import { handlePublicCoach, publicConfig, publicOrigin, publicReleaseId, type PublicConfig } from "./public-service";
@@ -22,11 +23,25 @@ function fixtures() {
   const provider = vi.fn<typeof fetch>(async (_url, options) => {
     expect(store).toHaveBeenCalled();
     expect(String(options?.body)).not.toContain(config.apiKey!);
-    return Response.json({ modelVersion: geminiModel, candidates: [{ finishReason: "STOP", content: { role: "model", parts: [{ text: JSON.stringify({ summary: "This fixed fictional example concerns general learning.", questions: ["What would I like to learn?", "How can I organize questions?", "Which resources could we discuss?"] }) }] } }], usageMetadata: { promptTokenCount: 700, candidatesTokenCount: 100, thoughtsTokenCount: 5, totalTokenCount: 805 } });
+    return Response.json({ modelVersion: geminiModel, candidates: [{ finishReason: "STOP", content: { role: "model", parts: [{ text: JSON.stringify({ summary: publicCanonicalSummary(), questions: ["What would I like to learn?", "How can I organize questions?", "Which resources could we discuss?"] }) }] } }], usageMetadata: { promptTokenCount: 700, candidatesTokenCount: 100, thoughtsTokenCount: 5, totalTokenCount: 805 } });
   });
   return { store, provider };
 }
 describe("public Gemini boundary", () => {
+  it.each(["The subject declined lifestyle information.", "The subject has no current pain."])("rejects observed factual paraphrase: %s", async summary => {
+    const deps = fixtures();
+    const original = deps.provider.getMockImplementation()!;
+    deps.provider.mockImplementation(async (...args) => {
+      const response = await original(...args);
+      const body = await response.json();
+      const output = JSON.parse(body.candidates[0].content.parts[0].text);
+      output.summary = summary;
+      body.candidates[0].content.parts[0].text = JSON.stringify(output);
+      return Response.json(body);
+    });
+    expect((await handlePublicCoach(request(), config, deps)).status).toBe(503);
+    expect(JSON.parse(String(deps.store.mock.calls.at(-1)![1]?.body)).at(-1)).toBe("0");
+  });
   it("reserves before the only provider call and settles before returning a draft", async () => {
     const deps = fixtures(), req = request(), id = (await req.clone().json()).requestId;
     const response = await handlePublicCoach(req, config, deps);

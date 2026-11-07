@@ -73,3 +73,8 @@ The user selected Gemini and authorized the local integration plus a conditional
 ## Production Gemini direction, 7 November 2026
 
 The user authorized preparing Gemini for public availability with production engineering and superseded the project requirement to wait for authoritative hard billable token bounds. Specification 0007 records the new direction. The forum reply is follow up rather than a release dependency. Public spending allowance and intake scope await explicit answers; previous local approval does not define a public budget. Shared admission implementation has begun. No runtime public AI, model evaluation or production readiness is claimed.
+
+
+## Verified provider continuation, 7 November 2026
+
+The user approved the public lifetime USD 1 / 60 attempt allowance and requested an international adult personal intake design separately. Actual fictional Gemini qualification exposed factual paraphrasing errors. The revised public coach fixes the summary to canonical answers and generates only three questions. Ten revised qualification and twenty frozen evaluation calls passed the recorded engineering/content screen, with both earlier failures retained. Specification 0007 and docs/gemini-live-evaluation.md govern the release; specification 0008 remains a Proposed personal design, not active data collection. Public deployment verification is still pending.

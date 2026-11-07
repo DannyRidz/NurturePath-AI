@@ -1,7 +1,9 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { geminiModel, outputShape, usageShape, publicNoticeVersion } from "./contract";
-import { coachInstruction, createCoachFacts, promptVersion, providerOutputSchema } from "./prompt";
+import { coachInstruction, createCoachFacts, promptVersion, providerOutputSchema, publicPromptVersion, publicCoachInstruction } from "./prompt";
+import { publicCanonicalSummary } from "./facts";
+
 export function geminiRequestBody() {
   return JSON.stringify({
     systemInstruction:{parts:[{text:coachInstruction}]},
@@ -10,8 +12,19 @@ export function geminiRequestBody() {
       thinkingConfig:{thinkingLevel:"MINIMAL"},responseMimeType:"application/json",responseJsonSchema:providerOutputSchema},
   });
 }
+export function publicGeminiRequestBody() {
+  const requiredSummary = publicCanonicalSummary();
+  return JSON.stringify({
+    systemInstruction: {parts:[{text:publicCoachInstruction}]},
+    contents: [{role:"user",parts:[{text:JSON.stringify({...createCoachFacts(),requiredSummary})}]}],
+    generationConfig: {candidateCount:1,temperature:0,maxOutputTokens:1024,
+      thinkingConfig:{thinkingLevel:"MINIMAL"},responseMimeType:"application/json",
+      responseJsonSchema:{...providerOutputSchema,properties:{...providerOutputSchema.properties,summary:{type:"string",enum:[requiredSummary]}}}},
+  });
+}
 export function configurationHash(noticeVersion = publicNoticeVersion) {
-  return createHash("sha256").update(`${geminiModel}\n${noticeVersion}\n${promptVersion}\n${geminiRequestBody()}`).digest("hex");
+  const isPublic = noticeVersion === publicNoticeVersion;
+  return createHash("sha256").update(`${geminiModel}\n${noticeVersion}\n${isPublic?publicPromptVersion:promptVersion}\n${isPublic?publicGeminiRequestBody():geminiRequestBody()}`).digest("hex");
 }
 export class GeminiFailure extends Error {
   constructor(public readonly code:"provider_failure"|"invalid_output"|"deadline") { super(code); }
@@ -19,6 +32,12 @@ export class GeminiFailure extends Error {
 
 // Transport injection is for deterministic unit tests only. The runtime always uses native fetch.
 export async function generateGemini(key:string, evidence:{maxInputTokens:number}, transport:typeof fetch=fetch) {
+  return generate(key,evidence,transport,false);
+}
+export async function generatePublicGemini(key:string, evidence:{maxInputTokens:number}, transport:typeof fetch=fetch) {
+  return generate(key,evidence,transport,true);
+}
+async function generate(key:string,evidence:{maxInputTokens:number},transport:typeof fetch,boundedSummary:boolean) {
   const controller=new AbortController();
   const start=Date.now();
   let timer:ReturnType<typeof setTimeout>|undefined;
@@ -27,7 +46,7 @@ export async function generateGemini(key:string, evidence:{maxInputTokens:number
   try {
     const response=await Promise.race([transport(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent`,{
       method:"POST",headers:{"content-type":"application/json","x-goog-api-key":key},
-      body:geminiRequestBody(),signal:controller.signal,redirect:"error",cache:"no-store",
+      body:boundedSummary?publicGeminiRequestBody():geminiRequestBody(),signal:controller.signal,redirect:"error",cache:"no-store",
     }),deadline]);
     if(!response.ok || !response.headers.get("content-type")?.startsWith("application/json"))throw new GeminiFailure("provider_failure");
     reader=response.body?.getReader();
@@ -53,6 +72,7 @@ export async function generateGemini(key:string, evidence:{maxInputTokens:number
     const u=envelope.usageMetadata, thinking=u.thoughtsTokenCount??0;
     if(u.promptTokenCount>evidence.maxInputTokens || u.candidatesTokenCount+thinking>1024 || u.totalTokenCount!==u.promptTokenCount+u.candidatesTokenCount+thinking)throw new GeminiFailure("invalid_output");
     const output=outputShape.parse(JSON.parse(envelope.candidates[0].content.parts[0].text));
+    if(boundedSummary && output.summary!==publicCanonicalSummary())throw new GeminiFailure("invalid_output");
     // These are only obvious exclusions. Every successful trial draft still needs manual semantic review.
     const text=[output.summary,...output.questions].join(" ");
     if(!/fictional/i.test(output.summary) || /\b(diagnos\w*|infertil\w*|prescrib\w*|treatment|take medication|you should|you must|book an appointment|seek urgent)\b/i.test(text))throw new GeminiFailure("invalid_output");

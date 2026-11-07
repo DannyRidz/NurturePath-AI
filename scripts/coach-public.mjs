@@ -3,11 +3,11 @@ const command = process.argv[2] || 'config';
 if (!['config', 'init', 'status', 'disable', 'enable'].includes(command)) throw new Error('Unknown operator command');
 const loader = await createServer({configFile:false, appType:'custom', server:{middlewareMode:true,hmr:false,ws:false,watch:null}});
 try {
-  const { configurationHash, geminiRequestBody } = await loader.ssrLoadModule('/src/lib/coach/gemini.ts');
+  const { configurationHash, publicGeminiRequestBody } = await loader.ssrLoadModule('/src/lib/coach/gemini.ts');
   const { redisCommand } = await loader.ssrLoadModule('/src/lib/coach/admission.ts');
   const fingerprint = configurationHash(), budgetKey = '{nurturepath-coach}:gemini-public-1:budget';
   if(command === 'config') {
-    console.log(JSON.stringify({releaseId:'gemini-public-1',model:'gemini-3.1-flash-lite',configurationHash:fingerprint,requestBytes:Buffer.byteLength(geminiRequestBody()),maxAttempts:60,maxReservedCents:100},null,2));
+    console.log(JSON.stringify({releaseId:'gemini-public-1',model:'gemini-3.1-flash-lite',configurationHash:fingerprint,requestBytes:Buffer.byteLength(publicGeminiRequestBody()),maxAttempts:60,maxReservedCents:100},null,2));
   } else {
     const url = process.env.COACH_KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || await prompt('Upstash REST URL (hidden): ',true);
     const parsed = new URL(url);
