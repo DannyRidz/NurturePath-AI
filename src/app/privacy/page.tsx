@@ -25,10 +25,35 @@ export default function Page() {
       </p>
       <h2>What reaches other services</h2>
       <p>
-        Opening the site sends ordinary web requests to its host. This version
-        makes no analytics, remote font or AI provider request and does not
-        create patient accounts. Following a source link opens an external
+        Opening the site sends ordinary web requests to Vercel. With separate
+        consent on V01, the optional coach sends all seven fixed fictional answers
+        to Google Gemini to draft three conversation questions alongside a fixed factual summary.
+        It accepts no names, personal answers, uploads or conversation history.
+        The app makes no analytics or remote font requests and does not create
+        patient accounts. Following a source link opens an external
         website with its own privacy practices.
+      </p>
+      <p>
+        Paid Gemini processing does not use prompts and responses to improve
+        Google products. Google can retain them for abuse detection and legal
+        requirements. This is not zero retention. Clearing or cancelling here
+        cannot recall a sent request or erase provider records. Drafts stay in
+        tab memory and are excluded from reports and printing.
+      </p>
+      <h2>Request limits and metadata</h2>
+      <p>
+        The host processes your IP address. To limit automated requests, the server
+        derives a daily pseudonym and sends it to Upstash Redis. Raw IP addresses,
+        example facts and drafts are not stored in the application’s counter store.
+        Minute counters expire after the minute plus sixty seconds. Anonymous
+        project reservation totals remain for accounting. Vendor access logs and
+        backups have separate retention policies.
+      </p>
+      <p>
+        The first release permits at most 60 provider attempts and USD 1 in
+        estimated application reservations, with no automatic reset. These are
+        not a guarantee of the final Google invoice. The coach can be unavailable
+        while authored guidance and reports remain usable.
       </p>
       <h2>Access to this demonstration</h2>
       <p>

@@ -1,15 +1,84 @@
 # 0007. AI appointment preparation coach
 
+## Production direction, 7 November 2026
+
+The user requested making Gemini available and treating the application as a production application. This authorizes production implementation and replaces the earlier requirement to wait for authoritative worst case billable token evidence. The forum response is useful follow up, not a release dependency. Earlier statements that public implementation is unauthorized or that unsupported hard token bounds automatically disqualify Gemini are historical and superseded by this section.
+
+The user approved a one time public USD 1 application allowance and at most 60 provider attempts. There is no daily reset or automatic top up. The user also requested personal health intake to be designed, which is a separate design deliverable rather than authorization to collect or transmit real health information now. Public implementation in this slice remains the fixed V01 example. This change does not establish clinical approval or successful model evaluation.
+
+### Production implementation contract
+
+Retain Next.js, Vercel, the existing design system, authored guidance and complete report. Use native Next.js server hosting in place of the static Vercel export. Keep the static export as an explicitly AI disabled artifact. Reuse the existing Gemini transport, fixed V01 facts, strict schema, consent lifecycle and fallback. No browser API key or local operator token appears in the public flow. The server validates exact production Origin and derives all model input from the canonical catalog.
+
+Use the shared Redis primary selected in ADR 0004. The public service must never use the experiment filesystem ledger or process memory as its budget authority. An unavailable shared store prevents dispatch. Use direct REST commands with a bounded deadline and no automatic retries. The first implementation primitive is shared admission, within the approved public allowance.
+
+| Shared admission value | Source and rule |
+|---|---|
+| Release identifier | Stable server configuration, unchanged across deployments and restarts |
+| Allowance | Explicit operator initialized Redis hash with integer maximum attempts and reserved cents, plus configuration fingerprint and enabled status. Never initialize automatically on request |
+| Lifetime counters | Same hash, integer admitted attempts and reserved cents, never expiring or automatically refunded |
+| Client rate | ADR 0004, at most ten admissions per UTC minute. Use normalized direct Vercel client IP, HMAC SHA256 under a server secret, never raw IP in Redis |
+| Admission | One Redis EVAL checks initialized matching allowance, enabled state, remaining attempts, remaining one cent reservations and minute count before any increment. Failed or uncertain response prevents provider dispatch |
+| Time | Redis server TIME for minute boundary and rate expiry. Never client timestamps |
+| Duplicate or failed call | Each deliberate admitted attempt consumes another reservation. No retries or refunds |
+| Shutdown | Shared enabled field stops new admissions across deployments without resetting counters. Already sent requests can still bill |
+| Data retention | Budget metadata remains for reconciliation. Pseudonymous minute counters expire after the minute plus sixty seconds. No case, prompt, draft or consent record in Redis |
+
+The earlier one cent reservation is an application estimate, not a proven upper bound on Google billing. Keep the explicit provider output setting, payload cap, deadline, no tools and no retries. Check observed usage against the estimate and stop further admissions if it is exceeded or cannot be reconciled. Do not describe post response validation as a provider billing cap. Final public activation needs the chosen allowance, configured services and credentials, reviewed model output, deployed browser checks, latest head CI and a tested shutdown path.
+
+### Observed qualification correction and frozen v2
+
+The first two real attempts remain failed and reserved. A diagnostic output changed No to declined and broadened a negative answer, so free summary paraphrasing failed qualification. Production now uses a fixed factual summary derived from all seven answers and three generated discussion questions. The provider schema constrains summary to one canonical string, and both server and browser independently require it. The local legacy experiment remains version 1. Public consent and prompt advance to `coach-public-notice-2` and `coach-gemini-prompt-2`, with configuration SHA256 `6ff661f0dffc0b1f22c5a76fc102ffcbfa25d1f71c27e94620eaaef4c02d697d`. The UI explicitly labels summary as fixed and questions as Gemini generated.
+
+Ten revised qualification and twenty frozen evaluation requests passed the recorded engineering/content screen. [Actual evaluation evidence](../gemini-live-evaluation.md) reports all attempts, repeated output limitations, usage, estimated cost and remaining allowance. This supersedes earlier claims that no provider call has occurred, but supplies no clinical approval or personal intake authorization.
+
+### Public route and operating configuration
+
+Use POST `/api/coach` with the existing strict identifier and version request, `coach-public-notice-2`, consent true and a UUID. Reject arbitrary fields and all other variants before admission. Limit the request body to 1,024 bytes. Use exact origin `https://nurturepath-demo.vercel.app`, direct Vercel production ingress only, and the server verified client header described in ADR 0004. Local, CI and preview builds cannot make public provider calls. Tests inject deterministic transports into the service function; never add an HTTP test bypass.
+
+The server requires `AI_COACH_ENABLED=1`, `GEMINI_API_KEY`, `COACH_KV_REST_API_URL` (or `UPSTASH_REDIS_REST_URL`), `COACH_KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_TOKEN`), `COACH_LIMITER_HMAC_SECRET`, `COACH_REVIEWED_CONFIG_HASH` matching the frozen public request, and `COACH_COST_RISK_ACK=estimated-reservations-not-invoice-cap`. Missing configuration disables provider dispatch. Use stable release identifier `gemini-public-1`, maximum attempts 60 and maximum reserved cents 100 in code. Provisioning must initialize matching limits with zero counters explicitly, never overwrite an existing release. Shutdown sets the shared enabled field to zero. Do not reset or create another release to bypass exhaustion.
+
+The browser coach is optional after the complete V01 authored result. Reuse design.md and existing panel composition: introduction, separate unchecked Google consent, Request Gemini draft, loading, labelled review required draft or honest unavailable state, and dismiss. Remove the local token field. Keep all seven answers server derived. Clear, Hide, consent withdrawal, dismissal, case replacement, route change and document hiding discard the draft and invalidate late completion. Report and print exclude the coach. Personal intake controls are absent.
+
+Return only the existing validated draft fields with Google model provenance and public notice version, or a generic unavailable code. Reserve before dispatch and never retry. If a dispatched response fails usage or content validation, or usage is unavailable after a timeout or failure, disable further admissions through the shared store for operator reconciliation. Serialize the public release to one active provider attempt by atomically setting shared status to pending before dispatch. Successful reconciliation can restore enabled only if that pending attempt and fingerprint still match; an operator shutdown must never be undone. A crash before settlement leaves the public coach unavailable until explicit reconciliation. If a successful settlement commits but its response is lost, the release may reopen; the endpoint withholds the draft and retains the reservation. Unknown provider usage is never a successful settlement. Counters are never refunded.
+
+Preserve the existing 15 second provider timeout, 16 KiB response cap, strict text output and obvious prohibited content rejection. One cent is an estimate; tokens and calculated standard charge are observed after a call, never proof of a hard pre dispatch billing cap. Local trial accounting remains separate, but any verification through the public release consumes its public allowance.
+
+The operator trial command records only validated synthetic drafts, usage, timestamps, configuration identity, failures and review decisions in ignored `.local/coach-public-evaluation` files with restrictive permissions. It reads credentials from hidden standard input, never arguments or files. Qualification is ten calls, then a separate twenty call frozen evaluation after review; no automatic retries or allowance reset. These calls consume the same public lifetime allowance, and must stop on any unavailable response. No real health information may enter these evaluation artifacts.
+
+### Production acceptance criteria and build sequence
+
+1. **PUB-1:** Shared atomic admission survives concurrency, deployment changes and exhausted or corrupt state, with no provider call on uncertainty. Build the counter primitive and deterministic transport tests first, then verify the Lua operation against a real Redis primary before activation.
+2. **PUB-2:** An eligible consented fictional journey can request a real Gemini draft through the public server, with keys kept server side and the existing clear, Hide, withdrawal and late completion behavior preserved. Build the public route and UI around the shared admission primitive for this fixed example release.
+3. **PUB-3:** Invalid, urgent, disabled, over budget, malformed and failed requests retain authored guidance and report behavior. Test request admission before the provider and all relevant browser races.
+4. **PUB-4:** Privacy, source labels and operating instructions describe actual provider and metadata processing, estimated spending controls and deployment shutdown. Reconcile the older static only and local only documents with the implemented behavior.
+5. **PUB-5:** Verify real model results within the authorized allowance, review the diff, run applicable checks and browser projects, inspect latest head CI, then verify deployed anonymous access, response headers and shutdown. Do not label unverified work production ready.
+
+
 **Date:** 2026-10-26
 **Status:** In Progress
-**Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. Real provider activation, spending, model evaluation calls and public AI access remain unauthorized.
+**Authorization:** The original request authorized planning. On 6 November 2026 the user authorized the next local slice with simulated provider responses. The later continuation below authorizes provider integration and a conditional bounded local trial. Public AI access remains unauthorized.
 **Readiness:** Local simulated slice accepted and built under the 6 November authorization. Verification is recorded in `docs/local-coach-verification.md` and the implementation PR. Provider activation and public deployment remain separate, incomplete release work.
 
-**Provider qualification, 6 November 2026:** [Gemini qualification](../gemini-coach-qualification.md) records the documentation review and conditional allowance arithmetic. Activation remains no-go: account terms/retention/access and exact hard billable-token bounds need evidence. No provider adapter, call or spending is authorized by this review.
+**Provider qualification, 6 November 2026:** [Gemini qualification](../gemini-coach-qualification.md) records the documentation review and conditional allowance arithmetic. The subsequent user approval permits a conditional bounded local trial. Activation still requires the remaining hard billable-token evidence; the review itself does not activate calls.
 
 ## Summary
 
 Add an optional AI coach that helps someone prepare to discuss a fictional example with a clinician. It would draft a short factual summary and three discussion questions. The existing authored guidance remains available and continues to determine every next step.
+
+## Gemini implementation continuation, 6 November 2026
+
+The user authorized implementation, ultimately selected Gemini and explicitly approved use of existing AI Studio credits for a local V01 trial of at most 60 attempts and USD 1 in application reservations, after account and cost checks pass. Public AI remains outside this approval. This supersedes the brief OpenAI selection before provider code was written. A read only AI Studio check confirmed paid tier, prepaid credit availability and auto reload off. No account identifiers, balance or credentials are recorded here. No billing settings were changed.
+
+Use Gemini Developer API direct REST `v1beta/models/gemini-3.1-flash-lite:generateContent`. Freeze the full canonical V01 facts, instructions, strict output schema and configuration in a SHA256 hash. The request uses one candidate, temperature 0, `maxOutputTokens:1024`, minimal thinking, JSON schema output, no tools, history, grounding, cache, uploads or automatic retries. The existing 8,192 request byte cap, 16 KiB response cap and 15 second provider deadline apply. Every successful response must have the expected model version, STOP finish reason, one text part, valid usage and independently validated summary/questions. Obvious prohibited patterns may reject an output but never replace semantic review.
+
+Simulation stays the launcher default. Explicit Gemini launch uses `.local/coach-gemini` and experiment ID `gemini-trial-1`, separate from simulation counters. Keys are read through masked terminal input or server environment, never arguments or files. A separate activation JSON file, outside git, must bind the experiment, exact model and request hash, recent review time and expiry (at most seven days), approval reference, paid/region/intended use checks, terms and retention disclosure, input/output bound evidence, rates and the approved allowance. Missing or mismatched evidence stops dispatch before reservation. Recheck the evidence for each request. Removing it stops new admissions; an existing sent request can still bill. This record is an operator assertion, not proof of account configuration.
+
+Standard rates checked are USD 0.25 per million input tokens and USD 1.50 per million generated tokens including thinking. A qualified input ceiling of 16,384 tokens and a combined generation ceiling of 1,024 would cost at most USD 0.005632, below the one cent reservation. The byte cap is not a token ceiling. These bounds are still conditional: **do not create activation evidence until authoritative support for the exact request is available**. Account and allowance approval do not waive this gate. A post-response usage rejection cannot prevent provider billing.
+
+UI follows the existing result, disclosure, token/consent, loading, draft, unavailable and dismiss composition in `design.md`. Server configuration provides only the public mode to the local shell. Gemini uses `coach-gemini-notice-1` and `coach-gemini-prompt-1`, names the provider/model and explains paid processing, limited abuse/legal retention, billing and cancellation limits. It never claims zero retention or that a failed real request contacted nobody. Browser validation requires matching provider/notice provenance. Drafts remain outside reports and printing.
+
+Deterministic transports verify success and failure without keys or provider access. The browser suite verifies simulation and Gemini mode separately with real dispatch disabled. CI always denies real dispatch, as do Vercel and exported preview environments. Root export isolation checks include Gemini markers. Evaluation remains ten qualification attempts followed by twenty fresh frozen evaluation attempts, with thirty reserve attempts. No model run, output quality, clinical approval or measured patient benefit is claimed before those runs and reviews occur.
 
 ## Context
 

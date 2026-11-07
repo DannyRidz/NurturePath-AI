@@ -5,6 +5,8 @@
 
 Solo revision 3: this decision is retained for a future separately funded X-AI slice. It is not implemented or part of the 82h authored core, and the solo builder is not expected to provision Redis/model services for the baseline.
 
+7 November 2026: specification 0007 now governs the authorized Gemini coach release. Its lifetime USD 1 / 60 attempt allowance, fixed V01 contract, estimated reservation policy and pending request settlement supersede this historical daily fragment selection design for that release. Shared primary storage and data minimization remain applicable.
+
 ## Summary
 
 Use one shared metadata counter store before a public model call. Admit only bounded requests within a per-IP rate and a project-wide daily reservation. If the store or required approvals are unavailable, retain authored mode.

@@ -63,3 +63,18 @@ On 26 October 2026 the user asked to capture the recommended AI appointment prep
 ## Local coach simulation, 6 November 2026
 
 The user authorized the next local slice of specification 0007 with simulated provider responses. It is isolated in `experiments/coach`, uses the canonical V01 example and adds no model call or public endpoint. [Verification](local-coach-verification.md) records the local checks; latest head CI is recorded in the implementation PR. Real provider activation, spending, model evaluation and public AI enablement remain separate decisions.
+
+
+## Gemini integration continuation, 6 November 2026
+
+The user selected Gemini and authorized the local integration plus a conditional trial using existing AI Studio prepaid credits (at most 60 attempts and USD 1 in reservations after account/cost checks). The paid account check passed. The adapter and deterministic verification are implemented; exact billable token qualification and actual evaluation remain outstanding. No model calls or credit spending occurred. Public AI stays separately unauthorized. See [qualification](gemini-coach-qualification.md) and [specification 0007](specs/0007-ai-appointment-coach.md).
+
+
+## Production Gemini direction, 7 November 2026
+
+The user authorized preparing Gemini for public availability with production engineering and superseded the project requirement to wait for authoritative hard billable token bounds. Specification 0007 records the new direction. The forum reply is follow up rather than a release dependency. Public spending allowance and intake scope await explicit answers; previous local approval does not define a public budget. Shared admission implementation has begun. No runtime public AI, model evaluation or production readiness is claimed.
+
+
+## Verified provider continuation, 7 November 2026
+
+The user approved the public lifetime USD 1 / 60 attempt allowance and requested an international adult personal intake design separately. Actual fictional Gemini qualification exposed factual paraphrasing errors. The revised public coach fixes the summary to canonical answers and generates only three questions. Ten revised qualification and twenty frozen evaluation calls passed the recorded engineering/content screen, with both earlier failures retained. Specification 0007 and docs/gemini-live-evaluation.md govern the release; specification 0008 remains a Proposed personal design, not active data collection. Public deployment verification is still pending.

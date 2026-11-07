@@ -77,3 +77,9 @@ test("CO-06 rejects malformed response and times out without automatic retry",as
  await page.getByRole("button",{name:"Request simulated draft"}).click();await arrived;await page.clock.fastForward(18001);
  await expect(page.getByRole("status",{name:"Coach status"})).toContainText("unavailable");expect(calls).toBe(2);release();
 });
+
+
+test("CO-08 local simulation privacy excludes provider processing",async({page})=>{
+ await page.goto("/privacy");await expect(page.getByRole("heading",{name:"Privacy and limits.",level:1})).toBeVisible();
+ await expect(page.getByText("This mode uses an authored fixture",{exact:false})).toContainText("No request is made to Google");
+});

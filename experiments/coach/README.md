@@ -1,6 +1,6 @@
 # Local coach simulation
 
-This isolated Next.js workspace uses V01 and an authored response fixture. It has no provider adapter and cannot make model calls, even if a Gemini key exists in the environment. The public app and Vercel export do not include it.
+This isolated Next.js workspace uses V01 and an authored response fixture. Simulation is the default. An optional Gemini adapter is implemented but refuses dispatch without reviewed activation evidence and a server key. The public app and Vercel export do not include it.
 
 ## Run locally
 
@@ -34,6 +34,23 @@ Session, consent, access token and draft live in React memory. Clear, withdrawal
 
 The endpoint denies a hosted Vercel/export environment, missing enable flag, wrong token, nonlocal Host/Origin, unsupported cases, stale versions and unexpected fields. This is a local operator tool, not a deployable public access design. Directly running Next instead of the launcher does not establish a qualified configuration. Keep it local.
 
-Real provider activation, paid budget, account terms/retention, model qualification, qualified content review, public admission and hosting remain separate work under [specification 0007](../../docs/specs/0007-ai-appointment-coach.md).
+The local paid trial has conditional user approval. Cost qualification, model evaluation, qualified content review, public admission and hosting remain separate work under [specification 0007](../../docs/specs/0007-ai-appointment-coach.md).
 
-The [Gemini qualification record](../../docs/gemini-coach-qualification.md) tracks documentation findings, conditional costs and unresolved activation gates. It does not enable a provider adapter or authorize calls.
+The [Gemini qualification record](../../docs/gemini-coach-qualification.md) tracks documentation findings, conditional costs and unresolved activation gates. Its later continuation records the implemented adapter and conditional trial approval; unresolved qualification still prevents dispatch.
+
+
+## Gemini trial, not publicly enabled
+
+The user approved using the existing AI Studio credits for at most 60 attempts and USD 1 in application reservations, after account and cost checks pass. The paid account check passed. Hard billable token bounds for the exact model/configuration remain unresolved, so no activation record has been created and no real calls have been made. See [qualification](../../docs/gemini-coach-qualification.md).
+
+The adapter uses direct native fetch to Gemini Developer API, no SDK or retries. A successful draft is labelled Gemini AI; simulation remains labelled authored. The local shell obtains only the runtime mode from the server. Keys never enter browser state, public configuration or reports.
+
+After qualification is complete:
+
+1. Prepare an operator reviewed activation JSON under an ignored local path, separate from the counter ledger. `lib/gemini.ts` defines its exact strict schema. Bind its `configurationHash` to `configurationHash()` for the current request. Evidence must name the exact model/API and substantiate input and combined generated token bounds; never fill these with placeholders or fabricate approval.
+2. Run `npm run coach:init:gemini` once for a separate experiment. Never reinitialize it to bypass the allowance. Set `COACH_ACTIVATION_PATH` to the absolute evidence path. Optional `COACH_EXPERIMENT_ID` and `COACH_LEDGER_PATH` must match the evidence and initialized ledger.
+3. Build with `npm run build:coach`, then use `npm run start:coach:gemini` (or `npm run dev:coach:gemini`). Enter the local 64 character token and Gemini key at the masked prompts. Never place a key in chat, a shell argument, source or an env file.
+4. Review the provider disclosure and consent on V01. Each deliberate click reserves one cent and one attempt before dispatch, including failures. No automatic retry occurs. Copy observed draft decisions and usage into the separate synthetic evaluation evidence, never the anonymous counter ledger. Measured provider charge remains unknown until billing evidence is available.
+5. Stop the server and remove activation evidence to disable future admissions. A previously sent request may still bill. Existing crash recovery and ledger reconciliation rules still apply.
+
+`npm run test:e2e:coach:gemini` verifies the Gemini browser surface using deterministic browser responses and a disabled endpoint, with no credentials or activation. CI runs it after the simulation suite. Unit tests inject the transport and use synthetic activation records that are explicitly not real approval.

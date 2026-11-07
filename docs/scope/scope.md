@@ -96,4 +96,4 @@ The user authorized the local simulation on 6 November 2026. [Specification 0007
 * [x] Verify browser lifecycle, fallback, report exclusion and production isolation, CO-04 to CO-09.
 * [x] Run endpoint, browser and authored regression tests. Latest head CI remains a PR gate.
 
-Real provider qualification, paid activation, the model evaluation and public hosting migration remain later work. No generated output or clinician approval is claimed.
+The user subsequently authorized the Gemini integration and a conditional local 60 attempt / USD 1 reservation trial. The adapter is implemented with deterministic unit/browser checks; real dispatch remains disabled pending exact billable token qualification. The paid account check passed, but no real model evaluation has run. Public hosting migration and qualified review remain later work. No generated model output or clinician approval is claimed.

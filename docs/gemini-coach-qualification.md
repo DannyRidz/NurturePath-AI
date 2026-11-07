@@ -1,6 +1,14 @@
 # Gemini qualification for the bounded coach trial
 
+**Live continuation, 7 November:** The project hard token proof gate was explicitly waived. Actual paid account qualification proceeded using estimated lifetime reservations. Two initial failed requests were retained; fixed summary v2 then passed ten qualification and twenty frozen evaluation calls. See [the measured evaluation](gemini-live-evaluation.md). Historical no call and no go statements below no longer describe the current production continuation. Personal intake remains design only.
+
+
+**7 November production direction:** The user requested public Gemini availability with production engineering. The [production section of specification 0007](specs/0007-ai-appointment-coach.md#production-direction-7-november-2026) supersedes this document's earlier hard token evidence activation gate. The forum reply is no longer a release prerequisite. Spending controls will use explicit estimated reservations without promising an invoice cap. Public allowance and intake scope are pending user answers. Historical findings below remain research evidence, not current instructions to wait indefinitely. No real call or public activation has occurred.
+
+
 Checked 6 November 2026. Governing contract: [specification 0007](specs/0007-ai-appointment-coach.md). Scope: documentation qualification only. No provider request, account inspection, billing change, key creation or public activation occurred.
+
+**Latest follow-up:** The user asked to carry out the remaining qualification and approved trial. A further documentation check identified the Interactions API as a possible alternative, but did not establish the whole billable input bound. [The clarification packet](gemini-provider-clarification.md) contains offline measurements of the exact existing request and the approved public provider question. It was [published on 7 November](https://discuss.ai.google.dev/t/documented-billable-token-bounds-for-gemini-3-1-flash-lite-structured-text/198793) under the authorized `Danny_Ridz` profile; a provider reply is pending. Real dispatch stays disabled; no key was retrieved or credits spent.
 
 **Decision: retain Gemini as the candidate; do not activate.** Documented structured output and advertised prices support further preparation. Account-specific terms, retention, access and the hard combined token bound remain unverified. This is not model performance evidence or permission to spend.
 
@@ -60,3 +68,14 @@ No run has started: provider attempts 0, measured cost not applicable, model qua
 ## Change verification
 
 This qualification changes documentation only. Runtime behavior, mocks, notices, deployment and account configuration are unchanged. Reviewed source links and allowance arithmetic; no browser behavior changed and no new model tests were run. PR #9's passing CI applies to its recorded head, not to this new document.
+
+
+## Implementation and account continuation, 6 November 2026
+
+The user ultimately selected Gemini and approved use of existing AI Studio credits for a maximum of 60 local V01 attempts and USD 1 in application reservations, conditional on passing account and cost checks. The paid tier, prepaid availability and auto reload off were observed through the authenticated AI Studio UI. No account IDs, balances or keys are recorded in this public repository. No billing change was made. A generic existing key was visible but was not copied or used; no new credential was created.
+
+The implementation now includes a disabled Gemini adapter, exact request hashing, expiring activation evidence, direct REST transport, strict response/provenance checks, no retries, anonymous reservations and truthful Gemini browser states. The public export still excludes it. This supersedes the earlier statement that no adapter exists, but does not mean dispatch is qualified.
+
+**Cost qualification remains no-go.** Minimal thinking does not guarantee zero thought tokens. General documentation and first party support discussions describe combined caps, but the retrieved material does not settle that hard bound for this exact model/API/configuration. Do not copy Interactions API `max_output_tokens` guarantees into the GenerateContent contract. The [token counting clarification](https://discuss.ai.google.dev/t/gemini-api-counttokens/188451) also says `countTokens` excludes output schemas in generation configuration. A token count alone cannot establish the whole billable input bound here. The larger conditional input ceiling of 16,384 plus 1,024 combined generated tokens would yield USD 0.005632 per attempt at the checked rates. It remains conditional, not a proven maximum.
+
+No activation record has been manufactured. No model inference or token counting call has been made, and no credits were spent by this work. Before running the approved trial, obtain authoritative model specific bounds or approve a separately qualified Gemini model/configuration through an explicit spec update. Continue to count every admitted failure and do not infer safety or usefulness from synthetic transport tests.

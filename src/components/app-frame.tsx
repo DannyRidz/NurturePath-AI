@@ -14,6 +14,10 @@ function Frame({ children }: { children: ReactNode }) {
   const hiddenAt = useRef<number | null>(null);
   const resume = useRef<HTMLButtonElement>(null);
   const hideButton = useRef<HTMLButtonElement>(null);
+  const hide = () => {
+    window.dispatchEvent(new Event("nurturepath:hide"));
+    setHidden(true);
+  };
 
   useEffect(() => {
     // Next.js can retain inactive pages. Focus the visible page, not cached DOM.
@@ -34,7 +38,7 @@ function Frame({ children }: { children: ReactNode }) {
         hiddenAt.current !== null &&
         Date.now() - hiddenAt.current >= 120_000
       )
-        setHidden(true);
+        hide();
     };
     const restore = (event: PageTransitionEvent) => {
       if (event.persisted) {
@@ -76,7 +80,7 @@ function Frame({ children }: { children: ReactNode }) {
             <button
               className="quiet-button"
               ref={hideButton}
-              onClick={() => setHidden(true)}
+              onClick={hide}
             >
               Hide screen
             </button>
@@ -86,7 +90,7 @@ function Frame({ children }: { children: ReactNode }) {
           {children}
         </main>
         <footer className="site-footer">
-          <p>Authored simulation. No runtime AI. No clinical validation.</p>
+          <p>Authored guidance. Optional Gemini drafts for V01. No clinical validation.</p>
           <nav aria-label="Information">
             <Link href="/privacy">Privacy and limits</Link>
             <Link href="/sources">Sources</Link>

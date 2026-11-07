@@ -1,5 +1,8 @@
 # 0006. Public demonstration on Vercel
 
+7 November 2026: specification 0007 authorizes native Next.js Vercel server hosting for the Gemini coach. This supersedes the static only production configuration below. The static artifact remains a separate AI disabled preview. The production migration is not yet deployed or verified.
+
+
 **Date:** 2026-10-26
 **Status:** In Progress
 
