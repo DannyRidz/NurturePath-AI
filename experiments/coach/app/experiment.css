@@ -1,0 +1,9 @@
+.experiment-banner { padding: 12px 24px; border-bottom: 1px solid var(--rule); background: var(--soft); }
+.coach-panel { border-top: 3px solid var(--accent); padding-top: 28px; }
+.coach-panel form, .coach-panel .draft { margin-top: 24px; }
+.coach-panel label { display: block; margin: 18px 0; }
+.coach-panel input[type="password"] { display: block; width: 100%; max-width: 560px; padding: 10px; border: 1px solid var(--rule); }
+.coach-panel ol { list-style: decimal; padding-left: 1.5em; }
+.coach-panel li { margin: 12px 0; }
+.coach-panel button { min-height: 44px; }
+@media print { .coach-panel, .experiment-banner { display: none !important; } }

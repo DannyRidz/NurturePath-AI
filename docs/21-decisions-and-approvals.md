@@ -26,6 +26,7 @@ Prepared 23 October 2026. **The first implementation milestone was authorized on
 | D21 Solo delivery | User builds everything; Jeremiah role unassigned. Core 82h, gross capacity about 100h, reserve 18h gross/about 14h before internal submission | No hidden second reviewer or parallel workstream | Solo builder confirmed; reduced scope/estimates proposed |
 | D22 Report scope | Complete preview and browser Print/Save as PDF, share all or cancel | Selective field omission and its dependency-redaction work deferred | Proposed solo scope reduction |
 | D23 AI capacity | No runtime model service in committed solo core | Safe fragment-only design retained; 24h added builder work plus any independent reviewer time needs funding/approval | Deferred, no fabricated AI delivery |
+| D24 AI coach proposal | Capture an optional summary and three clinician discussion questions for fictional nonurgent examples in proposal 0007 | Extends fragment selection; requires revised content, API/hosting, provider, budget and evaluation decisions | Planning authorized by user, 26 October 2026; implementation and public AI enablement not authorized |
 | D16 Implementation | Build the app foundation and one complete authored fictional journey | Other variants, report, runtime AI and deployment remain later work | **Authorized**, user, 24 October 2026 |
 
 ## Approval checklist for your team review
@@ -55,3 +56,11 @@ The user explicitly said to disregard CodeRabbit because of free plan limits, re
 ## Authorized complete report milestone, 25 October 2026
 
 After the scenario milestone merged, the user authorized the recommended complete printable summary and requested implementation and verification without further questions. Implement T12/T13 report preview, explicit browser Print / Save as PDF, Cancel / Back and reliable clear. Use the existing all-facts disclosure and canonical answers/reasons/sources. This does not authorize selective omission, personal intake, runtime AI, deployment or submission.
+
+## AI coach design continuation, 6 November 2026
+
+The user authorized continuing the planning work. Proposal 0007 now specifies an isolated local V01 experiment, Gemini as a qualification candidate, exact transport/lifecycle controls, proposed USD 1/60 attempt limits and a thirty call evaluation. Design acceptance, implementation and provider activation remain separate. No account, spending or public runtime change was made. Public AI contracts remain unchanged.
+
+## Authorized local simulated coach build, 6 November 2026
+
+The user said “please proceed with the next step” after the recommendation to build the local version with simulated provider responses. This accepts the local slice design and authorizes its implementation, automated tests, browser verification and PR. Real provider activation, spending, the thirty call evaluation and public AI enablement remain unauthorized. No paid service is required for this slice.

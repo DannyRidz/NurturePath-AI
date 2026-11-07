@@ -34,3 +34,5 @@
 - Sites bare static serving ignored `_headers` in deployed verification. `build:preview` therefore embeds the Next export in a self-contained Worker under ignored `dist/`, with a 2 MiB compressed budget. Local QA delegates to that generated handler. Keep `.openai/hosting.json` without `static`; the platform still owns private authentication. Do not reintroduce a standalone static deployment that loses privacy headers.
 
 - Active hosting supersedes the historical Sites instructions above: the user requested a public judge demo without OpenAI login on 26 October. Use Vercel and `vercel.json` under ADR 0006. Build the Next export directly into `out/`; do not use Sites for new deployments or change the old Site audience. Production URL: `https://nurturepath-demo.vercel.app`. Vercel production tracks `main`; Standard Protection preserves separate development protection. Verify production access anonymously.
+
+- The user authorized the local simulated coach on 6 November 2026. [experiments/coach/AGENTS.md](experiments/coach/AGENTS.md) governs that isolated workspace. It adds no public runtime AI; provider activation and spending still require separate authorization.
