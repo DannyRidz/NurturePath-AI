@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 async function results(page:Page){
  await page.goto("/start");await page.getByRole("button",{name:"Choose V01"}).click();
- await page.getByRole("checkbox",{name:/I understand this is a made-up example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
+ await page.getByRole("checkbox",{name:/I understand this is a fictional example/}).check();await page.getByRole("button",{name:"Agree and continue"}).click();
  await page.getByRole("checkbox",{name:/I am 18 or older/}).check();await page.getByRole("button",{name:"Explore the example",exact:true}).click();
  await expect(page.getByRole("heading",{name:"Immediate concerns",exact:true})).toBeFocused();
  for(let i=0;i<3;i++)await page.getByRole("button",{name:"Next section"}).click();
@@ -32,10 +32,16 @@ test("CO-06 unavailable service preserves authored guidance and permits delibera
 });
 test("CO-07 dismiss, revoke and Hide discard current and delayed drafts",async({page})=>{
  await results(page);await consent(page);
- let release:()=>void=()=>{};let seen:()=>void=()=>{};const arrived=new Promise<void>(r=>seen=r);const gate=new Promise<void>(r=>release=r);
- await page.route("**/api/coach",async route=>{seen();await gate;try{await route.continue();}catch{/* aborted on dismissal */}});
+ let release:()=>void=()=>{}, seen:()=>void=()=>{}, finish:()=>void=()=>{};
+ const arrived=new Promise<void>(r=>seen=r), gate=new Promise<void>(r=>release=r), drained=new Promise<void>(r=>finish=r);
+ // Hold a completed response, not an undispatched request. The local ledger must
+ // settle before the deliberate retry; removing a route does not drain handlers.
+ await page.route("**/api/coach",async route=>{
+  const response=await route.fetch();expect(response.status()).toBe(200);seen();await gate;
+  try{await route.fulfill({response});}catch{/* response canceled by dismissal */}finally{finish();}
+ });
  await page.getByRole("button",{name:"Request simulated draft"}).click();await arrived;
- await expect(page.getByRole("button",{name:"Preparing simulated draft…"})).toBeDisabled();await page.getByRole("button",{name:"Dismiss coach"}).click();release();
+ await expect(page.getByRole("button",{name:"Preparing simulated draft…"})).toBeDisabled();await page.getByRole("button",{name:"Dismiss coach"}).click();release();await drained;
  await expect(draft(page)).toHaveCount(0);await page.unroute("**/api/coach");await consent(page);await page.getByRole("button",{name:"Request simulated draft"}).click();await expect(draft(page)).toBeVisible();
  await page.getByRole("checkbox",{name:/I agree to send/}).uncheck();await expect(draft(page)).toHaveCount(0);await expect(page.getByLabel("Local experiment token")).toHaveValue("");
  await page.getByLabel("Local experiment token").fill(process.env.COACH_TEST_TOKEN!);await page.getByRole("checkbox",{name:/I agree to send/}).check();await page.getByRole("button",{name:"Request simulated draft"}).click();await expect(draft(page)).toBeVisible();

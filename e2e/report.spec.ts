@@ -12,13 +12,13 @@ async function openResult(page: Page, label = "General learning") {
   await page.goto("/start");
   await page
     .getByRole("radio", {
-      name: `${label} Made-up example. These are not your health details.`,
+      name: `${label} Fictional example. These are not your health details.`,
       exact: true,
     })
     .check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
+    .getByRole("checkbox", { name: /I understand this is a fictional example/ })
     .check();
   await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18/ }).check();
@@ -67,7 +67,7 @@ for (const example of catalog) {
     );
     await expect(report).toContainText(steps[getResult(example).nextStepId]);
     await expect(report).toContainText(
-      "Unvalidated simulation. Not reviewed by a clinician.",
+      "Fictional example. Not clinically validated or reviewed by a clinician.",
     );
     await expect(
       report.getByRole("link").filter({ hasText: /^https:/ }),

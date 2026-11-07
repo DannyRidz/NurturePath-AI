@@ -5,13 +5,13 @@ async function prepare(page: Page, label = "General learning") {
   await page.goto("/start");
   await page
     .getByRole("radio", {
-      name: `${label} Made-up example. These are not your health details.`,
+      name: `${label} Fictional example. These are not your health details.`,
       exact: true,
     })
     .check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
+    .getByRole("checkbox", { name: /I understand this is a fictional example/ })
     .check();
   await page
     .getByRole("button", { name: "Agree and continue", exact: true })
@@ -58,13 +58,13 @@ test("AC-02/06/11 clearing an inline safety result starts fresh consent for the 
     .click();
   await page.getByRole("link", { name: "Start again", exact: true }).click();
   await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
-  await page.getByRole("radio", { name: /General learning Made-up/ }).check();
+  await page.getByRole("radio", { name: /General learning Fictional/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
-    page.getByRole("checkbox", { name: /I understand this is a made-up example/ }),
+    page.getByRole("checkbox", { name: /I understand this is a fictional example/ }),
   ).not.toBeChecked();
   await page
-    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
+    .getByRole("checkbox", { name: /I understand this is a fictional example/ })
     .check();
   await page
     .getByRole("button", { name: "Agree and continue", exact: true })
@@ -176,7 +176,7 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "reproductive health",
   );
-  await expect(page.getByText(/Want to try Gemini/)).toContainText("General learning");
+  await expect(page.getByText(/To try Gemini in/)).toContainText("General learning");
   await expect(page.getByText(/You can skip Gemini/)).toBeVisible();
   await page.screenshot({
     path: `output/playwright/onboarding-home-${test.info().project.name}.png`,
@@ -184,11 +184,11 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
   });
   await tabTo(
     page,
-    page.getByRole("link", { name: "Explore a made-up example", exact: true }),
+    page.getByRole("link", { name: "Explore a fictional example", exact: true }),
   );
   await page.keyboard.press("Enter");
   await expect(
-    page.getByRole("heading", { name: "Choose a made-up example." }),
+    page.getByRole("heading", { name: "Choose a fictional example." }),
   ).toBeFocused();
   await expect(page.getByText(/Not sure where to start/)).toContainText(
     "General learning",
@@ -201,7 +201,7 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
   );
   await page.keyboard.press("Enter");
   await expect(page.getByText(/Only General learning offers/)).toContainText(
-    "Agreeing to this demo does not send anything to Gemini.",
+    "Agreeing here does not send anything to Gemini.",
   );
   await page.screenshot({
     path: `output/playwright/onboarding-notice-${test.info().project.name}.png`,
@@ -209,7 +209,7 @@ test("AC-12 complete ordinary journey is operable with the keyboard", async ({
   });
   await tabTo(
     page,
-    page.getByRole("checkbox", { name: /I understand this is a made-up example/ }),
+    page.getByRole("checkbox", { name: /I understand this is a fictional example/ }),
   );
   await page.keyboard.press("Space");
   await tabTo(

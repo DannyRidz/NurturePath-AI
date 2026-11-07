@@ -3,17 +3,17 @@ import AxeBuilder from "@axe-core/playwright";
 
 async function consent(page: Page) {
   await page.goto("/");
-  await page.getByRole("link", { name: "Explore a made-up example" }).click();
+  await page.getByRole("link", { name: "Explore a fictional example" }).click();
   await page.getByRole("radio", { name: /General learning/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(page.getByText(/Only General learning offers/)).toContainText(
     "You will be asked to agree separately.",
   );
   await expect(page.getByText(/Only General learning offers/)).toContainText(
-    "Agreeing to this demo does not send anything to Gemini.",
+    "Agreeing here does not send anything to Gemini.",
   );
   await page
-    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
+    .getByRole("checkbox", { name: /I understand this is a fictional example/ })
     .check();
   await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18 or older/ }).check();
@@ -59,7 +59,7 @@ test("AC-01/02/03/07/09/11 complete fictional journey and clear survive Back", a
   ).toBeFocused();
   await expect(
     page
-      .getByText("Unvalidated simulation. Not reviewed by a clinician.")
+      .getByText("Fictional example. Not clinically validated or reviewed by a clinician.")
       .filter({ visible: true }),
   ).toBeVisible();
   await expect(
@@ -361,7 +361,7 @@ test("AC-11 restored pages clear before the native event returns", async ({
   ).toHaveCount(0);
   await page.getByRole("link", { name: "Start a fictional example" }).click();
   await expect(
-    page.getByRole("heading", { name: "Choose a made-up example." }),
+    page.getByRole("heading", { name: "Choose a fictional example." }),
   ).toBeVisible();
 
   // A restored masked page keeps the barrier with a truthful cleared message.
@@ -479,7 +479,7 @@ test("AC-06 catalog safety selection stops after consent without requiring intak
   await page.getByRole("radio", { name: /Sudden severe pain/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
-    .getByRole("checkbox", { name: /I understand this is a made-up example/ })
+    .getByRole("checkbox", { name: /I understand this is a fictional example/ })
     .check();
   await page.getByRole("button", { name: "Agree and continue" }).click();
   await page.getByRole("checkbox", { name: /I am 18/ }).check();
@@ -539,7 +539,7 @@ for (const [id, text] of [
     ).toBeVisible();
     await expect(
       page
-        .getByText("Unvalidated simulation. Not reviewed by a clinician.")
+        .getByText("Fictional example. Not clinically validated or reviewed by a clinician.")
         .filter({ visible: true }),
     ).toBeVisible();
     if (["V07", "V10", "V12"].includes(id)) {

@@ -28,7 +28,7 @@ describe("AC-10 complete fictional report", () => {
       expect(report.nextStep).toBe(result.nextStep);
       expect(report.generatedAt).toBe(time);
       expect(report.reviewStatus).toBe(
-        "Unvalidated simulation. Not reviewed by a clinician.",
+        "Fictional example. Not clinically validated or reviewed by a clinician.",
       );
       expect(report.sources.map((s) => s.organization)).toEqual([
         "World Health Organization",

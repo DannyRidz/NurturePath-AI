@@ -12,17 +12,18 @@ export default function Home() {
             reproductive health.
           </h1>
           <p className="lead">
-            Choose a made-up example, read its answers and guidance, and see a
-            report you can print. You do not enter your own health details.
+            Explore male reproductive health through twelve fictional examples.
+            Read the guidance, prepare conversation questions and preview a
+            report. Each example uses invented details, not your health history.
           </p>
           <p>
-            This demo has not been checked for use in medical care. It cannot
-            assess your health, diagnose a condition or replace a health
-            professional.
+            For learning and conversation preparation. This app is not approved
+            for medical care. It cannot assess your health, diagnose a condition
+            or replace a health professional.
           </p>
           <div className="actions">
             <Link className="button" href="/start">
-              Explore a made-up example <span aria-hidden="true">→</span>
+              Explore a fictional example <span aria-hidden="true">→</span>
             </Link>
           </div>
           <Link className="text-link" href="/privacy">
@@ -41,7 +42,10 @@ export default function Home() {
               <span>01</span>
               <div>
                 <strong>Choose an example</strong>
-                <p>Pick one of twelve made-up situations.</p>
+                <p>
+                  Start with General learning to try Gemini, or choose another
+                  situation.
+                </p>
               </div>
             </li>
             <li>
@@ -54,14 +58,19 @@ export default function Home() {
             <li>
               <span>03</span>
               <div>
-                <strong>View the report</strong>
-                <p>Print or save a copy if you want, then finish and clear.</p>
+                <strong>Prepare questions and view the report</strong>
+                <p>
+                  Try optional Gemini questions in General learning. Preview or
+                  print the written report in any example.
+                </p>
               </div>
             </li>
           </ol>
           <p className="sheet-footnote">
-            Want to try Gemini? Choose <strong>General learning</strong>. After
-            its guidance, look for <strong>Help me prepare for a conversation</strong>.
+            To try Gemini in <strong>General learning</strong>, select{" "}
+            <strong>Help me prepare for a conversation</strong> after the
+            guidance. Review the Google notice and choose whether to request
+            three AI questions.
           </p>
         </aside>
       </section>
@@ -74,7 +83,7 @@ export default function Home() {
         <div>
           <p>
             General learning is the only example with optional Gemini questions.
-            With your separate agreement, Google receives its made-up answers
+            With your separate agreement, Google receives its fictional answers
             and Gemini writes three questions to help you prepare for a
             conversation. The summary and guidance are already written.
           </p>

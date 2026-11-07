@@ -4,11 +4,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "NurturePath | Fictional demonstration",
+    default: "NurturePath | Fictional examples",
     template: "%s | NurturePath",
   },
   description:
-    "Explore a fictional reproductive health information journey. Authored simulation, not a personal assessment or clinical service.",
+    "Explore twelve fictional male reproductive health examples, written guidance, printable reports and optional Gemini conversation questions for General learning. No personal health intake.",
   robots: { index: false, follow: false },
 };
 

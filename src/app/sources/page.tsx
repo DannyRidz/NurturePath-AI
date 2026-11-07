@@ -25,7 +25,7 @@ export default function Page() {
       <section className="notice">
         <h2>Actual review status</h2>
         <p>
-          The example and its explanation are authored simulation content,
+          The fictional examples and explanations are written content,
           version sim-1. Clinical approval and source reuse review are
           outstanding. Software tests check implementation, not clinical
           accuracy.
