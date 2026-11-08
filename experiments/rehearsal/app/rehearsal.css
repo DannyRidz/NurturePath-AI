@@ -154,7 +154,7 @@
   }
 }
 @media print {
-  body * {
+  body:has(main[data-route="/rehearsal"]) * {
     visibility: hidden !important;
   }
   body:not([data-rehearsal-print="1"]) .preparation-sheet {

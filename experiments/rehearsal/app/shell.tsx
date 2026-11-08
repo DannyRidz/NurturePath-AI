@@ -32,7 +32,7 @@ export function Frame({ children }: { children: React.ReactNode }) {
           Hide screen
         </button>
       </header>
-      <main>
+      <main data-route={pathname}>
         {hidden ? (
           <section className="page narrow">
             <h1 tabIndex={-1}>Screen hidden</h1>

@@ -216,9 +216,12 @@ export function reducer(s: RehearsalState, a: Action): RehearsalState {
             ? {
                 ...q,
                 text: a.text,
-                origin: q.origin.includes("suggestion")
-                  ? "Edited by you from a simulated suggestion"
-                  : q.origin,
+                origin:
+                  a.text === q.text
+                    ? q.origin
+                    : q.origin.includes("suggestion")
+                      ? "Edited by you from a simulated suggestion"
+                      : "User wording",
               }
             : q,
         ),

@@ -348,3 +348,43 @@ it("a delayed simulated transport times out and retains its reservation", async 
     vi.useRealTimers();
   }
 });
+
+it("labels edited written worksheet questions as user wording without losing suggestion provenance", () => {
+  let state = reducer(initial, {
+    type: "add",
+    question: {
+      id: "written",
+      text: "Which facts are missing?",
+      origin: "Written starter",
+    },
+  });
+  expect(
+    reducer(state, {
+      type: "editQuestion",
+      id: "written",
+      text: "Which facts are missing?",
+    }).questions[0].origin,
+  ).toBe("Written starter");
+  state = reducer(state, {
+    type: "editQuestion",
+    id: "written",
+    text: "What does this example leave unanswered?",
+  });
+  expect(state.questions[0].origin).toBe("User wording");
+  state = reducer(state, {
+    type: "add",
+    question: {
+      id: "simulated",
+      text: "Which parts could I ask about?",
+      origin: "Simulated suggestion",
+    },
+  });
+  state = reducer(state, {
+    type: "editQuestion",
+    id: "simulated",
+    text: "Which missing parts could I ask about?",
+  });
+  expect(state.questions[1].origin).toBe(
+    "Edited by you from a simulated suggestion",
+  );
+});

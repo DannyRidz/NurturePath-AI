@@ -347,3 +347,54 @@ test("route exit and Back never restore a selected worksheet or credentials", as
   ).toHaveCount(0);
   await expect(page.getByLabel("Local operator access token")).toHaveValue("");
 });
+
+test("edited written questions have truthful sheet labels and the complete report still prints", async ({
+  page,
+}) => {
+  await open(page);
+  await page.getByText("Written worksheet questions", { exact: true }).click();
+  await page
+    .getByRole("button", { name: "Add written question", exact: true })
+    .first()
+    .click();
+  await page
+    .getByLabel("Question 1 wording", { exact: true })
+    .fill("What is left unanswered by this invented example?");
+  await page
+    .getByRole("checkbox", { name: "Include question 1", exact: true })
+    .check();
+  await page.getByRole("button", { name: "Preview preparation sheet" }).click();
+  await expect(sheet(page)).toContainText("User wording");
+  await expect(sheet(page)).not.toContainText("Written starter");
+  await page
+    .getByRole("link", { name: "Back to written result", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/results$/);
+  await page.getByRole("link", { name: /Preview complete report/ }).click();
+  await expect(page).toHaveURL(/\/report$/);
+  await page.emulateMedia({ media: "print" });
+  await expect(
+    page.getByRole("heading", {
+      name: "Appointment preparation report",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Every fictional answer", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".report-answers dd")).toHaveCount(7);
+  for (const answer of await page.locator(".report-answers dd").all())
+    await expect(answer).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Print / Save as PDF", exact: true }),
+  ).not.toBeVisible();
+  await page.emulateMedia({ media: "screen" });
+  await page.getByRole("button", { name: "Hide screen", exact: true }).click();
+  await page.emulateMedia({ media: "print" });
+  await expect(
+    page.getByRole("heading", {
+      name: "Appointment preparation report",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+});
