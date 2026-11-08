@@ -74,3 +74,21 @@ On continuation, automatic approval review required specific authorization for e
 ## Engineering verification
 
 The complete 143 test unit and service suite passed, including real atomic operations against isolated ephemeral Redis stores. Root and rehearsal type checks, lint, native root and rehearsal webpack production builds, static preview webpack export and export isolation checks passed. The Gemini regression file passed all twelve tests after the final reporting change. All 60 browser checks passed and cover the full local simulated journey across desktop and mobile Chromium and WebKit, plus desktop Firefox. Native operating system print dialogs and human content scoring remain manual work.
+
+
+## Worldwide tester continuation
+
+On 8 November the user requested continuing until the app is ready for colleagues worldwide to test live rehearsal. The requested audience is worldwide, with a common tester experience rather than individual tester configuration. Actual provider availability and the B3 through B5 release evidence still require verification. The operator contact, processing notice, qualified content review and hosted tester allowance have no completed evidence in this record. The separate proposed 30 attempt / USD 0.60 tester allowance has not received specific approval and has not been created.
+
+A subsequent attempt to restart the temporary credential helper was rejected by automatic approval review. The review required explicit approval of the generic key transfer through `http://127.0.0.1:59439/` into hidden runner stdin, and judged the user's general continuation instruction insufficient. A specific approval question was sent. No new provider call occurred. A read of the durable local allowance confirmed enabled admission, no pending request, 32 attempts and 64 reserved cents. P3 qualification and evaluation remain incomplete.
+
+The colleague readiness sequence is to finish and inspect P3 evidence, resolve the typed text notice and provider availability requirements, obtain qualified content review, establish the specifically approved hosted allowance and protected access, then verify actual deployment, both coaching rounds, worksheet printing, clearing, failure behavior and shared shutdown. Final tester instructions must identify the fictional adult scope and the measured limitations. Completion must be recorded against actual evidence before inviting testers.
+
+
+## Approved handoff and qualification failure
+
+The user explicitly accepted the described loopback credential transfer and local qualification/evaluation allowance on continuation. The handoff succeeded. Qualification dispatched five calls. Four responses passed validation. The fifth response supplied fact ID Q03 for the vague current phrase fictional information 3, which contains no literal fact ID. The unsupported fact reference validator rejected it before successful feedback settlement. The remaining fifteen slots were retained as uncompleted. The frozen evaluation was not started.
+
+The complete qualification artifact and summary are retained under the ignored operator directory. Durable totals are 37 attempts and 74 reserved cents. Admission is paused with pending request `9a43df4f-620c-43c3-ac40-460b6817cb4c`. The rejected response includes observed provider usage of 1,230 input tokens and 163 output tokens, total 1,393, with STOP and the expected model. Its token based estimated charge is USD 0.000552. The phase summary conservatively includes this failed response in unknown usage because it lacks a validated result envelope. The observed usage must remain available during explicit reconciliation.
+
+The temporary listener was stopped and the key cleared from agent memory after the failure. No reservation was refunded and no allowance was reset or reopened. Continuation requires a reviewed reconciliation path preserving the exact counters and failure, plus a configuration revision that prevents unsupported fact references at generation. The latest qualification does not satisfy B4. Worldwide live tester readiness remains incomplete.
