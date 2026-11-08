@@ -24,7 +24,12 @@
     "test:e2e:coach": "playwright test --config experiments/coach/playwright.config.ts",
     "test:e2e:coach:gemini": "node scripts/test-gemini-ui.mjs",
     "coach:public": "node scripts/coach-public.mjs",
-    "coach:public:trial": "node scripts/coach-public-trial.mjs"
+    "coach:public:trial": "node scripts/coach-public-trial.mjs",
+    "dev:rehearsal": "node scripts/rehearsal-local.mjs dev",
+    "start:rehearsal": "node scripts/rehearsal-local.mjs start",
+    "build:rehearsal": "next build experiments/rehearsal --webpack",
+    "typecheck:rehearsal": "next typegen experiments/rehearsal && tsc --noEmit -p experiments/rehearsal/tsconfig.json",
+    "test:e2e:rehearsal": "playwright test --config experiments/rehearsal/playwright.config.ts"
   },
   "dependencies": {
     "next": "16.4.3",

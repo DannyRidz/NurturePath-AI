@@ -19,6 +19,7 @@ Status: Proposed, solo revision 3. The user owns all building; Jeremiah has no a
 | 8 | Report and session control | Slice 4 | done |
 | 9 | Evidence and submission | Release | in-progress |
 | 10 | Local simulated appointment coach | AI experiment, no provider | in-progress |
+| 11 | Conversation rehearsal | P0 through P2, simulation only | in-progress |
 
 ## Foundations
 
@@ -97,3 +98,14 @@ The user authorized the local simulation on 6 November 2026. [Specification 0007
 * [x] Run endpoint, browser and authored regression tests. Latest head CI remains a PR gate.
 
 The user subsequently authorized the Gemini integration and a conditional local 60 attempt / USD 1 reservation trial. The adapter is implemented with deterministic unit/browser checks; real dispatch remains disabled pending exact billable token qualification. The paid account check passed, but no real model evaluation has run. Public hosting migration and qualified review remain later work. No generated model output or clinician approval is claimed.
+
+### 11. Conversation rehearsal, in-progress
+
+The user authorized specification 0009 P0 through P2 on 8 November 2026, with simulated responses only. [Specification 0009](../specs/0009-conversation-rehearsal/index.md) governs the isolated workspace. Existing public app and lifetime allowance remain unchanged. Real Gemini calls, new spending, public rehearsal and personal intake remain disabled.
+
+* [x] Build the frozen goal, rubric, synthetic fixture and comparison registries.
+* [x] Build the local V01 two round simulation, explicit sheet selections and discard lifecycle.
+* [x] Build strict contracts, sealed tickets/receipts and isolated admission primitives.
+Verification evidence: `docs/rehearsal-implementation.md` and implementation PR #15. Public release gates remain outside P0 through P2.
+
+Code in `experiments/rehearsal` and `src/lib/rehearsal`. Review responsibilities and remaining release gates are recorded in `docs/rehearsal-implementation.md`. No clinical, privacy, model quality or human benefit approval is claimed.
