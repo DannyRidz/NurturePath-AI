@@ -113,6 +113,10 @@ describe("P3 Gemini fixture transport", () => {
     const body = JSON.parse(sent);
     expect(Buffer.byteLength(sent)).toBeLessThan(16384);
     expect(body.generationConfig.maxOutputTokens).toBe(1536);
+    expect(
+      body.generationConfig.responseJsonSchema.properties.notes.items.properties
+        .factIds.maxItems,
+    ).toBe(0);
     expect(body.generationConfig.thinkingConfig.thinkingLevel).toBe("MINIMAL");
     const data = JSON.parse(body.contents[0].parts[0].text);
     expect(data.case.facts).toHaveLength(7);
