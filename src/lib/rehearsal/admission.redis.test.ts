@@ -9,6 +9,7 @@ import {
   RedisAdmission,
   initializeLocalRehearsalScript,
   rebindLocalRehearsalScript,
+  reconcileLocalRehearsalScript,
 } from "./admission";
 const hash = (v: string) => createHash("sha256").update(v).digest("hex");
 const execute = promisify(execFile),
@@ -291,5 +292,46 @@ describe.skipIf(!server || !cli)("rehearsal Redis atomic operations", () => {
         8,
       ]),
     ).toBe(0);
+  });
+  it("reconciles only the reviewed pending state without refund or replay", async () => {
+    const { prefix } = await setup("reconcile");
+    const key = `${prefix}:budget`;
+    await command([
+      "HSET",
+      key,
+      "enabled",
+      0,
+      "pending",
+      "reviewed-request",
+      "attempts",
+      37,
+      "reservedCents",
+      74,
+    ]);
+    const args = [
+      "EVAL",
+      reconcileLocalRehearsalScript,
+      1,
+      key,
+      "a".repeat(64),
+      "b".repeat(64),
+      37,
+      74,
+      "reviewed-request",
+    ];
+    expect(await command([...args.slice(0, -1), "wrong-request"])).toBe(0);
+    expect(await command(args)).toBe(1);
+    expect(
+      await command([
+        "HMGET",
+        key,
+        "attempts",
+        "reservedCents",
+        "enabled",
+        "pending",
+        "configuration",
+      ]),
+    ).toEqual(["37", "74", "1", null, "b".repeat(64)]);
+    expect(await command(args)).toBe(0);
   });
 });

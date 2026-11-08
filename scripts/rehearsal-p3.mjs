@@ -17,6 +17,7 @@ const phase = process.argv[2],
     "review-qualification",
     "disable",
     "rebind",
+    "reconcile",
   ];
 if (
   !allowed.includes(phase) ||
@@ -175,7 +176,116 @@ try {
         issued: Number(v.issued),
       };
     }
-    if (phase === "rebind") {
+    if (phase === "reconcile") {
+      // Narrow recovery for the retained Q3 prompt3 failure, never an automatic retry.
+      const previous =
+        "76bb350fcebd1946ae043d1340416b19109d95d4a5801ca133ac1079775f30ae";
+      const pending = "9a43df4f-620c-43c3-ac40-460b6817cb4c";
+      const before = await state(previous);
+      if (
+        before.enabled ||
+        before.pending !== pending ||
+        before.attempts !== 37 ||
+        before.reservedCents !== 74
+      )
+        throw new Error("Reconciliation evidence does not match store");
+      const artifact = await readFile(
+        join(directory, "qualification.jsonl"),
+        "utf8",
+      );
+      const summaryText = await readFile(
+        join(directory, "qualification-summary.json"),
+        "utf8",
+      );
+      const summary = JSON.parse(summaryText);
+      const records = artifact
+        .trim()
+        .split("\n")
+        .map((line) => JSON.parse(line));
+      const failed = records[4];
+      const observation = failed?.observation;
+      if (
+        records.length !== 20 ||
+        failed.fixtureId !== "Q3" ||
+        failed.slot !== 1 ||
+        failed.code !== "reconciliation_required" ||
+        !failed.dispatched ||
+        failed.configuration !== previous ||
+        failed.fixtures !== fixtureHash ||
+        summary.after.pending !== pending ||
+        summary.after.attempts !== 37 ||
+        summary.after.reservedCents !== 74 ||
+        observation?.httpStatus !== 200 ||
+        observation.modelVersion !== gemini.model ||
+        JSON.stringify(observation.finishReasons) !== '["STOP"]'
+      )
+        throw new Error("Incomplete failure evidence");
+      const usage = observation.usage;
+      const thinking = usage.thoughtsTokenCount ?? 0;
+      const settledUsage = gemini.usageSchema.parse({
+        inputTokens: usage.promptTokenCount,
+        outputTokens: usage.candidatesTokenCount,
+        thinkingTokens: thinking,
+        totalTokens: usage.totalTokenCount,
+        durationMs: observation.durationMs,
+        estimatedUsd:
+          (usage.promptTokenCount * 0.25 +
+            (usage.candidatesTokenCount + thinking) * 1.5) /
+          1000000,
+      });
+      const output = JSON.parse(observation.syntheticOutput);
+      if (
+        output.decision !== "coach" ||
+        !output.notes.some((note) => note.factIds?.includes("Q03"))
+      )
+        throw new Error("Failure cause mismatch");
+      // Persist the reviewed disposition before touching metadata, retaining all failed output.
+      const audit = await open(
+        join(directory, "reconciliation-prompt3.json"),
+        "wx",
+        0o600,
+      );
+      try {
+        await audit.writeFile(
+          JSON.stringify(
+            {
+              at: new Date().toISOString(),
+              previous,
+              configuration: gemini.liveHash,
+              pending,
+              attempts: 37,
+              reservedCents: 74,
+              disposition: "rejected-output-reservation-retained",
+              usage: settledUsage,
+              artifactHash: createHash("sha256").update(artifact).digest("hex"),
+              summaryHash: createHash("sha256")
+                .update(summaryText)
+                .digest("hex"),
+            },
+            null,
+            2,
+          ),
+        );
+        await audit.sync();
+      } finally {
+        await audit.close();
+      }
+      if (
+        (await command([
+          "EVAL",
+          admission.reconcileLocalRehearsalScript,
+          1,
+          budgetKey,
+          previous,
+          gemini.liveHash,
+          "37",
+          "74",
+          pending,
+        ])) !== 1
+      )
+        throw new Error("Reconciliation transition rejected");
+      console.log(JSON.stringify(await state()));
+    } else if (phase === "rebind") {
       const packet = JSON.parse(
         await readFile(join(directory, "rebind.json"), "utf8"),
       );
