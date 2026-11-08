@@ -106,6 +106,6 @@ The user authorized specification 0009 P0 through P2 on 8 November 2026, with si
 * [x] Build the frozen goal, rubric, synthetic fixture and comparison registries.
 * [x] Build the local V01 two round simulation, explicit sheet selections and discard lifecycle.
 * [x] Build strict contracts, sealed tickets/receipts and isolated admission primitives.
-* [ ] Complete browser, service, diff and latest head CI verification.
+Verification evidence: `docs/rehearsal-implementation.md` and implementation PR #15. Public release gates remain outside P0 through P2.
 
 Code in `experiments/rehearsal` and `src/lib/rehearsal`. Review responsibilities and remaining release gates are recorded in `docs/rehearsal-implementation.md`. No clinical, privacy, model quality or human benefit approval is claimed.

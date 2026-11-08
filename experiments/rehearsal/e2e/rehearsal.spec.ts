@@ -336,7 +336,9 @@ test("route exit and Back never restore a selected worksheet or credentials", as
   await page
     .getByRole("link", { name: "Back to written result", exact: true })
     .click();
+  await expect(page).toHaveURL(/\/results$/);
   await page.goBack();
+  await expect(page).toHaveURL(/\/rehearsal$/);
   await expect(
     page.getByLabel("Practice question", { exact: true }),
   ).toHaveValue("");
