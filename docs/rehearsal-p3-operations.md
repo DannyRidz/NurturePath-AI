@@ -128,3 +128,12 @@ Prompt5 smoke passed4/4 outputs and engineering content inspection. Qualificatio
 All37 generated evaluation outputs were inspected. Quality limitations remain. Several comments expose internal goal IDs. E12 first round calls the question a complete information set before a following note challenges that premise. Some followups and rewrites are generic and may change the learner's emphasis. No medical fact or new clinical topic was observed in this minimized-context corpus. These machine and engineering results do not establish comparative usefulness. Independent rubric scores remain absent, consistent with the user's decision to pursue prototype usability testing without a qualified reviewer. The helper retains qualified:false.
 
 The credential listener was stopped and its temporary key cleared after evaluation. Live browser tester deployment and its reduced-context transmission preview still require implementation and deployed verification. The frozen evidence applies to this exact local provider profile.
+
+
+## Hosted tester foundation, 9 November
+
+Specification0011 records the authorized prototype usability tester release. The shared admission primitive now recognizes prepaid metering only for the exact separate `gemini-testers-1` namespace with a matching billingMode marker. Historical namespaces retain their existing caps. No hosted allowance was initialized or enabled. The new regression exercises500 prior attempts/1000 reserved cents and verifies continued metering, duplicate/session rejection and shutdown surviving a late success. All8 Redis tests passed against a disposable store. Lint and root type checks passed.
+
+The current official Gemini terms and availability pages were read on9November. They require18+ use and supported regions, and paid service for EEA/Switzerland/UK API clients. Relevant sources are https://ai.google.dev/gemini-api/terms and https://ai.google.dev/gemini-api/docs/available-regions. The hosted eligibility implementation and actual protected deployment remain outstanding. No new tester-facing HTTP endpoint or live browser activation has been added by this foundation change.
+
+Review found that the aggregate duplicate marker hash could grow indefinitely under continuous prepaid traffic. Only the tester namespace now uses per-request marker keys with independent30 minute expiry. The historical key layout is preserved. The8 Redis regressions passed again, including marker lifetime and aggregate-key absence assertions.

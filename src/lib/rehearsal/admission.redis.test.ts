@@ -334,4 +334,51 @@ describe.skipIf(!server || !cli)("rehearsal Redis atomic operations", () => {
     ).toEqual(["37", "74", "1", null, "b".repeat(64)]);
     expect(await command(args)).toBe(0);
   });
+  it("meters the prepaid tester release beyond old caps while preserving shutdown and session limits", async () => {
+    const key = "{nurturepath-rehearsal}:gemini-testers-1:budget";
+    const config = "a".repeat(64);
+    await command([
+      "HSET",
+      key,
+      "configuration",
+      config,
+      "enabled",
+      1,
+      "attempts",
+      500,
+      "reservedCents",
+      1000,
+      "issued",
+      500,
+      "billingMode",
+      "prepaid",
+    ]);
+    const store = new RedisAdmission(command, config, "gemini-testers-1");
+    const client = hash("prepaid-client");
+    await store.start("prepaid-session", "G01", client);
+    await store.admit("prepaid-session", 1, "prepaid-request", client);
+    expect(
+      await command([
+        "TTL",
+        "{nurturepath-rehearsal}:gemini-testers-1:seen:prepaid-request",
+      ]),
+    ).toBeGreaterThan(1700);
+    expect(
+      await command([
+        "EXISTS",
+        "{nurturepath-rehearsal}:gemini-testers-1:seen",
+      ]),
+    ).toBe(0);
+    await expect(
+      store.admit("prepaid-session", 1, "another", client),
+    ).rejects.toThrow();
+    await command(["HSET", key, "enabled", 0]);
+    await store.settle("prepaid-session", "prepaid-request", "success");
+    expect(
+      await command(["HMGET", key, "attempts", "reservedCents", "enabled"]),
+    ).toEqual(["501", "1002", "0"]);
+    await expect(store.start("blocked-session", "G01", client)).rejects.toThrow(
+      "disabled",
+    );
+  });
 });
