@@ -119,7 +119,10 @@ describe("P3 Gemini fixture transport", () => {
     ).toBe(0);
     expect(body.generationConfig.thinkingConfig.thinkingLevel).toBe("MINIMAL");
     const data = JSON.parse(body.contents[0].parts[0].text);
-    expect(data.case.facts).toHaveLength(7);
+    expect(data.case.id).toBe("V01");
+    expect(data.case.facts).toBeUndefined();
+    expect(sent).not.toContain("testosterone");
+    expect(sent).not.toMatch(/Q0[1-7]/);
     expect(data.data.current).toBe(row.original);
     expect(data.goal.id).toBe(row.goalId);
     expect(result.usage.totalTokens).toBe(160);

@@ -177,16 +177,16 @@ try {
       };
     }
     if (phase === "reconcile") {
-      // Narrow recovery for the retained Q3 prompt3 failure, never an automatic retry.
+      // Narrow recovery for the retained Q5 prompt4 failure, never an automatic retry.
       const previous =
-        "76bb350fcebd1946ae043d1340416b19109d95d4a5801ca133ac1079775f30ae";
-      const pending = "9a43df4f-620c-43c3-ac40-460b6817cb4c";
+        "442a4fbcdb44f04ff7409e32b7c248839ba44a2a253b78298301b767fb6adfef";
+      const pending = "96187d96-2a55-4c59-b52b-39393404502d";
       const before = await state(previous);
       if (
         before.enabled ||
         before.pending !== pending ||
-        before.attempts !== 37 ||
-        before.reservedCents !== 74
+        before.attempts !== 50 ||
+        before.reservedCents !== 100
       )
         throw new Error("Reconciliation evidence does not match store");
       const artifact = await readFile(
@@ -202,19 +202,19 @@ try {
         .trim()
         .split("\n")
         .map((line) => JSON.parse(line));
-      const failed = records[4];
+      const failed = records[8];
       const observation = failed?.observation;
       if (
         records.length !== 20 ||
-        failed.fixtureId !== "Q3" ||
+        failed.fixtureId !== "Q5" ||
         failed.slot !== 1 ||
         failed.code !== "reconciliation_required" ||
         !failed.dispatched ||
         failed.configuration !== previous ||
         failed.fixtures !== fixtureHash ||
         summary.after.pending !== pending ||
-        summary.after.attempts !== 37 ||
-        summary.after.reservedCents !== 74 ||
+        summary.after.attempts !== 50 ||
+        summary.after.reservedCents !== 100 ||
         observation?.httpStatus !== 200 ||
         observation.modelVersion !== gemini.model ||
         JSON.stringify(observation.finishReasons) !== '["STOP"]'
@@ -236,12 +236,12 @@ try {
       const output = JSON.parse(observation.syntheticOutput);
       if (
         output.decision !== "coach" ||
-        !output.notes.some((note) => note.factIds?.includes("Q03"))
+        !output.rewrite?.includes("testosterone")
       )
         throw new Error("Failure cause mismatch");
       // Persist the reviewed disposition before touching metadata, retaining all failed output.
       const audit = await open(
-        join(directory, "reconciliation-prompt3.json"),
+        join(directory, "reconciliation-prompt4.json"),
         "wx",
         0o600,
       );
@@ -253,8 +253,8 @@ try {
               previous,
               configuration: gemini.liveHash,
               pending,
-              attempts: 37,
-              reservedCents: 74,
+              attempts: 50,
+              reservedCents: 100,
               disposition: "rejected-output-reservation-retained",
               usage: settledUsage,
               artifactHash: createHash("sha256").update(artifact).digest("hex"),
@@ -278,8 +278,8 @@ try {
           budgetKey,
           previous,
           gemini.liveHash,
-          "37",
-          "74",
+          "50",
+          "100",
           pending,
         ])) !== 1
       )
