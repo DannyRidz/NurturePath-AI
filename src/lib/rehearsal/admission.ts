@@ -166,8 +166,11 @@ export class RedisAdmission implements AdmissionStore {
     private config: string,
     private release: string,
   ) {
-    if (!/^simulation-[a-z0-9-]+$/.test(release))
-      throw new Error("simulation_namespace_required");
+    if (
+      !/^simulation-[a-z0-9-]+$/.test(release) &&
+      release !== "gemini-local-1"
+    )
+      throw new Error("local_or_simulation_namespace_required");
   }
   private async run(
     op: string,
@@ -237,3 +240,9 @@ export class RedisAdmission implements AdmissionStore {
     await this.run("close", id);
   }
 }
+
+// Operator-only metadata transitions. Neither operation can refund a reservation.
+export const initializeLocalRehearsalScript =
+  "if redis.call('EXISTS',KEYS[1])~=0 then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[1],'enabled','1','attempts',0,'reservedCents',0,'maxAttempts',150,'maxCents',300,'issued',0) return 1";
+export const rebindLocalRehearsalScript =
+  "local s=redis.call('HMGET',KEYS[1],'configuration','attempts','reservedCents','enabled','pending') if s[1]~=ARGV[1] or s[2]~=ARGV[3] or s[3]~=ARGV[4] or s[4]~='1' or (s[5] and s[5]~='') then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[2]) return 1";

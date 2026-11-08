@@ -5,7 +5,11 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { RedisAdmission } from "./admission";
+import {
+  RedisAdmission,
+  initializeLocalRehearsalScript,
+  rebindLocalRehearsalScript,
+} from "./admission";
 const hash = (v: string) => createHash("sha256").update(v).digest("hex");
 const execute = promisify(execFile),
   server = process.env.REDIS_SERVER_BIN,
@@ -194,5 +198,98 @@ describe.skipIf(!server || !cli)("rehearsal Redis atomic operations", () => {
       "last",
       "successful",
     ]);
+  });
+  it("creates the local allowance only once and never resets existing totals", async () => {
+    const key = "{nurturepath-rehearsal}:gemini-local-1:budget";
+    expect(
+      await command([
+        "EVAL",
+        initializeLocalRehearsalScript,
+        1,
+        key,
+        "a".repeat(64),
+      ]),
+    ).toBe(1);
+    await command(["HSET", key, "attempts", 4, "reservedCents", 8]);
+    expect(
+      await command([
+        "EVAL",
+        initializeLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+      ]),
+    ).toBe(0);
+    expect(
+      await command([
+        "HMGET",
+        key,
+        "configuration",
+        "attempts",
+        "reservedCents",
+        "maxAttempts",
+        "maxCents",
+      ]),
+    ).toEqual(["a".repeat(64), "4", "8", "150", "300"]);
+  });
+  it("rebinds only a quiescent exact state and preserves counters and shutdown", async () => {
+    const { prefix } = await setup("rebind");
+    const key = `${prefix}:budget`;
+    await command(["HSET", key, "attempts", 4, "reservedCents", 8]);
+    const before = await command(["HGETALL", key]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "a".repeat(64),
+        "b".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(1);
+    expect(await command(["HGETALL", key])).toEqual({
+      ...before,
+      configuration: "b".repeat(64),
+    });
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        3,
+        6,
+      ]),
+    ).toBe(0);
+    await command(["HSET", key, "enabled", 0]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(0);
+    await command(["HSET", key, "enabled", 1, "pending", "request-in-flight"]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(0);
   });
 });

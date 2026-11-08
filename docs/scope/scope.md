@@ -109,3 +109,5 @@ The user authorized specification 0009 P0 through P2 on 8 November 2026, with si
 Verification evidence: `docs/rehearsal-implementation.md` and implementation PR #15. Public release gates remain outside P0 through P2.
 
 Code in `experiments/rehearsal` and `src/lib/rehearsal`. Review responsibilities and remaining release gates are recorded in `docs/rehearsal-implementation.md`. No clinical, privacy, model quality or human benefit approval is claimed.
+
+P3 continuation, 8 November: the user approved local synthetic Gemini trials with a separate lifetime 150 attempt / USD 3 estimated reservation allowance. The frozen-fixture operator path and shared service core are implemented; live smoke completed, an initial qualification failed engineering content inspection, and prompt3 passed investigative smoke. Repeat qualification and held out evaluation are pending specific credential handoff authorization. Lifetime local totals are32 attempts and64 reserved cents. Operation and boundaries: `docs/rehearsal-p3-operations.md`. The original public coach and allowance are preserved; browser rehearsal remains simulated and public/personal intake gates stay closed.
