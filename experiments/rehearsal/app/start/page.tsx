@@ -10,7 +10,7 @@ export default function Start() {
       <h1 tabIndex={-1}>General learning</h1>
       <p>
         This local experiment enables only the fixed general learning example.
-        You cannot enter personal information.
+        Use only invented example information. Do not enter personal details.
       </p>
       <div className="actions">
         <button
