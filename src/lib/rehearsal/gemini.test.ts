@@ -12,7 +12,11 @@ import {
 } from "./gemini";
 import { MemoryAdmission } from "./admission";
 import { qualificationManifest } from "./fixtures";
-import { requestContext, validateEnvelope } from "./contract";
+import {
+  requestContext,
+  validateEnvelope,
+  validateTesterEnvelope,
+} from "./contract";
 import { runPhase, activationSchema, fixtureHash } from "./trial";
 const row = qualificationManifest[0],
   context = requestContext({
@@ -205,6 +209,35 @@ describe("P3 Gemini fixture transport", () => {
     expect(first.provider).toBe("google-gemini");
     expect(first.configuration).toBe(liveHash);
     validateLiveEnvelope(first, x.request);
+    validateTesterEnvelope(
+      first,
+      x.request,
+      liveHash,
+      JSON.stringify(liveVersions),
+    );
+    expect(() =>
+      validateTesterEnvelope(
+        { ...first, usage: { ...first.usage, totalTokens: 999 } },
+        x.request,
+        liveHash,
+        JSON.stringify(liveVersions),
+      ),
+    ).toThrow();
+    if (first.feedback.decision === "coach")
+      expect(() =>
+        validateTesterEnvelope(
+          {
+            ...first,
+            feedback: {
+              ...first.feedback,
+              rewrite: "What testosterone details are missing?",
+            },
+          },
+          x.request,
+          liveHash,
+          JSON.stringify(liveVersions),
+        ),
+      ).toThrow("unsupported_topic");
     expect(() =>
       validateEnvelope(first, x.request as never, liveHash),
     ).toThrow();

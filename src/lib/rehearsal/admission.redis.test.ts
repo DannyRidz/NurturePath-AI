@@ -10,6 +10,8 @@ import {
   initializeLocalRehearsalScript,
   rebindLocalRehearsalScript,
   reconcileLocalRehearsalScript,
+  initializeTesterScript,
+  enableTesterScript,
 } from "./admission";
 const hash = (v: string) => createHash("sha256").update(v).digest("hex");
 const execute = promisify(execFile),
@@ -380,5 +382,32 @@ describe.skipIf(!server || !cli)("rehearsal Redis atomic operations", () => {
     await expect(store.start("blocked-session", "G01", client)).rejects.toThrow(
       "disabled",
     );
+  });
+  it("initializes tester metadata once and enables only reconciled matching state", async () => {
+    const key = "tester-init-metadata";
+    const config = "a".repeat(64);
+    const init = ["EVAL", initializeTesterScript, 1, key, config];
+    const enable = ["EVAL", enableTesterScript, 1, key, config];
+    expect(await command(init)).toBe(1);
+    expect(await command(["HGET", key, "enabled"])).toBe("0");
+    await command([
+      "HSET",
+      key,
+      "attempts",
+      511,
+      "reservedCents",
+      1022,
+      "pending",
+      "unsettled",
+    ]);
+    expect(await command(enable)).toBe(0);
+    await command(["HDEL", key, "pending"]);
+    expect(await command([...enable.slice(0, -1), "b".repeat(64)])).toBe(0);
+    expect(await command(enable)).toBe(1);
+    expect(await command(init)).toBe(0);
+    expect(await command(["HMGET", key, "attempts", "reservedCents"])).toEqual([
+      "511",
+      "1022",
+    ]);
   });
 });

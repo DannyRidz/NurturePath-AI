@@ -260,3 +260,8 @@ redis.call('HSET',KEYS[1],'configuration',ARGV[2],'enabled','1')
 redis.call('HDEL',KEYS[1],'pending')
 return 1
 `;
+
+export const initializeTesterScript =
+  "if redis.call('EXISTS',KEYS[1])~=0 then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[1],'billingMode','prepaid','enabled','0','attempts',0,'reservedCents',0,'issued',0) return 1";
+export const enableTesterScript =
+  "local s=redis.call('HMGET',KEYS[1],'configuration','billingMode','attempts','reservedCents','issued','pending') local a=tonumber(s[3]) local c=tonumber(s[4]) local i=tonumber(s[5]) if s[1]~=ARGV[1] or s[2]~='prepaid' or not a or not c or not i or a<0 or a~=math.floor(a) or c~=a*2 or i<0 or i~=math.floor(i) or (s[6] and s[6]~='') then return 0 end redis.call('HSET',KEYS[1],'enabled','1') return 1";

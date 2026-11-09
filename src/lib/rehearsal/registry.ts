@@ -56,3 +56,5 @@ export const fixedQuestions = [
   "Which information is missing from this fictional example?",
   "How could I ask about the limits of this example?",
 ];
+
+export const wordingCase = {id:"V01",scope:"Invented communication practice. Clinical facts are available only in the authored app guidance."};

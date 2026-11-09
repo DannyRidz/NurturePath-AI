@@ -1,3 +1,4 @@
+import { usageSchema, validateCommunicationContent } from "./live-validation";
 import { z } from "zod";
 import { rehearsalVersions, canonicalCase } from "./registry";
 export const codePoints = (s: string) => Array.from(s).length;
@@ -183,4 +184,47 @@ export function requestContext(
       ...(request.round === 2 ? { original: request.original } : {}),
     },
   };
+}
+
+export const testerEnvelopeSchema = envelopeSchema.extend({
+  versions: z.string(),
+  provider: z.literal("google-gemini"),
+  model: z.literal("gemini-3.1-flash-lite"),
+  usage: usageSchema,
+});
+export type DisplayEnvelope = Envelope | z.infer<typeof testerEnvelopeSchema>;
+export function validateTesterEnvelope(
+  raw: unknown,
+  expected: {
+    requestId: string;
+    rehearsalId: string;
+    goalId: string;
+    round: number;
+    revision: number;
+    current: string;
+  },
+  configuration: string,
+  versions: string,
+) {
+  const v = testerEnvelopeSchema.parse(raw);
+  for (const key of [
+    "requestId",
+    "rehearsalId",
+    "goalId",
+    "round",
+    "revision",
+  ] as const)
+    if (v[key] !== expected[key]) throw new Error("stale_response");
+  if (
+    v.configuration !== configuration ||
+    v.versions !== versions ||
+    (v.round === 1 && v.feedback.decision === "coach" && !v.receipt) ||
+    (v.feedback.decision === "out_of_scope" && v.receipt)
+  )
+    throw new Error("invalid_identity");
+  validateCommunicationContent(
+    validateFeedback(v.feedback, expected.current),
+    expected.current,
+  );
+  return v;
 }

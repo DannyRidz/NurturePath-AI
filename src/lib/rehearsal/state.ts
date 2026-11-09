@@ -1,4 +1,4 @@
-import type { Envelope } from "./contract";
+import type { DisplayEnvelope } from "./contract";
 import type { Goal } from "./registry";
 export type Question = {
   id: string;
@@ -6,6 +6,8 @@ export type Question = {
   origin:
     | "User wording"
     | "Written starter"
+    | "AI suggestion"
+    | "Edited by you from an AI suggestion"
     | "Simulated suggestion"
     | "Edited by you from a simulated suggestion";
 };
@@ -22,7 +24,7 @@ export type RehearsalState = {
   rehearsalId: string;
   configuration: string;
   receipt: string;
-  records: Envelope[];
+  records: DisplayEnvelope[];
   pending: string | null;
   closed: boolean;
   error: string;
@@ -79,7 +81,7 @@ export type Action =
       revision: number;
     }
   | { type: "pending"; id: string }
-  | { type: "feedback"; value: Envelope }
+  | { type: "feedback"; value: DisplayEnvelope }
   | { type: "error"; message: string; closed?: boolean }
   | { type: "add"; question: Question }
   | { type: "select"; id: string }
@@ -102,7 +104,9 @@ export function reducer(s: RehearsalState, a: Action): RehearsalState {
         textOrigin:
           a.origin ??
           (s.textOrigin.includes("suggestion")
-            ? "Edited by you from a simulated suggestion"
+            ? s.textOrigin.includes("AI")
+              ? "Edited by you from an AI suggestion"
+              : "Edited by you from a simulated suggestion"
             : "User wording"),
         revision: s.revision + 1,
         pending: null,
@@ -144,18 +148,23 @@ export function reducer(s: RehearsalState, a: Action): RehearsalState {
           selected: [],
           receipt: "",
           error:
-            "The simulated service declined this request. Use the written worksheet.",
+            "The service declined this request. Use the written worksheet.",
         };
       const added: Question[] = [
         {
           id: `${v.requestId}-rewrite`,
           text: v.feedback.rewrite,
-          origin: "Simulated suggestion",
+          origin:
+            v.provider === "simulation"
+              ? "Simulated suggestion"
+              : "AI suggestion",
         },
         ...v.feedback.followUps.map((text, i) => ({
           id: `${v.requestId}-${i}`,
           text,
-          origin: "Simulated suggestion" as const,
+          origin: (v.provider === "simulation"
+            ? "Simulated suggestion"
+            : "AI suggestion") as Question["origin"],
         })),
       ];
       return {
@@ -220,7 +229,9 @@ export function reducer(s: RehearsalState, a: Action): RehearsalState {
                   a.text === q.text
                     ? q.origin
                     : q.origin.includes("suggestion")
-                      ? "Edited by you from a simulated suggestion"
+                      ? q.origin.includes("AI")
+                        ? "Edited by you from an AI suggestion"
+                        : "Edited by you from a simulated suggestion"
                       : "User wording",
               }
             : q,
