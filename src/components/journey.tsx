@@ -206,7 +206,9 @@ function ConsentFlow() {
               Only General learning offers optional Gemini questions, when
               available. After the guidance, you can choose whether to send its
               fictional answers to Google. You will be asked to agree separately.
-              Agreeing here does not send anything to Gemini.
+              Agreeing here does not send anything to Gemini. The live rehearsal
+              prototype has its own agreement and sends the practice wording you
+              preview. Its clinical fact catalog stays in the written guidance.
             </p>
           </div>
         </div>

@@ -209,12 +209,16 @@ test("AC-08/14 journey uses only expected read requests and stores no session", 
   page.on("request", (request) => {
     const url = new URL(request.url());
     const expectedPath =
+      url.pathname === "/icon.svg" ||
       allowedPages.has(url.pathname) ||
       (process.env.NURTUREPATH_STATIC_PREVIEW === "1" &&
         allowedPayloads.has(url.pathname)) ||
       url.pathname.startsWith("/_next/static/");
     const expectedQuery = [...url.searchParams.keys()].every(
-      (key) => key === "_rsc",
+      (key) =>
+        key === "_rsc" ||
+        (url.pathname === "/icon.svg" &&
+          /^(?:icon\.[a-z0-9]+\.svg|[a-f0-9]{16})$/.test(key)),
     );
     if (
       url.origin !== new URL(baseURL!).origin ||

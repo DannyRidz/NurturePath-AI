@@ -85,7 +85,9 @@ export default function Home() {
             General learning is the only example with optional Gemini questions.
             With your separate agreement, Google receives its fictional answers
             and Gemini writes three questions to help you prepare for a
-            conversation. The summary and guidance are already written.
+            conversation. The summary and guidance are already written. The live
+            rehearsal prototype also lets adults practise their own fictional
+            wording, with a separate preview and Google agreement.
           </p>
           <p>
             You can skip Gemini and still use the guidance and report. Gemini

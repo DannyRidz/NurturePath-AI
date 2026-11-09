@@ -431,6 +431,10 @@ dd {
 .prose h2 {
   margin: 32px 0 12px;
 }
+.prose p a,
+.notice p a {
+  text-decoration: underline;
+}
 .site-footer {
   display: flex;
   gap: 24px;

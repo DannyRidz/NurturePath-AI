@@ -7,7 +7,7 @@ export default function Page() {
       <h1 tabIndex={-1}>Privacy and limits.</h1>
       <p className="lead">
         This app uses fictional examples for learning and conversation
-        preparation. It does not accept personal health information.
+        preparation. Do not enter personal health information.
       </p>
       <h2>What stays in memory</h2>
       <p>
@@ -21,7 +21,8 @@ export default function Page() {
         Finish and clear removes the app’s session state. Back cannot restore
         it. Clearing does not sign you out of the preview host or erase browser
         history, host access logs or copies you saved elsewhere. Hiding the
-        screen only masks it; Resume makes it visible again.
+        screen masks the written journey; Resume makes it visible again. Live
+        rehearsal wording and feedback are discarded when hidden.
       </p>
       <h2>What reaches other services</h2>
       <p>
@@ -39,6 +40,31 @@ export default function Page() {
         requirements. This is not zero retention. Clearing or cancelling here
         cannot recall a sent request or erase provider records. Drafts stay in
         tab memory and are excluded from reports and printing.
+      </p>
+      <h2>Live rehearsal prototype</h2>
+      <p>
+        General learning also offers a live wording rehearsal for adult prototype
+        testers. After its separate Google agreement, the host sends the exact
+        practice wording you preview, your selected goal, the communication rubric
+        and the fictional V01 identity to Gemini. A second round includes your
+        original and revised wording. The clinical fact catalog stays in the
+        authored guidance. Free writing can contain personal information despite
+        warnings or filters, so use invented wording only.
+      </p>
+      <p>
+        Practice wording, feedback, tickets and selections stay in this tab’s
+        memory. Clearing, hiding, switching tabs, leaving or reloading discards
+        the rehearsal. Google may already have received a deliberately sent
+        request. The tester service keeps expiring session and rate metadata
+        plus a separate prepaid usage total. It has no application dollar stop,
+        while session limits, rate limits and operator shutdown still apply.
+        The original fixed coach retains its existing allowance.
+      </p>
+      <p>
+        Prototype feedback can be general or wrong. Clinical review and
+        comparative usefulness testing have not been completed. Project support
+        is available through the <a href="https://github.com/DannyRidz/NurturePath-AI/issues" target="_blank" rel="noreferrer">NurturePath issue tracker</a>.
+        Omit personal and health information in support requests.
       </p>
       <h2>Request limits and metadata</h2>
       <p>
