@@ -1,8 +1,9 @@
+import { z } from "zod";
 import { randomUUID } from "node:crypto";
 import { AdmissionError, type AdmissionStore } from "./admission";
 import {
   startSchema,
-  requestSchema,
+  makeRequestSchema,
   requestContext,
   validateFeedback,
   envelopeSchema,
@@ -31,38 +32,76 @@ export const simulatedFeedback: SimulatedTransport = async (context) => ({
     "What does this fictional example tell us, and what information is still missing?",
   followUps: ["Which parts of this example could I ask about?"],
 });
-export class RehearsalService {
+export type RehearsalProfile = {
+  configuration: string;
+  versions: string;
+  notice: string;
+  provider: string;
+  model: string;
+  decode: (
+    raw: unknown,
+    current: string,
+  ) => { feedback: Feedback; usage: unknown };
+};
+const simulatedProfile: RehearsalProfile = {
+  configuration: configurationHash,
+  versions: JSON.stringify(rehearsalVersions),
+  notice: rehearsalVersions.notice,
+  provider: "simulation",
+  model: "authored-fixture-1",
+  decode: (raw, current) => ({
+    feedback: validateFeedback(raw, current),
+    usage: { input: 0, output: 0 },
+  }),
+};
+// Shared admission, receipts and lifecycle logic. No provider import or runtime flag.
+export class RehearsalCore {
   constructor(
     readonly store: AdmissionStore,
     private secret: string,
     private transport: SimulatedTransport = simulatedFeedback,
     private now = () => Date.now(),
+    private profile: RehearsalProfile = simulatedProfile,
   ) {}
   async start(raw: unknown, client: string) {
-    const v = startSchema.parse(raw),
+    const v = startSchema
+        .extend({ versions: z.literal(this.profile.versions) })
+        .parse(raw),
       rehearsalId = randomUUID(),
       expires = await this.store.start(rehearsalId, v.goalId, client);
     return {
       rehearsalId,
       expires,
-      configuration: configurationHash,
+      configuration: this.profile.configuration,
       ticket: seal(this.secret, {
         kind: "ticket",
         caseId: "V01",
         rehearsalId,
         goalId: v.goalId,
-        configuration: configurationHash,
+        configuration: this.profile.configuration,
         expires,
       }),
     };
   }
-  async feedback(raw: unknown, client: string) {
-    const v = requestSchema.parse(raw),
-      ticket = unseal(this.secret, v.ticket, "ticket", this.now());
+  async execute(raw: unknown, client: string) {
+    const v = makeRequestSchema(this.profile.notice).parse(raw),
+      ticket = unseal(
+        this.secret,
+        v.ticket,
+        "ticket",
+        this.now(),
+        this.profile.configuration,
+      );
     if (ticket.rehearsalId !== v.rehearsalId || ticket.goalId !== v.goalId)
       throw new AdmissionError("ineligible");
     if (v.round === 2) {
-      const receipt = unseal(this.secret, v.receipt!, "receipt", this.now());
+      const receipt = unseal(
+        this.secret,
+        v.receipt!,
+        "receipt",
+        this.now(),
+        this.profile.configuration,
+      );
       if (
         receipt.rehearsalId !== v.rehearsalId ||
         receipt.goalId !== v.goalId ||
@@ -79,6 +118,7 @@ export class RehearsalService {
       throw new AdmissionError("too_large");
     await this.store.admit(v.rehearsalId, v.round, v.requestId, client);
     let feedback: Feedback;
+    let usage: unknown;
     try {
       let timer: ReturnType<typeof setTimeout> | undefined;
       const deadline = new Promise<never>((_, reject) => {
@@ -95,7 +135,7 @@ export class RehearsalService {
       }
       if (Buffer.byteLength(JSON.stringify(rawOutput)) > 32768)
         throw new Error("too_large");
-      feedback = validateFeedback(rawOutput, v.current);
+      ({ feedback, usage } = this.profile.decode(rawOutput, v.current));
     } catch {
       await this.store.settle(v.rehearsalId, v.requestId, "uncertain");
       throw new AdmissionError("reconciliation_required");
@@ -114,21 +154,27 @@ export class RehearsalService {
             originalMac: mac(this.secret, "original", v.current),
           })
         : undefined;
-    return envelopeSchema.parse({
+    return {
       requestId: v.requestId,
       rehearsalId: v.rehearsalId,
       caseId: "V01",
       goalId: v.goalId,
       round: v.round,
       revision: v.revision,
-      versions: JSON.stringify(rehearsalVersions),
-      configuration: configurationHash,
-      provider: "simulation",
-      model: "authored-fixture-1",
+      versions: this.profile.versions,
+      configuration: this.profile.configuration,
+      provider: this.profile.provider,
+      model: this.profile.model,
       generatedAt: new Date(this.now()).toISOString(),
-      usage: { input: 0, output: 0 },
+      usage,
       feedback,
       ...(receipt ? { receipt } : {}),
-    });
+    };
+  }
+}
+
+export class RehearsalService extends RehearsalCore {
+  async feedback(raw: unknown, client: string) {
+    return envelopeSchema.parse(await this.execute(raw, client));
   }
 }

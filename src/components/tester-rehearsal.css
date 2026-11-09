@@ -1,0 +1,195 @@
+.simulation-banner {
+  background: var(--soft);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 24px;
+  font-size: 16px;
+  text-align: center;
+}
+.rehearsal-page {
+  max-width: 1040px !important;
+}
+.rehearsal-page .lede {
+  max-width: 720px;
+}
+.rehearsal-entry {
+  border-top: 1px solid var(--rule);
+}
+.practice-controls {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.practice-stage {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 24px;
+  border-top: 1px solid var(--rule);
+  padding: 32px 0;
+}
+.stage-number {
+  font-size: 32px;
+  color: var(--accent);
+  line-height: 1.2;
+}
+.practice-stage h2,
+.practice-stage h3,
+.practice-stage p,
+.practice-stage details,
+.practice-stage textarea,
+.practice-stage fieldset {
+  margin-bottom: 16px;
+}
+.practice-stage fieldset {
+  border: 0;
+  padding: 0;
+}
+.practice-stage legend {
+  padding: 0;
+  margin-bottom: 12px;
+}
+.practice-stage .choice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 0;
+}
+.choice input {
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.rehearsal-page textarea,
+.rehearsal-page input[type="password"] {
+  font: inherit;
+  width: 100%;
+  padding: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+}
+.rehearsal-page textarea {
+  resize: vertical;
+}
+.rehearsal-page textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.rehearsal-page .notice {
+  border-left: 3px solid var(--accent);
+  padding: 16px;
+  background: var(--soft);
+  margin: 24px 0;
+}
+.rehearsal-page .small {
+  font-size: 15px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.rehearsal-page summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.rehearsal-page dt {
+  font-weight: 600;
+}
+.rehearsal-page dd {
+  margin: 0 0 16px;
+}
+.rehearsal-page .button {
+  margin: 16px 16px 16px 0;
+}
+.rehearsal-page .quiet-button {
+  margin-right: 16px;
+}
+.rehearsal-page .comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.rehearsal-page h4 {
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+.feedback-record,
+.question-choice {
+  border-top: 1px solid var(--rule);
+  padding: 24px 0;
+}
+.rehearsal-page li {
+  margin-bottom: 16px;
+}
+.rehearsal-page p {
+  overflow-wrap: anywhere;
+}
+.preserve {
+  white-space: pre-wrap;
+}
+.preparation-sheet {
+  border-top: 2px solid var(--ink);
+  padding-top: 24px;
+}
+.preparation-sheet h2,
+.preparation-sheet h3,
+.preparation-sheet p {
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .practice-stage {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .rehearsal-page .comparison {
+    grid-template-columns: 1fr;
+  }
+  .practice-controls {
+    gap: 12px;
+  }
+  .simulation-banner {
+    padding: 12px 16px;
+  }
+  .site-header {
+    flex-wrap: wrap;
+  }
+}
+@media print {
+  body:has(main[data-route="/tester-rehearsal"]) * {
+    visibility: hidden !important;
+  }
+  body:not([data-rehearsal-print="1"]) .preparation-sheet {
+    display: none !important;
+  }
+  body[data-rehearsal-print="1"] .preparation-sheet,
+  body[data-rehearsal-print="1"] .preparation-sheet * {
+    visibility: visible !important;
+  }
+  body[data-rehearsal-print="1"] .preparation-sheet {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    background: white;
+    color: black;
+    padding: 16px;
+    display: block !important;
+  }
+  .practice-controls,
+  .simulation-banner,
+  .site-header,
+  .site-footer {
+    display: none !important;
+  }
+  .preparation-sheet li {
+    break-inside: avoid;
+  }
+  .preparation-sheet a {
+    color: black;
+  }
+}
+
+.preparation-sheet a {
+  text-decoration: underline;
+}
+
+.request-preview{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;}

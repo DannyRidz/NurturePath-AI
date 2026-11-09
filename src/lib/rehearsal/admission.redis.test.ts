@@ -5,7 +5,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { beforeAll, afterAll, describe, it, expect } from "vitest";
-import { RedisAdmission } from "./admission";
+import {
+  RedisAdmission,
+  initializeLocalRehearsalScript,
+  rebindLocalRehearsalScript,
+  reconcileLocalRehearsalScript,
+  initializeTesterScript,
+  enableTesterScript,
+} from "./admission";
 const hash = (v: string) => createHash("sha256").update(v).digest("hex");
 const execute = promisify(execFile),
   server = process.env.REDIS_SERVER_BIN,
@@ -193,6 +200,214 @@ describe.skipIf(!server || !cli)("rehearsal Redis atomic operations", () => {
       "id",
       "last",
       "successful",
+    ]);
+  });
+  it("creates the local allowance only once and never resets existing totals", async () => {
+    const key = "{nurturepath-rehearsal}:gemini-local-1:budget";
+    expect(
+      await command([
+        "EVAL",
+        initializeLocalRehearsalScript,
+        1,
+        key,
+        "a".repeat(64),
+      ]),
+    ).toBe(1);
+    await command(["HSET", key, "attempts", 4, "reservedCents", 8]);
+    expect(
+      await command([
+        "EVAL",
+        initializeLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+      ]),
+    ).toBe(0);
+    expect(
+      await command([
+        "HMGET",
+        key,
+        "configuration",
+        "attempts",
+        "reservedCents",
+        "maxAttempts",
+        "maxCents",
+      ]),
+    ).toEqual(["a".repeat(64), "4", "8", "150", "300"]);
+  });
+  it("rebinds only a quiescent exact state and preserves counters and shutdown", async () => {
+    const { prefix } = await setup("rebind");
+    const key = `${prefix}:budget`;
+    await command(["HSET", key, "attempts", 4, "reservedCents", 8]);
+    const before = await command(["HGETALL", key]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "a".repeat(64),
+        "b".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(1);
+    expect(await command(["HGETALL", key])).toEqual({
+      ...before,
+      configuration: "b".repeat(64),
+    });
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        3,
+        6,
+      ]),
+    ).toBe(0);
+    await command(["HSET", key, "enabled", 0]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(0);
+    await command(["HSET", key, "enabled", 1, "pending", "request-in-flight"]);
+    expect(
+      await command([
+        "EVAL",
+        rebindLocalRehearsalScript,
+        1,
+        key,
+        "b".repeat(64),
+        "c".repeat(64),
+        4,
+        8,
+      ]),
+    ).toBe(0);
+  });
+  it("reconciles only the reviewed pending state without refund or replay", async () => {
+    const { prefix } = await setup("reconcile");
+    const key = `${prefix}:budget`;
+    await command([
+      "HSET",
+      key,
+      "enabled",
+      0,
+      "pending",
+      "reviewed-request",
+      "attempts",
+      37,
+      "reservedCents",
+      74,
+    ]);
+    const args = [
+      "EVAL",
+      reconcileLocalRehearsalScript,
+      1,
+      key,
+      "a".repeat(64),
+      "b".repeat(64),
+      37,
+      74,
+      "reviewed-request",
+    ];
+    expect(await command([...args.slice(0, -1), "wrong-request"])).toBe(0);
+    expect(await command(args)).toBe(1);
+    expect(
+      await command([
+        "HMGET",
+        key,
+        "attempts",
+        "reservedCents",
+        "enabled",
+        "pending",
+        "configuration",
+      ]),
+    ).toEqual(["37", "74", "1", null, "b".repeat(64)]);
+    expect(await command(args)).toBe(0);
+  });
+  it("meters the prepaid tester release beyond old caps while preserving shutdown and session limits", async () => {
+    const key = "{nurturepath-rehearsal}:gemini-testers-1:budget";
+    const config = "a".repeat(64);
+    await command([
+      "HSET",
+      key,
+      "configuration",
+      config,
+      "enabled",
+      1,
+      "attempts",
+      500,
+      "reservedCents",
+      1000,
+      "issued",
+      500,
+      "billingMode",
+      "prepaid",
+    ]);
+    const store = new RedisAdmission(command, config, "gemini-testers-1");
+    const client = hash("prepaid-client");
+    await store.start("prepaid-session", "G01", client);
+    await store.admit("prepaid-session", 1, "prepaid-request", client);
+    expect(
+      await command([
+        "TTL",
+        "{nurturepath-rehearsal}:gemini-testers-1:seen:prepaid-request",
+      ]),
+    ).toBeGreaterThan(1700);
+    expect(
+      await command([
+        "EXISTS",
+        "{nurturepath-rehearsal}:gemini-testers-1:seen",
+      ]),
+    ).toBe(0);
+    await expect(
+      store.admit("prepaid-session", 1, "another", client),
+    ).rejects.toThrow();
+    await command(["HSET", key, "enabled", 0]);
+    await store.settle("prepaid-session", "prepaid-request", "success");
+    expect(
+      await command(["HMGET", key, "attempts", "reservedCents", "enabled"]),
+    ).toEqual(["501", "1002", "0"]);
+    await expect(store.start("blocked-session", "G01", client)).rejects.toThrow(
+      "disabled",
+    );
+  });
+  it("initializes tester metadata once and enables only reconciled matching state", async () => {
+    const key = "tester-init-metadata";
+    const config = "a".repeat(64);
+    const init = ["EVAL", initializeTesterScript, 1, key, config];
+    const enable = ["EVAL", enableTesterScript, 1, key, config];
+    expect(await command(init)).toBe(1);
+    expect(await command(["HGET", key, "enabled"])).toBe("0");
+    await command([
+      "HSET",
+      key,
+      "attempts",
+      511,
+      "reservedCents",
+      1022,
+      "pending",
+      "unsettled",
+    ]);
+    expect(await command(enable)).toBe(0);
+    await command(["HDEL", key, "pending"]);
+    expect(await command([...enable.slice(0, -1), "b".repeat(64)])).toBe(0);
+    expect(await command(enable)).toBe(1);
+    expect(await command(init)).toBe(0);
+    expect(await command(["HMGET", key, "attempts", "reservedCents"])).toEqual([
+      "511",
+      "1022",
     ]);
   });
 });

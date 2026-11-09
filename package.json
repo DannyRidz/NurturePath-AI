@@ -29,7 +29,10 @@
     "start:rehearsal": "node scripts/rehearsal-local.mjs start",
     "build:rehearsal": "next build experiments/rehearsal --webpack",
     "typecheck:rehearsal": "next typegen experiments/rehearsal && tsc --noEmit -p experiments/rehearsal/tsconfig.json",
-    "test:e2e:rehearsal": "playwright test --config experiments/rehearsal/playwright.config.ts"
+    "test:e2e:rehearsal": "playwright test --config experiments/rehearsal/playwright.config.ts",
+    "rehearsal:p3": "node scripts/rehearsal-p3.mjs",
+    "test:e2e:testers": "playwright test --config playwright.testers.config.ts",
+    "rehearsal:testers": "node scripts/rehearsal-testers.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

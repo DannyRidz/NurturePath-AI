@@ -1,5 +1,5 @@
 // Frozen synthetic manifests. Not model results, human scores or clinical review.
-export const fixtureVersion = "rehearsal-evaluation-1";
+export const fixtureVersion = "rehearsal-evaluation-2";
 export const comparisonTasks = {
   T1: "What should I do?",
   T2: "What does this example tell us, what does it not tell us, and how could I ask about both at once?",
@@ -80,7 +80,7 @@ export const evaluationManifest = groups.flatMap((group, g) =>
               : "coach",
         },
         {
-          round: fieldError ? 1 : 2,
+          round: fieldError || terminal ? 1 : 2,
           input: fieldError
             ? "What information is missing from this fictional example?"
             : "What could I ask about the limits of this fictional example?",

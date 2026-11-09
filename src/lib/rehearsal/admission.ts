@@ -123,8 +123,10 @@ local t=redis.call('TIME'); local now=tonumber(t[1])*1000+math.floor(tonumber(t[
 local op=ARGV[1]; local cfg=ARGV[2]; local id=ARGV[3]; local request=ARGV[4]; local round=tonumber(ARGV[5]); local goal=ARGV[6]
 local r=redis.call('HMGET',KEYS[1],'configuration','enabled','attempts','reservedCents','maxAttempts','maxCents','issued','pending')
 if r[1]~=cfg then return {'configuration_required'} end
+local prepaid=KEYS[1]=='{nurturepath-rehearsal}:gemini-testers-1:budget' and redis.call('HGET',KEYS[1],'billingMode')=='prepaid'
 local attempts=tonumber(r[3]); local cents=tonumber(r[4]); local maxA=tonumber(r[5]); local maxC=tonumber(r[6]); local issued=tonumber(r[7])
-if not attempts or not cents or not maxA or not maxC or not issued or attempts<0 or cents~=attempts*2 or attempts>maxA or cents>maxC or issued<0 or issued>300 or attempts~=math.floor(attempts) or issued~=math.floor(issued) or maxA<1 or maxA>150 or maxA~=math.floor(maxA) or maxC<1 or maxC>300 or maxC~=math.floor(maxC) then return {'configuration_required'} end
+if not attempts or not cents or not issued or attempts<0 or cents~=attempts*2 or issued<0 or attempts~=math.floor(attempts) or issued~=math.floor(issued) or cents>=9007199254740000 then return {'configuration_required'} end
+if not prepaid and (not maxA or not maxC or attempts>maxA or cents>maxC or issued>300 or maxA<1 or maxA>150 or maxA~=math.floor(maxA) or maxC<1 or maxC>300 or maxC~=math.floor(maxC)) then return {'configuration_required'} end
 local expires=tonumber(redis.call('HGET',KEYS[2],'expires'))
 if op=='close' then if expires then redis.call('HSET',KEYS[2],'closed','1') end return {'ok'} end
 if op=='success' or op=='refusal' or op=='uncertain' then
@@ -137,7 +139,7 @@ if r[2]~='1' then return {'disabled'} end
 local minute=math.floor(now/60000); local rate=redis.call('HMGET',KEYS[3],'minute','count'); local count=0
 if rate[1] then if not tonumber(rate[1]) or not tonumber(rate[2]) or tonumber(rate[2])<0 then return {'configuration_required'} end if tonumber(rate[1])==minute then count=tonumber(rate[2]) end end
 if op=='start' then
- if issued>=300 or expires then return {'session_limit'} end
+ if (not prepaid and issued>=300) or expires then return {'session_limit'} end
  if count>=5 then return {'rate_limited'} end
  expires=now+1800000
  redis.call('HSET',KEYS[2],'id',id,'goal',goal,'configuration',cfg,'expires',expires,'attempts',0,'successful',0,'closed',0,'last','')
@@ -150,7 +152,7 @@ else
  local a=tonumber(redis.call('HGET',KEYS[2],'attempts')); local s=tonumber(redis.call('HGET',KEYS[2],'successful'))
  if not a or not s or a~=s or a>=2 or round~=s+1 or redis.call('HGET',KEYS[2],'configuration')~=cfg then return {'stale_round'} end
  if r[8] and r[8]~='' then return {'busy'} end
- if attempts>=maxA or cents+2>maxC then return {'exhausted'} end
+ if not prepaid and (attempts>=maxA or cents+2>maxC) then return {'exhausted'} end
  if count>=10 then return {'rate_limited'} end
  redis.call('HSET',KEYS[4],request,'1'); redis.call('PEXPIRE',KEYS[4],1800000)
  redis.call('HSET',KEYS[2],'attempts',a+1,'last',request)
@@ -166,8 +168,12 @@ export class RedisAdmission implements AdmissionStore {
     private config: string,
     private release: string,
   ) {
-    if (!/^simulation-[a-z0-9-]+$/.test(release))
-      throw new Error("simulation_namespace_required");
+    if (
+      !/^simulation-[a-z0-9-]+$/.test(release) &&
+      release !== "gemini-local-1" &&
+      release !== "gemini-testers-1"
+    )
+      throw new Error("local_or_simulation_namespace_required");
   }
   private async run(
     op: string,
@@ -198,7 +204,9 @@ export class RedisAdmission implements AdmissionStore {
           `${prefix}:budget`,
           `${prefix}:session:${id}`,
           `${prefix}:${op === "start" ? "start" : "feedback"}:${client}`,
-          `${prefix}:seen`,
+          this.release === "gemini-testers-1"
+            ? `${prefix}:seen:${request}`
+            : `${prefix}:seen`,
           op,
           this.config,
           id,
@@ -237,3 +245,23 @@ export class RedisAdmission implements AdmissionStore {
     await this.run("close", id);
   }
 }
+
+// Operator-only metadata transitions. Neither operation can refund a reservation.
+export const initializeLocalRehearsalScript =
+  "if redis.call('EXISTS',KEYS[1])~=0 then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[1],'enabled','1','attempts',0,'reservedCents',0,'maxAttempts',150,'maxCents',300,'issued',0) return 1";
+export const rebindLocalRehearsalScript =
+  "local s=redis.call('HMGET',KEYS[1],'configuration','attempts','reservedCents','enabled','pending') if s[1]~=ARGV[1] or s[2]~=ARGV[3] or s[3]~=ARGV[4] or s[4]~='1' or (s[5] and s[5]~='') then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[2]) return 1";
+
+// Explicit operator reconciliation of a reviewed failed local response. No refund.
+export const reconcileLocalRehearsalScript = `
+local s=redis.call('HMGET',KEYS[1],'configuration','attempts','reservedCents','enabled','pending','maxAttempts','maxCents')
+if s[1]~=ARGV[1] or s[2]~=ARGV[3] or s[3]~=ARGV[4] or s[4]~='0' or s[5]~=ARGV[5] or s[6]~='150' or s[7]~='300' or ARGV[5]=='' then return 0 end
+redis.call('HSET',KEYS[1],'configuration',ARGV[2],'enabled','1')
+redis.call('HDEL',KEYS[1],'pending')
+return 1
+`;
+
+export const initializeTesterScript =
+  "if redis.call('EXISTS',KEYS[1])~=0 then return 0 end redis.call('HSET',KEYS[1],'configuration',ARGV[1],'billingMode','prepaid','enabled','0','attempts',0,'reservedCents',0,'issued',0) return 1";
+export const enableTesterScript =
+  "local s=redis.call('HMGET',KEYS[1],'configuration','billingMode','attempts','reservedCents','issued','pending') local a=tonumber(s[3]) local c=tonumber(s[4]) local i=tonumber(s[5]) if s[1]~=ARGV[1] or s[2]~='prepaid' or not a or not c or not i or a<0 or a~=math.floor(a) or c~=a*2 or i<0 or i~=math.floor(i) or (s[6] and s[6]~='') then return 0 end redis.call('HSET',KEYS[1],'enabled','1') return 1";

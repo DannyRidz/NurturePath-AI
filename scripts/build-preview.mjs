@@ -22,7 +22,7 @@ rmSync(exportRoot, { recursive: true, force: true });
 mkdirSync(exportRoot, { recursive: true });
 for (const name of ["src", "public", "package.json", "package-lock.json", "next.config.ts", "tsconfig.json", "postcss.config.mjs"]) {
   if (!existsSync(name)) continue;
-  cpSync(name, join(exportRoot, name), { recursive: true, filter: path => path !== "src/app/api" });
+  cpSync(name, join(exportRoot, name), { recursive: true, filter: path => path !== "src/app/api" && path !== "src/app/tester-rehearsal" });
 }
 symlinkSync(resolve("node_modules"), join(exportRoot, "node_modules"), "dir");
 const result = spawnSync(
